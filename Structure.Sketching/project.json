@@ -1,0 +1,22 @@
+﻿{
+  "authors": [ "James Craig" ],
+  "title": "Structure.Sketching",
+  "version": "1.0.0-*",
+  "packOptions": {
+    "projectUrl": "https://github.com/JaCraig/Structure.Sketching",
+    "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+    "tags": [
+      "Image Picture Gif Jpg Jpeg Bitmap Png Processing"
+    ]
+  },
+  "supports": {},
+  "dependencies": {
+    "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
+    "NETStandard.Library": "1.6.0",
+    "System.Numerics.Vectors": "4.1.1",
+    "System.Threading.Tasks.Parallel": "4.0.1"
+  },
+  "frameworks": {
+    "netstandard1.3": {}
+  }
+}

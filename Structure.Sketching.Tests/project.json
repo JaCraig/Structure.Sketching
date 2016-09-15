@@ -1,0 +1,38 @@
+{
+  "version": "1.0.0-*",
+  "title": "Structure.Sketching.Tests",
+  "description": "Tests for Structure.Sketching",
+  "authors": [ "James Craig" ],
+  "packOptions": {
+    "projectUrl": "https://github.com/JaCraig/Structure.Sketching",
+    "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+    "tags": [
+      "Image Picture Gif Jpg Jpeg Bitmap Png Processing"
+    ]
+  },
+  "buildOptions": {
+    "debugType": "portable"
+  },
+  "dependencies": {
+    "xunit": "2.2.0-*",
+    "dotnet-test-xunit": "2.2.0-*",
+  },
+  "frameworks": {
+    "netcoreapp1.1": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.0.0-*"
+        },
+        "Structure.Sketching": {
+          "target": "project"
+        }
+      },
+      "imports": [
+        "dnxcore50",
+        "portable-net45+win8"
+      ]
+    }
+  },
+  "testRunner": "xunit"
+}

@@ -1,0 +1,32 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Benchmarks for Structure.Sketching",
+  "authors": [ "James Craig" ],
+  "packOptions": {
+    "projectUrl": "https://github.com/JaCraig/Structure.Sketching",
+    "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+    "tags": [
+      "Image Picture Gif Jpg Jpeg Bitmap Png Processing"
+    ]
+  },
+  "buildOptions": {
+    "emitEntryPoint": true,
+    "allowUnsafe": true
+  },
+  "dependencies": {
+    "BenchmarkDotNet.Diagnostics.Windows": "0.9.9",
+    "Structure.Sketching": "1.0.0-*"
+  },
+  "commands": {
+    "Structure.Sketching.Benchmarks": "Structure.Sketching.Benchmarks"
+  },
+  "frameworks": {
+    "net461": {
+      "dependencies": {
+      },
+      "frameworkAssemblies": {
+        "System.Drawing": ""
+      }
+    }
+  }
+}
