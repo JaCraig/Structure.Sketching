@@ -17,6 +17,7 @@ limitations under the License.
 using Structure.Sketching.Formats.Gif.Format.BaseClasses;
 using Structure.Sketching.Formats.Gif.Format.Helpers;
 using Structure.Sketching.IO;
+using Structure.Sketching.Quantizers;
 using System.IO;
 
 namespace Structure.Sketching.Formats.Gif.Format
@@ -27,6 +28,16 @@ namespace Structure.Sketching.Formats.Gif.Format
     /// <seealso cref="Structure.Sketching.Formats.Gif.Format.BaseClasses.SectionBase" />
     public class FrameIndices : SectionBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FrameIndices"/> class.
+        /// </summary>
+        /// <param name="quantizedImage">The quantized image.</param>
+        /// <param name="bitDepth">The bit depth.</param>
+        public FrameIndices(QuantizedImage quantizedImage, int bitDepth)
+            : this(quantizedImage.Pixels, (byte)bitDepth)
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FrameIndices" /> class.
         /// </summary>

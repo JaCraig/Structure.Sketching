@@ -20,6 +20,7 @@ using Structure.Sketching.ExtensionMethods;
 using Structure.Sketching.Quantizers.BaseClasses;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Structure.Sketching.Quantizers.Octree
 {
@@ -86,20 +87,17 @@ namespace Structure.Sketching.Quantizers.Octree
         protected override byte[] Process(Image image)
         {
             byte[] quantizedPixels = new byte[image.Width * image.Height];
-            for (int y = 0; y < image.Height; ++y)
-            {
-                //Parallel.For(
-                //    0,
-                //    image.Height,
-                //    y =>
-                //    {
-                for (int x = 0; x < image.Width; x++)
+            Parallel.For(
+                0,
+                image.Height,
+                y =>
                 {
-                    Bgra sourcePixel = new Color(image.Pixels[(y * image.Width) + x]);
-                    quantizedPixels[(y * image.Width) + x] = QuantizePixel(sourcePixel);
-                }
-            }
-            //});
+                    for (int x = 0; x < image.Width; x++)
+                    {
+                        Bgra sourcePixel = new Color(image.Pixels[(y * image.Width) + x]);
+                        quantizedPixels[(y * image.Width) + x] = QuantizePixel(sourcePixel);
+                    }
+                });
 
             return quantizedPixels;
         }

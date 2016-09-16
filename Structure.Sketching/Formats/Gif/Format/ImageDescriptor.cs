@@ -56,6 +56,16 @@ namespace Structure.Sketching.Formats.Gif.Format
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ImageDescriptor"/> class.
+        /// </summary>
+        /// <param name="image">The image.</param>
+        /// <param name="bitDepth">The bit depth.</param>
+        public ImageDescriptor(Image image, int bitDepth)
+            : this(0, 0, (short)image.Width, (short)image.Height, true, bitDepth - 1, false)
+        {
+        }
+
+        /// <summary>
         /// Gets the height.
         /// </summary>
         /// <value>

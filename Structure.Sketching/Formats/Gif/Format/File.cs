@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Colors.ColorSpaces;
 using Structure.Sketching.Formats.BaseClasses;
-using Structure.Sketching.Formats.Gif.Format.Enums;
 using Structure.Sketching.IO;
 using Structure.Sketching.IO.Converters.BaseClasses;
 using Structure.Sketching.Quantizers;
@@ -26,7 +24,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Formats.Gif.Format
 {
@@ -207,7 +204,7 @@ namespace Structure.Sketching.Formats.Gif.Format
             QuantizedImage Quantized = Quantizer.Quantize(image, Quality);
             LoadImage(image, Quantized);
             WriteToFile(stream);
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -240,57 +237,18 @@ namespace Structure.Sketching.Formats.Gif.Format
         {
             var TempImage = animation[0];
             var TransparencyIndex = quantizedImage.TransparentIndex;
-            var DisposalMethodUsed = TransparencyIndex > -1
-                ? DisposalMethod.RestoreToBackground
-                : DisposalMethod.Undefined;
-            int PixelCount = quantizedImage.Palette.Length;
-            int ColorTableLength = (int)Math.Pow(2, BitDepth) * 3;
-            byte[] ColorTableBuffer = new byte[ColorTableLength];
-            Parallel.For(0, PixelCount,
-                i =>
-                {
-                    int offset = i * 3;
-                    Bgra color = quantizedImage.Palette[i];
-
-                    ColorTableBuffer[offset] = (byte)color.Red;
-                    ColorTableBuffer[offset + 1] = (byte)color.Green;
-                    ColorTableBuffer[offset + 2] = (byte)color.Blue;
-                });
 
             Header = new FileHeader();
-            ScreenDescriptor = new LogicalScreenDescriptor((short)TempImage.Width,
-                (short)TempImage.Height,
-                (byte)(TransparencyIndex > -1 ? TransparencyIndex : 255),
-                0,
-                false,
-                BitDepth - 1);
-            Frames.Add(new Frame(new GraphicsControl(animation.Delay, (byte)(TransparencyIndex == -1 ? 255 : TransparencyIndex), TransparencyIndex > -1, DisposalMethodUsed),
-                new ImageDescriptor(0, 0, (short)TempImage.Width, (short)TempImage.Height, true, BitDepth - 1, false),
-                new ColorTable(ColorTableBuffer),
-                new FrameIndices(quantizedImage.Pixels, (byte)BitDepth),
-                null));
+            ScreenDescriptor = new LogicalScreenDescriptor(TempImage, TransparencyIndex, BitDepth);
+            Frames.Add(new Frame(TempImage, quantizedImage, BitDepth, animation.Delay));
             if (animation.Count > 1)
             {
                 AppExtension = new ApplicationExtension(animation.RepeatCount, animation.Count);
                 for (int x = 1; x < animation.Count; ++x)
                 {
-                    QuantizedImage QuantizedFrame = Quantizer.Quantize(animation[x], Quality);
-                    ColorTableBuffer = new byte[ColorTableLength];
-                    Parallel.For(0, PixelCount,
-                        i =>
-                        {
-                            int offset = i * 3;
-                            Bgra color = QuantizedFrame.Palette[i];
-
-                            ColorTableBuffer[offset] = (byte)color.Red;
-                            ColorTableBuffer[offset + 1] = (byte)color.Green;
-                            ColorTableBuffer[offset + 2] = (byte)color.Blue;
-                        });
-                    Frames.Add(new Frame(new GraphicsControl(animation.Delay, (byte)(QuantizedFrame.TransparentIndex == -1 ? 255 : QuantizedFrame.TransparentIndex), QuantizedFrame.TransparentIndex > -1, DisposalMethodUsed),
-                                            new ImageDescriptor(0, 0, (short)TempImage.Width, (short)TempImage.Height, true, BitDepth - 1, false),
-                                            new ColorTable(ColorTableBuffer),
-                                            new FrameIndices(QuantizedFrame.Pixels, (byte)BitDepth),
-                                            null));
+                    quantizedImage = Quantizer.Quantize(animation[x], Quality);
+                    TempImage = animation[x];
+                    Frames.Add(new Frame(TempImage, quantizedImage, BitDepth, animation.Delay));
                 }
             }
         }
@@ -302,37 +260,9 @@ namespace Structure.Sketching.Formats.Gif.Format
         /// <param name="quantizedImage">The quantized image.</param>
         private void LoadImage(Image image, QuantizedImage quantizedImage)
         {
-            var TempImage = image;
-            var TransparencyIndex = quantizedImage.TransparentIndex;
-            var DisposalMethodUsed = TransparencyIndex > -1
-                ? DisposalMethod.RestoreToBackground
-                : DisposalMethod.Undefined;
-            int PixelCount = quantizedImage.Palette.Length;
-            int ColorTableLength = (int)Math.Pow(2, BitDepth) * 3;
-            byte[] ColorTableBuffer = new byte[ColorTableLength];
-            Parallel.For(0, PixelCount,
-                i =>
-                {
-                    int offset = i * 3;
-                    Bgra color = quantizedImage.Palette[i];
-
-                    ColorTableBuffer[offset] = (byte)color.Red;
-                    ColorTableBuffer[offset + 1] = (byte)color.Green;
-                    ColorTableBuffer[offset + 2] = (byte)color.Blue;
-                });
-
             Header = new FileHeader();
-            ScreenDescriptor = new LogicalScreenDescriptor((short)TempImage.Width,
-                (short)TempImage.Height,
-                (byte)(TransparencyIndex > -1 ? TransparencyIndex : 255),
-                0,
-                false,
-                BitDepth - 1);
-            Frames.Add(new Frame(new GraphicsControl(0, (byte)(TransparencyIndex == -1 ? 255 : TransparencyIndex), TransparencyIndex > -1, DisposalMethodUsed),
-                new ImageDescriptor(0, 0, (short)TempImage.Width, (short)TempImage.Height, true, BitDepth - 1, false),
-                new ColorTable(ColorTableBuffer),
-                new FrameIndices(quantizedImage.Pixels, (byte)BitDepth),
-                null));
+            ScreenDescriptor = new LogicalScreenDescriptor(image, quantizedImage.TransparentIndex, BitDepth);
+            Frames.Add(new Frame(image, quantizedImage, BitDepth, 150));
         }
 
         private void WriteToFile(BinaryWriter writer)
@@ -342,7 +272,7 @@ namespace Structure.Sketching.Formats.Gif.Format
                 Header.Write(writer2);
                 ScreenDescriptor.Write(writer2);
                 Frames[0].Write(writer2);
-                if (AppExtension != null)
+                if (Frames.Count > 1)
                 {
                     AppExtension.Write(writer2);
                     for (int x = 0; x < Frames.Count; ++x)

@@ -25,7 +25,6 @@ namespace Structure.Sketching.Tests.Formats.Png
         {
             using (var TempFile = File.OpenRead(InputFileName))
             {
-                new FileInfo(OutputFileName).Directory.Create();
                 var TempDecoder = new Structure.Sketching.Formats.Png.Decoder();
                 var TempImage = TempDecoder.Decode(TempFile);
                 var TempEncoder = new Structure.Sketching.Formats.Png.Encoder();

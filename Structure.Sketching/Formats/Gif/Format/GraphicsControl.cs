@@ -18,6 +18,7 @@ using Structure.Sketching.Formats.Gif.Format.BaseClasses;
 using Structure.Sketching.Formats.Gif.Format.Enums;
 using Structure.Sketching.Helpers;
 using Structure.Sketching.IO;
+using Structure.Sketching.Quantizers;
 using System;
 using System.IO;
 
@@ -41,6 +42,26 @@ namespace Structure.Sketching.Formats.Gif.Format
             Delay = delay;
             TransparencyIndex = transparencyIndex;
             TransparencyFlag = transparencyFlag;
+            DisposalMethod = disposalMethod;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GraphicsControl"/> class.
+        /// </summary>
+        /// <param name="image">The image.</param>
+        /// <param name="quantizedImage">The quantized image.</param>
+        /// <param name="delay">The delay.</param>
+        public GraphicsControl(Image image, QuantizedImage quantizedImage, short delay)
+        {
+            var TempTransparencyIndex = quantizedImage.TransparentIndex;
+            bool hasTransparent = TempTransparencyIndex > -1;
+            DisposalMethod disposalMethod = hasTransparent
+                ? DisposalMethod.RestoreToBackground
+                : DisposalMethod.Undefined;
+
+            Delay = delay;
+            TransparencyIndex = (byte)TempTransparencyIndex;
+            TransparencyFlag = hasTransparent;
             DisposalMethod = disposalMethod;
         }
 

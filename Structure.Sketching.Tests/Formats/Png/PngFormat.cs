@@ -87,7 +87,6 @@ namespace Structure.Sketching.Tests.Formats.Png
         {
             using (var TempFile = File.OpenRead(InputFileName))
             {
-                new FileInfo(OutputFileName).Directory.Create();
                 var ImageFormat = new Sketching.Formats.Png.PngFormat();
                 var TempImage = ImageFormat.Decode(TempFile);
                 using (var TempFile2 = File.OpenWrite(OutputFileName))

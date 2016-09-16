@@ -17,6 +17,7 @@ limitations under the License.
 using Structure.Sketching.Formats.Gif.Format.BaseClasses;
 using Structure.Sketching.Formats.Gif.Format.Enums;
 using Structure.Sketching.IO;
+using Structure.Sketching.Quantizers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -44,6 +45,22 @@ namespace Structure.Sketching.Formats.Gif.Format
             Descriptor = descriptor;
             LocalColorTable = localColorTable;
             GraphicsControl = graphicsControl;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Frame"/> class.
+        /// </summary>
+        /// <param name="image">The image.</param>
+        /// <param name="quantizedImage">The quantized image.</param>
+        /// <param name="bitDepth">The bit depth.</param>
+        /// <param name="delay">The delay.</param>
+        public Frame(Image image, QuantizedImage quantizedImage, int bitDepth, short delay)
+            : this(new GraphicsControl(image, quantizedImage, delay),
+                new ImageDescriptor(image, bitDepth),
+                new ColorTable(quantizedImage, bitDepth),
+                new FrameIndices(quantizedImage, bitDepth),
+                null)
+        {
         }
 
         /// <summary>
@@ -85,6 +102,11 @@ namespace Structure.Sketching.Formats.Gif.Format
         /// The color table using.
         /// </value>
         public ColorTable LocalColorTable { get; set; }
+
+        private int bitDepth;
+        private Image image;
+        private QuantizedImage quantizedImage;
+        private int v;
 
         /// <summary>
         /// Reads from the specified stream.

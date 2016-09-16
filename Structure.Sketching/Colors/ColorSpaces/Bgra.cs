@@ -49,7 +49,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <value>
         /// The alpha.
         /// </value>
-        public float Alpha
+        public byte Alpha
         {
             get { return a; }
             set { a = value; }
@@ -61,7 +61,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <value>
         /// The blue.
         /// </value>
-        public float Blue
+        public byte Blue
         {
             get { return b; }
             set { b = value; }
@@ -73,7 +73,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <value>
         /// The green.
         /// </value>
-        public float Green
+        public byte Green
         {
             get { return g; }
             set { g = value; }
@@ -85,36 +85,31 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <value>
         /// The red.
         /// </value>
-        public float Red
+        public byte Red
         {
             get { return r; }
             set { r = value; }
         }
 
         /// <summary>
-        /// The epsilon
-        /// </summary>
-        private const float EPSILON = 0.001f;
-
-        /// <summary>
         /// alpha component
         /// </summary>
-        private float a;
+        private byte a;
 
         /// <summary>
         /// blue component
         /// </summary>
-        private float b;
+        private byte b;
 
         /// <summary>
         /// green component
         /// </summary>
-        private float g;
+        private byte g;
 
         /// <summary>
         /// red component
         /// </summary>
-        private float r;
+        private byte r;
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="Color"/> to <see cref="Bgra"/>.
@@ -150,7 +145,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// </returns>
         public static implicit operator int(Bgra color)
         {
-            return ((byte)color.r << 16) | ((byte)color.g << 8) | ((byte)color.b << 0) | ((byte)color.a << 24);
+            return color.r << 16 | color.g << 8 | color.b << 0 | color.a << 24;
         }
 
         /// <summary>
@@ -202,10 +197,10 @@ namespace Structure.Sketching.Colors.ColorSpaces
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Bgra other)
         {
-            return Math.Abs(other.b - b) < EPSILON
-                && Math.Abs(other.g - g) < EPSILON
-                && Math.Abs(other.r - r) < EPSILON
-                && Math.Abs(other.a - a) < EPSILON;
+            return other.b == b
+                && other.g == g
+                && other.r == r
+                && other.a == a;
         }
 
         /// <summary>
@@ -236,7 +231,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <param name="hash">The existing hash.</param>
         /// <param name="component">The component.</param>
         /// <returns>The resulting hash</returns>
-        private int ComputeHash(int hash, float component)
+        private int ComputeHash(int hash, byte component)
         {
             return ((hash << 5) + hash) ^ component.GetHashCode();
         }

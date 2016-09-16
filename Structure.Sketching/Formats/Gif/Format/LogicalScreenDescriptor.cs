@@ -53,6 +53,22 @@ namespace Structure.Sketching.Formats.Gif.Format
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="LogicalScreenDescriptor"/> class.
+        /// </summary>
+        /// <param name="image">The image.</param>
+        /// <param name="transparencyIndex">Index of the transparency.</param>
+        /// <param name="BitDepth">The bit depth.</param>
+        public LogicalScreenDescriptor(Image image, int transparencyIndex, int BitDepth)
+            : this((short)image.Width,
+                (short)image.Height,
+                (byte)(transparencyIndex > -1 ? transparencyIndex : 255),
+                0,
+                false,
+                BitDepth - 1)
+        {
+        }
+
+        /// <summary>
         /// Gets the index of the background color.
         /// </summary>
         /// <value>
@@ -133,12 +149,8 @@ namespace Structure.Sketching.Formats.Gif.Format
         /// <returns>True if it succeeds, false otherwise</returns>
         public override bool Write(EndianBinaryWriter writer)
         {
-            byte Packed = 0;
-            writer.Write(BitConverter.GetBytes(Width));
-            writer.Write(BitConverter.GetBytes(Height));
-            writer.Write(Packed);
-            writer.Write(BackgroundColorIndex);
-            writer.Write(PixelAspectRatio);
+            writer.Write((ushort)Width);
+            writer.Write((ushort)Height);
 
             var field = new PackedField();
             field.SetBit(0, GlobalColorTablePresent);
@@ -146,7 +158,6 @@ namespace Structure.Sketching.Formats.Gif.Format
             field.SetBit(4, false);
             field.SetBits(5, 3, GlobalColorTableSize);
 
-            // Reduce the number of writes
             byte[] arr = {
                 field.Byte,
                 BackgroundColorIndex,

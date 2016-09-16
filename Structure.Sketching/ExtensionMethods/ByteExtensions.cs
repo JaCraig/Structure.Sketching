@@ -61,5 +61,15 @@ namespace Structure.Sketching.ExtensionMethods
             }
             return Result;
         }
+
+        /// <summary>
+        /// Converts an int to a byte value
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public static byte ToByte(this int value)
+        {
+            return (byte)value.Clamp(0, 255);
+        }
     }
 }

@@ -15,193 +15,204 @@ limitations under the License.
 */
 
 using Structure.Sketching.Colors.ColorSpaces;
+using Structure.Sketching.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 
 namespace Structure.Sketching.Quantizers.Octree
 {
     /// <summary>
-    /// Octree node class
+    /// Node class
     /// </summary>
     public class Node
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Node"/> class.
         /// </summary>
-        /// <param name="level">The level.</param>
-        /// <param name="colorBits">The color bits.</param>
-        /// <param name="octree">The octree.</param>
+        /// <param name="level">
+        /// The level in the tree = 0 - 7
+        /// </param>
+        /// <param name="colorBits">
+        /// The number of significant color bits in the image
+        /// </param>
+        /// <param name="octree">
+        /// The tree to which this node belongs
+        /// </param>
         public Node(int level, int colorBits, Octree octree)
         {
-            ColorBits = colorBits;
-            Level = level;
-            Color = new Bgra(0, 0, 0);
-            IsLeafNode = ColorBits == Level;
-            if (IsLeafNode)
+            // Construct the new node
+            this.leaf = level == colorBits;
+
+            this.red = this.green = this.blue = 0;
+            this.pixelCount = 0;
+
+            // If a leaf, increment the leaf count
+            if (this.leaf)
             {
-                ++octree.Leaves;
-                NextReducible = null;
-                Children = null;
+                octree.Leaves++;
+                this.NextReducible = null;
+                this.children = null;
             }
             else
             {
-                NextReducible = octree.ReducibleNodes[level];
+                // Otherwise add this to the reducible nodes
+                this.NextReducible = octree.ReducibleNodes[level];
                 octree.ReducibleNodes[level] = this;
-                Children = new Node[8];
+                this.children = new Node[8];
             }
         }
 
         /// <summary>
-        /// The children
-        /// </summary>
-        /// <value>
-        /// The children.
-        /// </value>
-        public Node[] Children { get; set; }
-
-        /// <summary>
-        /// Gets or sets the color bits.
-        /// </summary>
-        /// <value>
-        /// The color bits.
-        /// </value>
-        public int ColorBits { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is leaf node.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance is leaf node; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsLeafNode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the level.
-        /// </summary>
-        /// <value>
-        /// The level.
-        /// </value>
-        public int Level { get; set; }
-
-        /// <summary>
         /// Gets the next reducible node
         /// </summary>
-        /// <value>
-        /// The next reducible.
-        /// </value>
         public Node NextReducible { get; }
+
+        private static readonly int[] Mask = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
+
+        /// <summary>
+        /// Pointers to any child nodes
+        /// </summary>
+        private readonly Node[] children;
+
+        /// <summary>
+        /// Blue component
+        /// </summary>
+        private int blue;
+
+        /// <summary>
+        /// Green Component
+        /// </summary>
+        private int green;
+
+        /// <summary>
+        /// Flag indicating that this is a leaf node
+        /// </summary>
+        private bool leaf;
 
         /// <summary>
         /// The index of this node in the palette
         /// </summary>
-        /// <value>
-        /// The index of the palette.
-        /// </value>
-        public int PaletteIndex { get; set; }
+        private int paletteIndex;
 
         /// <summary>
-        /// The pixel count
+        /// Number of pixels in this node
         /// </summary>
-        /// <value>
-        /// The pixel count.
-        /// </value>
-        public int PixelCount { get; set; }
+        private int pixelCount;
 
         /// <summary>
-        /// Gets or sets the color.
+        /// Red component
         /// </summary>
-        /// <value>
-        /// The color.
-        /// </value>
-        public Bgra Color;
+        private int red;
 
         /// <summary>
-        /// The mask
+        /// Add a color into the tree
         /// </summary>
-        private static readonly int[] Mask = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
-
-        /// <summary>
-        /// Adds the color.
-        /// </summary>
-        /// <param name="pixel">The pixel.</param>
-        /// <param name="colorBits">The color bits.</param>
-        /// <param name="level">The level.</param>
-        /// <param name="octree">The octree.</param>
+        /// <param name="pixel">
+        /// The color
+        /// </param>
+        /// <param name="colorBits">
+        /// The number of significant color bits
+        /// </param>
+        /// <param name="level">
+        /// The level in the tree
+        /// </param>
+        /// <param name="octree">
+        /// The tree to which this node belongs
+        /// </param>
         public void AddColor(Bgra pixel, int colorBits, int level, Octree octree)
         {
-            if (IsLeafNode)
+            // Update the color information if this is a leaf
+            if (this.leaf)
             {
                 this.Increment(pixel);
+
+                // Setup the previous node
                 octree.TrackPrevious(this);
             }
             else
             {
+                // Go to the next level down in the tree
                 int shift = 7 - level;
-                int index = (((int)pixel.Red & Mask[level]) >> (shift - 2)) |
-                            (((int)pixel.Green & Mask[level]) >> (shift - 1)) |
-                            (((int)pixel.Blue & Mask[level]) >> shift);
+                int index = ((pixel.Red & Mask[level]) >> (shift - 2)) |
+                            ((pixel.Green & Mask[level]) >> (shift - 1)) |
+                            ((pixel.Blue & Mask[level]) >> shift);
 
-                Node child = Children[index];
+                Node child = this.children[index];
 
                 if (child == null)
                 {
+                    // Create a new child node and store it in the array
                     child = new Node(level + 1, colorBits, octree);
-                    Children[index] = child;
+                    this.children[index] = child;
                 }
+
+                // Add the color to the child node
                 child.AddColor(pixel, colorBits, level + 1, octree);
             }
         }
 
         /// <summary>
-        /// Constructs the palette.
+        /// Traverse the tree, building up the color palette
         /// </summary>
-        /// <param name="palette">The palette.</param>
-        /// <param name="index">The index.</param>
+        /// <param name="palette">
+        /// The palette
+        /// </param>
+        /// <param name="index">
+        /// The current palette index
+        /// </param>
         public void ConstructPalette(List<Bgra> palette, ref int index)
         {
-            if (IsLeafNode)
+            if (this.leaf)
             {
-                PaletteIndex = index++;
+                // Consume the next palette index
+                this.paletteIndex = index++;
 
-                var red = (byte)(Color.Red / PixelCount);
-                var green = (byte)(Color.Green / PixelCount);
-                var blue = (byte)(Color.Blue / PixelCount);
+                byte r = (this.red / this.pixelCount).ToByte();
+                byte g = (this.green / this.pixelCount).ToByte();
+                byte b = (this.blue / this.pixelCount).ToByte();
 
-                palette.Add(new Bgra(red, green, blue));
+                // And set the color of the palette entry
+                palette.Add(new Bgra(b, g, r));
             }
             else
             {
+                // Loop through children looking for leaves
                 for (int i = 0; i < 8; i++)
                 {
-                    if (Children[i] != null)
+                    if (this.children[i] != null)
                     {
-                        Children[i].ConstructPalette(palette, ref index);
+                        this.children[i].ConstructPalette(palette, ref index);
                     }
                 }
             }
         }
 
         /// <summary>
-        /// Gets the index of the palette.
+        /// Return the palette index for the passed color
         /// </summary>
-        /// <param name="pixel">The pixel.</param>
-        /// <param name="level">The level.</param>
-        /// <returns></returns>
-        /// <exception cref="System.Exception">Didn't expect this!</exception>
+        /// <param name="pixel">
+        /// The <see cref="Bgra"/> representing the pixel.
+        /// </param>
+        /// <param name="level">
+        /// The level.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/> representing the index of the pixel in the palette.
+        /// </returns>
         public int GetPaletteIndex(Bgra pixel, int level)
         {
-            int index = PaletteIndex;
+            int index = this.paletteIndex;
 
-            if (!IsLeafNode)
+            if (!this.leaf)
             {
                 int shift = 7 - level;
-                int pixelIndex = (((byte)pixel.Red & Mask[level]) >> (shift - 2)) |
-                                 (((byte)pixel.Green & Mask[level]) >> (shift - 1)) |
-                                 (((byte)pixel.Blue & Mask[level]) >> shift);
+                int pixelIndex = ((pixel.Red & Mask[level]) >> (shift - 2)) |
+                                 ((pixel.Green & Mask[level]) >> (shift - 1)) |
+                                 ((pixel.Blue & Mask[level]) >> shift);
 
-                if (Children[pixelIndex] != null)
+                if (this.children[pixelIndex] != null)
                 {
-                    index = Children[pixelIndex].GetPaletteIndex(pixel, level + 1);
+                    index = this.children[pixelIndex].GetPaletteIndex(pixel, level + 1);
                 }
                 else
                 {
@@ -220,10 +231,10 @@ namespace Structure.Sketching.Quantizers.Octree
         /// </param>
         public void Increment(Bgra pixel)
         {
-            PixelCount++;
-            Color.Red += pixel.Red;
-            Color.Green += pixel.Green;
-            Color.Blue += pixel.Blue;
+            this.pixelCount++;
+            this.red += pixel.Red;
+            this.green += pixel.Green;
+            this.blue += pixel.Blue;
         }
 
         /// <summary>
@@ -232,22 +243,27 @@ namespace Structure.Sketching.Quantizers.Octree
         /// <returns>The number of leaves removed</returns>
         public int Reduce()
         {
-            Color = new Bgra(0, 0, 0);
+            this.red = this.green = this.blue = 0;
             int childNodes = 0;
+
+            // Loop through all children and add their information to this node
             for (int index = 0; index < 8; index++)
             {
-                if (Children[index] != null)
+                if (this.children[index] != null)
                 {
-                    Color.Red += Children[index].Color.Red;
-                    Color.Green += Children[index].Color.Green;
-                    Color.Blue += Children[index].Color.Blue;
-                    PixelCount += Children[index].PixelCount;
+                    this.red += this.children[index].red;
+                    this.green += this.children[index].green;
+                    this.blue += this.children[index].blue;
+                    this.pixelCount += this.children[index].pixelCount;
                     ++childNodes;
-                    Children[index] = null;
+                    this.children[index] = null;
                 }
             }
 
-            IsLeafNode = true;
+            // Now change this to a leaf node
+            this.leaf = true;
+
+            // Return the number of nodes to decrement the leaf count by
             return childNodes - 1;
         }
     }

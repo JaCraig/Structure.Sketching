@@ -14,9 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors.ColorSpaces;
 using Structure.Sketching.Formats.Gif.Format.BaseClasses;
 using Structure.Sketching.IO;
+using Structure.Sketching.Quantizers;
+using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Structure.Sketching.Formats.Gif.Format
 {
@@ -26,6 +30,33 @@ namespace Structure.Sketching.Formats.Gif.Format
     /// <seealso cref="Structure.Sketching.Formats.Gif.Format.BaseClasses.SectionBase" />
     public class ColorTable : SectionBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ColorTable"/> class.
+        /// </summary>
+        /// <param name="image">The image.</param>
+        /// <param name="BitDepth">The bit depth.</param>
+        public ColorTable(QuantizedImage image, int BitDepth)
+        {
+            Bgra[] palette = image.Palette;
+            int pixelCount = palette.Length;
+
+            // Get max colors for bit depth.
+            int colorTableLength = (int)Math.Pow(2, BitDepth) * 3;
+            byte[] colorTable = new byte[colorTableLength];
+
+            Parallel.For(0, pixelCount,
+                i =>
+                {
+                    int offset = i * 3;
+                    Bgra color = palette[i];
+
+                    colorTable[offset] = color.Red;
+                    colorTable[offset + 1] = color.Green;
+                    colorTable[offset + 2] = color.Blue;
+                });
+            Data = colorTable;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Format.ColorTable"/> class.
         /// </summary>

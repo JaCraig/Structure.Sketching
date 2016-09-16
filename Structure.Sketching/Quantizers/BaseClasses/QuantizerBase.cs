@@ -57,11 +57,9 @@ namespace Structure.Sketching.Quantizers.BaseClasses
         public QuantizedImage Quantize(Image image, int maxColors)
         {
             Initialize(image, maxColors);
-
-            byte[] Pixels = new byte[image.Width * image.Height];
             Bgra[] Palette = GetPalette();
 
-            Pixels = Process(image);
+            byte[] Pixels = Process(image);
             return new QuantizedImage(image.Width, image.Height, Palette, Pixels, TransparentIndex);
         }
 
