@@ -17,7 +17,6 @@ limitations under the License.
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters
@@ -25,7 +24,7 @@ namespace Structure.Sketching.Filters
     /// <summary>
     /// Translate the image
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter" />
+    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
     public class Translate : IFilter
     {
         /// <summary>
@@ -42,17 +41,13 @@ namespace Structure.Sketching.Filters
         /// <summary>
         /// Gets or sets the x delta.
         /// </summary>
-        /// <value>
-        /// The x delta.
-        /// </value>
+        /// <value>The x delta.</value>
         public int XDelta { get; set; }
 
         /// <summary>
         /// Gets or sets the y delta.
         /// </summary>
-        /// <value>
-        /// The y delta.
-        /// </value>
+        /// <value>The y delta.</value>
         public int YDelta { get; set; }
 
         /// <summary>
@@ -64,23 +59,33 @@ namespace Structure.Sketching.Filters
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var Result = new Vector4[image.Pixels.Length];
+            var Result = new byte[image.Pixels.Length];
             Array.Copy(image.Pixels, Result, Result.Length);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* SourcePointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* SourcePointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
                 {
-                    Vector4* SourcePointer2 = SourcePointer;
+                    byte* SourcePointer2 = SourcePointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
                         var TargetY = y + YDelta;
                         var TargetX = x + XDelta;
                         if (TargetY >= 0 && TargetY < image.Height && TargetX >= 0 && TargetX < image.Width)
                         {
-                            var TargetStart = (TargetY * image.Width) + TargetX;
+                            var TargetStart = ((TargetY * image.Width) + TargetX) * 4;
                             Result[TargetStart] = *SourcePointer2;
+                            ++SourcePointer2;
+                            Result[TargetStart + 1] = *SourcePointer2;
+                            ++SourcePointer2;
+                            Result[TargetStart + 2] = *SourcePointer2;
+                            ++SourcePointer2;
+                            Result[TargetStart + 3] = *SourcePointer2;
+                            ++SourcePointer2;
                         }
-                        ++SourcePointer2;
+                        else
+                        {
+                            SourcePointer2 += 4;
+                        }
                     }
                 }
             });

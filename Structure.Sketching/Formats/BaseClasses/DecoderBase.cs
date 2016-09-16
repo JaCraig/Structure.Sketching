@@ -25,7 +25,7 @@ namespace Structure.Sketching.Formats.BaseClasses
     /// Decoder base class
     /// </summary>
     /// <typeparam name="TFile">The type of the file format class.</typeparam>
-    /// <seealso cref="Structure.Sketching.Formats.Interfaces.IDecoder" />
+    /// <seealso cref="Structure.Sketching.Formats.Interfaces.IDecoder"/>
     public abstract class DecoderBase<TFile> : IDecoder
         where TFile : FileBase, new()
     {
@@ -39,26 +39,20 @@ namespace Structure.Sketching.Formats.BaseClasses
         /// <summary>
         /// Gets the size of the header.
         /// </summary>
-        /// <value>
-        /// The size of the header.
-        /// </value>
+        /// <value>The size of the header.</value>
         public abstract int HeaderSize { get; }
 
         /// <summary>
         /// Gets the file extensions.
         /// </summary>
-        /// <value>
-        /// The file extensions.
-        /// </value>
+        /// <value>The file extensions.</value>
         protected abstract string[] FileExtensions { get; }
 
         /// <summary>
         /// Determines whether this instance can decode the specified stream.
         /// </summary>
         /// <param name="stream">The stream.</param>
-        /// <returns>
-        /// True if it can, false otherwise
-        /// </returns>
+        /// <returns>True if it can, false otherwise</returns>
         public bool CanDecode(Stream stream)
         {
             if (stream == null) return false;
@@ -74,18 +68,14 @@ namespace Structure.Sketching.Formats.BaseClasses
         /// Determines whether this instance can decode the specified header.
         /// </summary>
         /// <param name="header">The header data</param>
-        /// <returns>
-        /// True if it can, false otherwise
-        /// </returns>
+        /// <returns>True if it can, false otherwise</returns>
         public abstract bool CanDecode(byte[] header);
 
         /// <summary>
         /// Determines whether this instance can decode the specified file name.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-        /// <returns>
-        /// True if it can, false otherwise
-        /// </returns>
+        /// <returns>True if it can, false otherwise</returns>
         public bool CanDecode(string fileName)
         {
             if (string.IsNullOrEmpty(fileName)) return false;
@@ -96,13 +86,11 @@ namespace Structure.Sketching.Formats.BaseClasses
         /// Decodes the specified stream and returns an image
         /// </summary>
         /// <param name="stream">The stream containing the image data.</param>
-        /// <returns>
-        /// The resulting image
-        /// </returns>
+        /// <returns>The resulting image</returns>
         public Image Decode(Stream stream)
         {
             if (stream == null)
-                return new Image(1, 1, new float[1]);
+                return new Image(1, 1, new byte[4]);
             return new TFile().Decode(stream);
         }
 
@@ -110,13 +98,11 @@ namespace Structure.Sketching.Formats.BaseClasses
         /// Decodes the specified stream and returns an animation
         /// </summary>
         /// <param name="stream">The stream containing the animation data.</param>
-        /// <returns>
-        /// The resulting animation
-        /// </returns>
+        /// <returns>The resulting animation</returns>
         public Animation DecodeAnimation(Stream stream)
         {
             if (stream == null)
-                return new Animation(new Image[] { new Image(1, 1, new float[1]) }, 0);
+                return new Animation(new Image[] { new Image(1, 1, new byte[4]) }, 0);
             return new TFile().Decode(stream);
         }
     }

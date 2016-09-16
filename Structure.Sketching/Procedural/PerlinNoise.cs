@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 using Structure.Sketching.ExtensionMethods;
-using System.Numerics;
 
 namespace Structure.Sketching.Procedural
 {
@@ -40,7 +39,7 @@ namespace Structure.Sketching.Procedural
         public static Image Generate(int Width, int Height, float MaxRGBValue, float MinRGBValue,
             float Frequency, float Amplitude, float Persistance, int Octaves, int Seed)
         {
-            var ReturnValue = new Image(Width, Height, new Vector4[Width * Height]);
+            var ReturnValue = new Image(Width, Height, new byte[Width * Height * 4]);
             float[,] Noise = GenerateNoise(Seed, Width, Height);
             for (int x = 0; x < Width; ++x)
             {
@@ -49,11 +48,11 @@ namespace Structure.Sketching.Procedural
                     float Value = GetValue(x, y, Width, Height, Frequency, Amplitude, Persistance, Octaves, Noise);
                     Value = (Value * 0.5f) + 0.5f;
                     Value *= 255;
-                    float RGBValue = Value.Clamp(MinRGBValue, MaxRGBValue);
-                    ReturnValue.Pixels[(y * Width) + x].X = RGBValue;
-                    ReturnValue.Pixels[(y * Width) + x].Y = RGBValue;
-                    ReturnValue.Pixels[(y * Width) + x].Z = RGBValue;
-                    ReturnValue.Pixels[(y * Width) + x].W = 1f;
+                    byte RGBValue = (byte)Value.Clamp(MinRGBValue, MaxRGBValue);
+                    ReturnValue.Pixels[(y * Width) + x] = RGBValue;
+                    ReturnValue.Pixels[(y * Width) + x + 1] = RGBValue;
+                    ReturnValue.Pixels[(y * Width) + x + 2] = RGBValue;
+                    ReturnValue.Pixels[(y * Width) + x + 3] = 255;
                 }
             }
             return ReturnValue;

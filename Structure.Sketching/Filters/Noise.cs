@@ -16,7 +16,6 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters
@@ -31,7 +30,7 @@ namespace Structure.Sketching.Filters
         /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
         /// <param name="amount">The amount of potential randomization (0 to 1).</param>
-        public Noise(double amount)
+        public Noise(byte amount)
         {
             Amount = amount;
         }
@@ -40,7 +39,7 @@ namespace Structure.Sketching.Filters
         /// Gets or sets the amount.
         /// </summary>
         /// <value>The amount.</value>
-        public double Amount { get; set; }
+        public byte Amount { get; set; }
 
         /// <summary>
         /// Applies the filter to the specified image.
@@ -53,21 +52,23 @@ namespace Structure.Sketching.Filters
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* OutputPointer = Pointer;
+                    byte* OutputPointer = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        float R = (*OutputPointer).X + (float)Numerics.Random.ThreadSafeNextDouble(-Amount, Amount);
-                        float G = (*OutputPointer).Y + (float)Numerics.Random.ThreadSafeNextDouble(-Amount, Amount);
-                        float B = (*OutputPointer).Z + (float)Numerics.Random.ThreadSafeNextDouble(-Amount, Amount);
-                        R = R < 0 ? 0 : R > 1 ? 1 : R;
-                        G = G < 0 ? 0 : G > 1 ? 1 : G;
-                        B = B < 0 ? 0 : B > 1 ? 1 : B;
-                        (*OutputPointer).X = R;
-                        (*OutputPointer).Y = G;
-                        (*OutputPointer).Z = B;
-                        OutputPointer++;
+                        int R = (*OutputPointer) + Random.ThreadSafeNext(-Amount, Amount);
+                        int G = *(OutputPointer + 1) + Random.ThreadSafeNext(-Amount, Amount);
+                        int B = *(OutputPointer + 2) + Random.ThreadSafeNext(-Amount, Amount);
+                        R = R < 0 ? 0 : R > 255 ? 255 : R;
+                        G = G < 0 ? 0 : G > 255 ? 255 : G;
+                        B = B < 0 ? 0 : B > 255 ? 255 : B;
+                        (*OutputPointer) = (byte)R;
+                        ++OutputPointer;
+                        (*OutputPointer) = (byte)G;
+                        ++OutputPointer;
+                        (*OutputPointer) = (byte)B;
+                        OutputPointer += 2;
                     }
                 }
             });

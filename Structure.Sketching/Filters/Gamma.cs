@@ -16,7 +16,6 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters
@@ -61,15 +60,17 @@ namespace Structure.Sketching.Filters
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* TargetPointer2 = TargetPointer;
+                    byte* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        (*TargetPointer2).X = Ramp[(int)((*TargetPointer2).X * 255)] / 255f;
-                        (*TargetPointer2).Y = Ramp[(int)((*TargetPointer2).Y * 255)] / 255f;
-                        (*TargetPointer2).Z = Ramp[(int)((*TargetPointer2).Z * 255)] / 255f;
+                        *TargetPointer2 = (byte)Ramp[*TargetPointer2];
                         ++TargetPointer2;
+                        *TargetPointer2 = (byte)Ramp[*TargetPointer2];
+                        ++TargetPointer2;
+                        *TargetPointer2 = (byte)Ramp[*TargetPointer2];
+                        TargetPointer2 += 2;
                     }
                 }
             });

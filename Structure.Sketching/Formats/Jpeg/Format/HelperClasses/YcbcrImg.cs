@@ -20,7 +20,6 @@ using Structure.Sketching.Formats.Jpeg.Format.HelperClasses.Enums;
 using Structure.Sketching.Formats.Jpeg.Format.Segments;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
@@ -59,97 +58,73 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
         /// <summary>
         /// Gets or sets the cb pixels.
         /// </summary>
-        /// <value>
-        /// The cb pixels.
-        /// </value>
+        /// <value>The cb pixels.</value>
         public byte[] CBPixels { get; set; }
 
         /// <summary>
         /// Gets or sets the c offset.
         /// </summary>
-        /// <value>
-        /// The c offset.
-        /// </value>
+        /// <value>The c offset.</value>
         public int COffset { get; set; }
 
         /// <summary>
         /// Gets or sets the cr pixels.
         /// </summary>
-        /// <value>
-        /// The cr pixels.
-        /// </value>
+        /// <value>The cr pixels.</value>
         public byte[] CRPixels { get; set; }
 
         /// <summary>
         /// Gets or sets the c stride.
         /// </summary>
-        /// <value>
-        /// The c stride.
-        /// </value>
+        /// <value>The c stride.</value>
         public int CStride { get; set; }
 
         /// <summary>
         /// Gets or sets the height.
         /// </summary>
-        /// <value>
-        /// The height.
-        /// </value>
+        /// <value>The height.</value>
         public int Height { get; set; }
 
         /// <summary>
         /// The ratio
         /// </summary>
-        /// <value>
-        /// The ratio.
-        /// </value>
+        /// <value>The ratio.</value>
         public YCbCrSubsampleRatio Ratio { get; set; }
 
         /// <summary>
         /// Gets or sets the width.
         /// </summary>
-        /// <value>
-        /// The width.
-        /// </value>
+        /// <value>The width.</value>
         public int Width { get; set; }
 
         /// <summary>
         /// X value
         /// </summary>
-        /// <value>
-        /// The x value.
-        /// </value>
+        /// <value>The x value.</value>
         public int X { get; set; }
 
         /// <summary>
         /// Gets or sets the y.
         /// </summary>
-        /// <value>
-        /// The y.
-        /// </value>
+        /// <value>The y.</value>
         public int Y { get; set; }
 
         /// <summary>
         /// Gets or sets the y offset.
         /// </summary>
-        /// <value>
-        /// The y offset.
-        /// </value>
+        /// <value>The y offset.</value>
         public int YOffset { get; set; }
 
         /// <summary>
         /// Gets or sets the y pixels.
         /// </summary>
-        /// <value>
-        /// The y pixels.
-        /// </value>
+        /// <value>The y pixels.</value>
         public byte[] YPixels { get; set; }
 
         /// <summary>
         /// Gets or sets the y stride.
         /// </summary>
-        /// <value>
-        /// The y stride.
-        /// </value>
+        /// <value>The y stride.</value>
         public int YStride { get; set; }
 
         private const byte AdobeTransformUnknown = 0;
@@ -310,7 +285,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
         {
             var StartFrameSegment = segments.OfType<StartOfFrame>().FirstOrDefault();
             int cScale = StartFrameSegment.Components[0].HorizontalSamplingFactor / StartFrameSegment.Components[1].HorizontalSamplingFactor;
-            Vector4[] pixels = new Vector4[width * height];
+            byte[] pixels = new byte[width * height * 4];
 
             Parallel.For(
                0,
@@ -326,12 +301,12 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
                        byte green = CBPixels[co + x / cScale];
                        byte blue = CRPixels[co + x / cScale];
 
-                       int index = (y * width) + x;
+                       int index = ((y * width) + x) * 4;
                        Color color = new Bgra(red, green, blue);
-                       pixels[index].X = color.Red;
-                       pixels[index].Y = color.Green;
-                       pixels[index].Z = color.Blue;
-                       pixels[index].W = color.Alpha;
+                       pixels[index] = color.Red;
+                       pixels[index + 1] = color.Green;
+                       pixels[index + 2] = color.Blue;
+                       pixels[index + 3] = color.Alpha;
                    }
                });
 
@@ -343,7 +318,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
             var StartFrameSegment = segments.OfType<StartOfFrame>().FirstOrDefault();
             int cScale = StartFrameSegment.Components[0].HorizontalSamplingFactor / StartFrameSegment.Components[1].HorizontalSamplingFactor;
 
-            Vector4[] pixels = new Vector4[width * height];
+            byte[] pixels = new byte[width * height * 4];
 
             Parallel.For(
                 0,
@@ -359,13 +334,13 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
                         byte cb = CBPixels[co + (x / cScale)];
                         byte cr = CRPixels[co + (x / cScale)];
 
-                        int index = (y * width) + x;
+                        int index = ((y * width) + x) * 4;
 
                         Color color = new YCbCr(yy, cb, cr);
-                        pixels[index].X = color.Red;
-                        pixels[index].Y = color.Green;
-                        pixels[index].Z = color.Blue;
-                        pixels[index].W = color.Alpha;
+                        pixels[index] = color.Red;
+                        pixels[index + 1] = color.Green;
+                        pixels[index + 2] = color.Blue;
+                        pixels[index + 3] = color.Alpha;
                     }
                 });
 

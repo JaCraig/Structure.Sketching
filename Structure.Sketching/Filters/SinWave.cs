@@ -18,7 +18,6 @@ using Structure.Sketching.Filters.Convolution.Enums;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters
@@ -69,13 +68,13 @@ namespace Structure.Sketching.Filters
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var Result = new Vector4[image.Width * image.Height];
+            var Result = new byte[image.Width * image.Height * 4];
             Array.Copy(image.Pixels, Result, Result.Length);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* TargetPointer2 = TargetPointer;
+                    byte* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
                         double Value1 = 0;
@@ -94,7 +93,10 @@ namespace Structure.Sketching.Filters
                             Value1 -= image.Height;
                         while (Value2 >= image.Width)
                             Value2 -= image.Width;
-                        Result[(y * image.Width) + x] = image.Pixels[((int)Value1 * image.Width) + ((int)Value2)];
+                        Result[((y * image.Width) + x) * 4] = image.Pixels[(((int)Value1 * image.Width) + ((int)Value2)) * 4];
+                        Result[(((y * image.Width) + x) * 4) + 1] = image.Pixels[((((int)Value1 * image.Width) + ((int)Value2)) * 4) + 1];
+                        Result[(((y * image.Width) + x) * 4) + 2] = image.Pixels[((((int)Value1 * image.Width) + ((int)Value2)) * 4) + 2];
+                        Result[(((y * image.Width) + x) * 4) + 3] = image.Pixels[((((int)Value1 * image.Width) + ((int)Value2)) * 4) + 3];
                     }
                 }
             });

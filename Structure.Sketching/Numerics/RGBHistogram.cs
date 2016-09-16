@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 
 namespace Structure.Sketching.Numerics
 {
@@ -110,17 +109,19 @@ namespace Structure.Sketching.Numerics
             Array.Clear(R, 0, R.Length);
             Array.Clear(G, 0, G.Length);
             Array.Clear(B, 0, B.Length);
-            fixed (Vector4* TargetPointer = &image.Pixels[0])
+            fixed (byte* TargetPointer = &image.Pixels[0])
             {
-                Vector4* TargetPointer2 = TargetPointer;
+                byte* TargetPointer2 = TargetPointer;
                 for (int x = 0; x < image.Width; ++x)
                 {
                     for (int y = 0; y < image.Height; ++y)
                     {
-                        ++R[(int)((*TargetPointer2).X * 255f)];
-                        ++G[(int)((*TargetPointer2).Y * 255f)];
-                        ++B[(int)((*TargetPointer2).Z * 255f)];
-                        TargetPointer2++;
+                        ++R[*TargetPointer2];
+                        ++TargetPointer2;
+                        ++G[*TargetPointer2];
+                        ++TargetPointer2;
+                        ++B[*TargetPointer2];
+                        TargetPointer2 += 2;
                     }
                 }
             }

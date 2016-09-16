@@ -48,54 +48,42 @@ namespace Structure.Sketching.Quantizers
         /// <summary>
         /// Gets the height.
         /// </summary>
-        /// <value>
-        /// The height.
-        /// </value>
+        /// <value>The height.</value>
         public int Height { get; private set; }
 
         /// <summary>
         /// Gets the palette.
         /// </summary>
-        /// <value>
-        /// The palette.
-        /// </value>
+        /// <value>The palette.</value>
         public Bgra[] Palette { get; private set; }
 
         /// <summary>
         /// Gets the pixels.
         /// </summary>
-        /// <value>
-        /// The pixels.
-        /// </value>
+        /// <value>The pixels.</value>
         public byte[] Pixels { get; private set; }
 
         /// <summary>
         /// Gets the index of the transparent color.
         /// </summary>
-        /// <value>
-        /// The index of the transparent color.
-        /// </value>
+        /// <value>The index of the transparent color.</value>
         public int TransparentIndex { get; private set; }
 
         /// <summary>
         /// Gets the width.
         /// </summary>
-        /// <value>
-        /// The width.
-        /// </value>
+        /// <value>The width.</value>
         public int Width { get; private set; }
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="QuantizedImage"/> to <see cref="Image"/>.
         /// </summary>
         /// <param name="quantizedImage">The quantized image.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Image(QuantizedImage quantizedImage)
         {
             int palletCount = quantizedImage.Palette.Length - 1;
-            float[] Pixels = new float[quantizedImage.Pixels.Length * 4];
+            byte[] Pixels = new byte[quantizedImage.Pixels.Length * 4];
 
             Parallel.For(0, quantizedImage.Pixels.Length, x =>
             {

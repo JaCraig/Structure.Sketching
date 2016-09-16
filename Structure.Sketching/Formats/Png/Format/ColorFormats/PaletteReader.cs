@@ -23,11 +23,11 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
     /// <summary>
     /// Palette reader
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces.IColorReader" />
+    /// <seealso cref="Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces.IColorReader"/>
     public class PaletteReader : IColorReader
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PaletteReader" /> class.
+        /// Initializes a new instance of the <see cref="PaletteReader"/> class.
         /// </summary>
         /// <param name="palette">The palette.</param>
         /// <param name="alphaPalette">The alpha palette.</param>
@@ -40,17 +40,13 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
         /// <summary>
         /// Gets or sets the alpha palette.
         /// </summary>
-        /// <value>
-        /// The alpha palette.
-        /// </value>
+        /// <value>The alpha palette.</value>
         public Palette AlphaPalette { get; set; }
 
         /// <summary>
         /// Gets or sets the palette.
         /// </summary>
-        /// <value>
-        /// The palette.
-        /// </value>
+        /// <value>The palette.</value>
         public Palette Palette { get; set; }
 
         /// <summary>
@@ -60,7 +56,7 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
         /// <param name="pixels">The pixels.</param>
         /// <param name="header">The header.</param>
         /// <param name="row">The row.</param>
-        public void ReadScanline(byte[] scanline, float[] pixels, Header header, int row)
+        public void ReadScanline(byte[] scanline, byte[] pixels, Header header, int row)
         {
             scanline = scanline.ExpandArray(header.BitDepth);
 
@@ -70,10 +66,10 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
                 {
                     int Offset = ((row * header.Width) + x) * 4;
                     int PixelOffset = scanline[x] * 3;
-                    pixels[Offset] = Palette.Data[PixelOffset] / 255f;
-                    pixels[Offset + 1] = Palette.Data[PixelOffset + 1] / 255f;
-                    pixels[Offset + 2] = Palette.Data[PixelOffset + 2] / 255f;
-                    pixels[Offset + 3] = AlphaPalette.Data.Length > scanline[x] ? AlphaPalette.Data[scanline[x]] / 255f : 1;
+                    pixels[Offset] = Palette.Data[PixelOffset];
+                    pixels[Offset + 1] = Palette.Data[PixelOffset + 1];
+                    pixels[Offset + 2] = Palette.Data[PixelOffset + 2];
+                    pixels[Offset + 3] = (byte)(AlphaPalette.Data.Length > scanline[x] ? AlphaPalette.Data[scanline[x]] : 255);
                 }
             }
             else
@@ -83,10 +79,10 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
                     int Offset = ((row * header.Width) + x) * 4;
                     int PixelOffset = scanline[x] * 3;
 
-                    pixels[Offset] = Palette.Data[PixelOffset] / 255f;
-                    pixels[Offset + 1] = Palette.Data[PixelOffset + 1] / 255f;
-                    pixels[Offset + 2] = Palette.Data[PixelOffset + 2] / 255f;
-                    pixels[Offset + 3] = 1;
+                    pixels[Offset] = Palette.Data[PixelOffset];
+                    pixels[Offset + 1] = Palette.Data[PixelOffset + 1];
+                    pixels[Offset + 2] = Palette.Data[PixelOffset + 2];
+                    pixels[Offset + 3] = 255;
                 }
             }
         }

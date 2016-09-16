@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters
@@ -28,7 +28,7 @@ namespace Structure.Sketching.Filters
     public class Solarize : IFilter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Solarize" /> class.
+        /// Initializes a new instance of the <see cref="Solarize"/> class.
         /// </summary>
         /// <param name="threshold">The threshold (between 0 and 3).</param>
         public Solarize(float threshold)
@@ -39,9 +39,7 @@ namespace Structure.Sketching.Filters
         /// <summary>
         /// Gets or sets the threshold.
         /// </summary>
-        /// <value>
-        /// The threshold.
-        /// </value>
+        /// <value>The threshold.</value>
         public float Threshold { get; set; }
 
         /// <summary>
@@ -55,18 +53,21 @@ namespace Structure.Sketching.Filters
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
                 {
-                    Vector4* OutputPointer = Pointer;
+                    byte* OutputPointer = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        if (Vector4.Distance(*OutputPointer, Vector4.Zero) < Threshold)
+                        if (Distance.Euclidean(new Color(*OutputPointer, *(OutputPointer + 1), *(OutputPointer + 2)), Color.Black) < Threshold)
                         {
-                            (*OutputPointer).X = 1f - (*OutputPointer).X;
-                            (*OutputPointer).Y = 1f - (*OutputPointer).Y;
-                            (*OutputPointer).Z = 1f - (*OutputPointer).Z;
+                            (*OutputPointer) = (byte)(255 - (*OutputPointer));
+                            ++OutputPointer;
+                            (*OutputPointer) = (byte)(255 - (*OutputPointer));
+                            ++OutputPointer;
+                            (*OutputPointer) = (byte)(255 - (*OutputPointer));
+                            OutputPointer += 2;
                         }
-                        OutputPointer++;
+                        OutputPointer += 4;
                     }
                 }
             });

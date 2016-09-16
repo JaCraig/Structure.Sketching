@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.ExtensionMethods;
 using Structure.Sketching.Filters;
 using Structure.Sketching.Filters.Arithmetic;
 using Structure.Sketching.Filters.ColorMatrix;
@@ -37,7 +36,7 @@ namespace Structure.Sketching
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
         public Image(int width, int height)
-            : this(width, height, (Vector4[])null)
+            : this(width, height, new byte[width * height * 4])
         {
         }
 
@@ -47,20 +46,9 @@ namespace Structure.Sketching
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
         /// <param name="data">The data.</param>
-        public Image(int width, int height, Vector4[] data)
+        public Image(int width, int height, byte[] data)
         {
             ReCreate(width, height, data);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Image"/> class.
-        /// </summary>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
-        /// <param name="data">The data.</param>
-        public Image(int width, int height, float[] data)
-            : this(width, height, data.ToVector4())
-        {
         }
 
         /// <summary>
@@ -113,7 +101,7 @@ namespace Structure.Sketching
         /// Gets or sets the pixels.
         /// </summary>
         /// <value>The pixels.</value>
-        public Vector4[] Pixels { get; private set; }
+        public byte[] Pixels { get; private set; }
 
         /// <summary>
         /// Gets or sets the width.
@@ -134,7 +122,7 @@ namespace Structure.Sketching
         /// <returns>The result of the operator.</returns>
         public static unsafe Image operator -(Image image1, Image image2)
         {
-            var TempArray = new Vector4[image1.Width * image1.Height];
+            var TempArray = new byte[image1.Width * image1.Height * 4];
             Array.Copy(image1.Pixels, TempArray, TempArray.Length);
             var Result = new Image(image1.Width, image1.Height, TempArray);
             return new Subtract(image2).Apply(Result);
@@ -147,7 +135,7 @@ namespace Structure.Sketching
         /// <returns>The result of the operator.</returns>
         public static unsafe Image operator !(Image image)
         {
-            var TempArray = new Vector4[image.Width * image.Height];
+            var TempArray = new byte[image.Width * image.Height * 4];
             Array.Copy(image.Pixels, TempArray, TempArray.Length);
             var Result = new Image(image.Width, image.Height, TempArray);
             return new Invert().Apply(Result);
@@ -161,7 +149,7 @@ namespace Structure.Sketching
         /// <returns>The result of the operator.</returns>
         public static unsafe Image operator %(Image image1, Image image2)
         {
-            var TempArray = new Vector4[image1.Width * image1.Height];
+            var TempArray = new byte[image1.Width * image1.Height * 4];
             Array.Copy(image1.Pixels, TempArray, TempArray.Length);
             var Result = new Image(image1.Width, image1.Height, TempArray);
             return new Modulo(image2).Apply(Result);
@@ -175,7 +163,7 @@ namespace Structure.Sketching
         /// <returns>The result of the operator.</returns>
         public static unsafe Image operator &(Image image1, Image image2)
         {
-            var TempArray = new Vector4[image1.Width * image1.Height];
+            var TempArray = new byte[image1.Width * image1.Height * 4];
             Array.Copy(image1.Pixels, TempArray, TempArray.Length);
             var Result = new Image(image1.Width, image1.Height, TempArray);
             return new And(image2).Apply(Result);
@@ -189,7 +177,7 @@ namespace Structure.Sketching
         /// <returns>The result of the operator.</returns>
         public static unsafe Image operator *(Image image1, Image image2)
         {
-            var TempArray = new Vector4[image1.Width * image1.Height];
+            var TempArray = new byte[image1.Width * image1.Height * 4];
             Array.Copy(image1.Pixels, TempArray, TempArray.Length);
             var Result = new Image(image1.Width, image1.Height, TempArray);
             return new Multiplication(image2).Apply(Result);
@@ -203,7 +191,7 @@ namespace Structure.Sketching
         /// <returns>The result of the operator.</returns>
         public static unsafe Image operator /(Image image1, Image image2)
         {
-            var TempArray = new Vector4[image1.Width * image1.Height];
+            var TempArray = new byte[image1.Width * image1.Height * 4];
             Array.Copy(image1.Pixels, TempArray, TempArray.Length);
             var Result = new Image(image1.Width, image1.Height, TempArray);
             return new Division(image2).Apply(Result);
@@ -217,7 +205,7 @@ namespace Structure.Sketching
         /// <returns>The result of the operator.</returns>
         public static unsafe Image operator ^(Image image1, Image image2)
         {
-            var TempArray = new Vector4[image1.Width * image1.Height];
+            var TempArray = new byte[image1.Width * image1.Height * 4];
             Array.Copy(image1.Pixels, TempArray, TempArray.Length);
             var Result = new Image(image1.Width, image1.Height, TempArray);
             return new XOr(image2).Apply(Result);
@@ -231,7 +219,7 @@ namespace Structure.Sketching
         /// <returns>The result of the operator.</returns>
         public static unsafe Image operator |(Image image1, Image image2)
         {
-            var TempArray = new Vector4[image1.Width * image1.Height];
+            var TempArray = new byte[image1.Width * image1.Height * 4];
             Array.Copy(image1.Pixels, TempArray, TempArray.Length);
             var Result = new Image(image1.Width, image1.Height, TempArray);
             return new Or(image2).Apply(Result);
@@ -245,7 +233,7 @@ namespace Structure.Sketching
         /// <returns>The result of the operator.</returns>
         public static unsafe Image operator +(Image image1, Image image2)
         {
-            var TempArray = new Vector4[image1.Width * image1.Height];
+            var TempArray = new byte[image1.Width * image1.Height * 4];
             Array.Copy(image1.Pixels, TempArray, TempArray.Length);
             var Result = new Image(image1.Width, image1.Height, TempArray);
             return new Add(image2).Apply(Result);
@@ -260,7 +248,7 @@ namespace Structure.Sketching
         public static unsafe Image operator <<(Image image1, int value)
         {
             value = Math.Abs(value);
-            var TempArray = new Vector4[image1.Width * image1.Height];
+            var TempArray = new byte[image1.Width * image1.Height * 4];
             Array.Copy(image1.Pixels, TempArray, TempArray.Length);
             var Result = new Image(image1.Width, image1.Height, TempArray);
             return new Brightness(value / 255f).Apply(Result);
@@ -275,7 +263,7 @@ namespace Structure.Sketching
         public static unsafe Image operator >>(Image image1, int value)
         {
             value = -Math.Abs(value);
-            var TempArray = new Vector4[image1.Width * image1.Height];
+            var TempArray = new byte[image1.Width * image1.Height * 4];
             Array.Copy(image1.Pixels, TempArray, TempArray.Length);
             var Result = new Image(image1.Width, image1.Height, TempArray);
             return new Brightness(value / 255f).Apply(Result);
@@ -287,7 +275,7 @@ namespace Structure.Sketching
         /// <returns>A copy of this image.</returns>
         public Image Copy()
         {
-            var data = new Vector4[Width * Height];
+            var data = new byte[Width * Height * 4];
             Array.Copy(Pixels, data, data.Length);
             return new Image(Width, Height, data);
         }
@@ -299,7 +287,7 @@ namespace Structure.Sketching
         /// <param name="height">The new height.</param>
         /// <param name="data">The new pixel data.</param>
         /// <returns>this</returns>
-        public Image ReCreate(int width, int height, Vector4[] data)
+        public Image ReCreate(int width, int height, byte[] data)
         {
             Width = width < 1 ? 1 : width;
             Height = height < 1 ? 1 : height;
@@ -307,7 +295,7 @@ namespace Structure.Sketching
             Center = new Vector2(Width >> 1, Height >> 1);
             if (data == null)
                 return this;
-            Pixels = new Vector4[width * height];
+            Pixels = new byte[width * height * 4];
             Array.Copy(data, Pixels, Pixels.Length);
             return this;
         }
@@ -348,7 +336,7 @@ namespace Structure.Sketching
                 {
                     if (ShowLine)
                     {
-                        var RValue = TempImage.Pixels[(y * TempImage.Width) + x].X;
+                        var RValue = TempImage.Pixels[(y * TempImage.Width * 4) + (x * 4)];
                         Builder.Append(_ASCIICharacters[(int)(RValue * _ASCIICharacters.Length)]);
                     }
                 }
@@ -369,9 +357,7 @@ namespace Structure.Sketching
         /// Returns a base64 <see cref="string"/> that represents this instance.
         /// </summary>
         /// <param name="desiredFormat">The desired format.</param>
-        /// <returns>
-        /// A <see cref="string"/> that represents this instance as a base64 instance.
-        /// </returns>
+        /// <returns>A <see cref="string"/> that represents this instance as a base64 instance.</returns>
         public string ToString(FileFormats desiredFormat)
         {
             using (MemoryStream Stream = new MemoryStream())

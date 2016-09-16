@@ -16,7 +16,6 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters
@@ -40,15 +39,17 @@ namespace Structure.Sketching.Filters
             TempHistogram.Equalize();
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* TargetPointer2 = TargetPointer;
+                    byte* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        (*TargetPointer2).X = TempHistogram.R[(int)((*TargetPointer2).X * 255f)] / 255f;
-                        (*TargetPointer2).Y = TempHistogram.G[(int)((*TargetPointer2).Y * 255f)] / 255f;
-                        (*TargetPointer2).Z = TempHistogram.B[(int)((*TargetPointer2).Z * 255f)] / 255f;
+                        (*TargetPointer2) = (byte)TempHistogram.R[*TargetPointer2];
                         ++TargetPointer2;
+                        (*TargetPointer2) = (byte)TempHistogram.G[*TargetPointer2];
+                        ++TargetPointer2;
+                        (*TargetPointer2) = (byte)TempHistogram.B[*TargetPointer2];
+                        TargetPointer2 += 2;
                     }
                 }
             });

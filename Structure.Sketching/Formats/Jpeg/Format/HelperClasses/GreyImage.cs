@@ -18,7 +18,6 @@ using Structure.Sketching.Formats.Jpeg.Format.Enums;
 using Structure.Sketching.Formats.Jpeg.Format.Segments;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
@@ -29,7 +28,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
     public class GreyImage
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GreyImage" /> class.
+        /// Initializes a new instance of the <see cref="GreyImage"/> class.
         /// </summary>
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
@@ -49,57 +48,43 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
         /// <summary>
         /// Gets or sets the height.
         /// </summary>
-        /// <value>
-        /// The height.
-        /// </value>
+        /// <value>The height.</value>
         public int Height { get; set; }
 
         /// <summary>
         /// Gets or sets the offset.
         /// </summary>
-        /// <value>
-        /// The offset.
-        /// </value>
+        /// <value>The offset.</value>
         public int Offset { get; set; }
 
         /// <summary>
         /// Gets or sets the pixels.
         /// </summary>
-        /// <value>
-        /// The pixels.
-        /// </value>
+        /// <value>The pixels.</value>
         public byte[] Pixels { get; set; }
 
         /// <summary>
         /// Gets or sets the stride.
         /// </summary>
-        /// <value>
-        /// The stride.
-        /// </value>
+        /// <value>The stride.</value>
         public int Stride { get; set; }
 
         /// <summary>
         /// Gets or sets the width.
         /// </summary>
-        /// <value>
-        /// The width.
-        /// </value>
+        /// <value>The width.</value>
         public int Width { get; set; }
 
         /// <summary>
         /// Gets or sets the x.
         /// </summary>
-        /// <value>
-        /// The x.
-        /// </value>
+        /// <value>The x.</value>
         public int X { get; set; }
 
         /// <summary>
         /// Gets or sets the y.
         /// </summary>
-        /// <value>
-        /// The y.
-        /// </value>
+        /// <value>The y.</value>
         public int Y { get; set; }
 
         /// <summary>
@@ -118,7 +103,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
                 int pixelWidth = StartFrameSegment.Width;
                 int pixelHeight = StartFrameSegment.Height;
 
-                Vector4[] pixels = new Vector4[pixelWidth * pixelHeight];
+                byte[] pixels = new byte[pixelWidth * pixelHeight * 4];
 
                 Parallel.For(
                             0,
@@ -128,12 +113,12 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
                                 var yoff = GetRowOffset(y);
                                 for (int x = 0; x < pixelWidth; x++)
                                 {
-                                    int offset = (y * pixelWidth) + x;
+                                    int offset = ((y * pixelWidth) + x) * 4;
 
-                                    pixels[offset].X = Pixels[yoff + x] / 255f;
-                                    pixels[offset].Y = Pixels[yoff + x] / 255f;
-                                    pixels[offset].Z = Pixels[yoff + x] / 255f;
-                                    pixels[offset].W = 1;
+                                    pixels[offset] = Pixels[yoff + x];
+                                    pixels[offset + 1] = Pixels[yoff + x];
+                                    pixels[offset + 2] = Pixels[yoff + x];
+                                    pixels[offset + 3] = 255;
                                 }
                             });
 

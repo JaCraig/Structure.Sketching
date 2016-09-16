@@ -16,14 +16,13 @@ limitations under the License.
 
 using Structure.Sketching.Formats.BaseClasses;
 using System.IO;
-using System.Linq;
 
 namespace Structure.Sketching.Formats.Bmp.Format
 {
     /// <summary>
     /// BMP file
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.Interfaces.IFile" />
+    /// <seealso cref="Structure.Sketching.Formats.Interfaces.IFile"/>
     public class File : FileBase
     {
         /// <summary>
@@ -54,9 +53,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// Decodes the specified stream.
         /// </summary>
         /// <param name="stream">The stream.</param>
-        /// <returns>
-        /// This.
-        /// </returns>
+        /// <returns>This.</returns>
         public override FileBase Decode(Stream stream)
         {
             FileHeader = FileHeader.Read(stream);
@@ -71,9 +68,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// </summary>
         /// <param name="stream">The stream.</param>
         /// <param name="image">The image.</param>
-        /// <returns>
-        /// True if it writes successfully, false otherwise.
-        /// </returns>
+        /// <returns>True if it writes successfully, false otherwise.</returns>
         public override bool Write(BinaryWriter stream, Image image)
         {
             LoadImage(image);
@@ -88,9 +83,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="animation">The animation.</param>
-        /// <returns>
-        /// True if it writes successfully, false otherwise.
-        /// </returns>
+        /// <returns>True if it writes successfully, false otherwise.</returns>
         public override bool Write(BinaryWriter writer, Animation animation)
         {
             return Write(writer, animation[0]);
@@ -99,9 +92,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// <summary>
         /// Converts the file to an animation.
         /// </summary>
-        /// <returns>
-        /// The animation version of the file.
-        /// </returns>
+        /// <returns>The animation version of the file.</returns>
         protected override Animation ToAnimation()
         {
             return new Animation(new Image[] { ToImage() }, 0);
@@ -110,12 +101,10 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// <summary>
         /// Converts the file to an image.
         /// </summary>
-        /// <returns>
-        /// The image version of the file.
-        /// </returns>
+        /// <returns>The image version of the file.</returns>
         protected override Image ToImage()
         {
-            return new Image(Header.Width, Header.Height, Body.Data.Select(x => x / 255f).ToArray());
+            return new Image(Header.Width, Header.Height, Body.Data);
         }
 
         /// <summary>
@@ -124,7 +113,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// <param name="image">The image.</param>
         private void LoadImage(Image image)
         {
-            var ImageSize = image.Pixels.Length * 3;
+            var ImageSize = image.Pixels.Length;
             FileHeader = new FileHeader(54 + ImageSize, 54);
             Header = new Header(image.Width, image.Height, 24, ImageSize, 0, 0, 0, 0, Compression.RGB);
             Palette = new Palette(0, new byte[0]);

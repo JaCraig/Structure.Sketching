@@ -30,7 +30,7 @@ namespace Structure.Sketching.Formats.Gif.Format
     /// <summary>
     /// Gif file class
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.BaseClasses.FileBase" />
+    /// <seealso cref="Structure.Sketching.Formats.BaseClasses.FileBase"/>
     public class File : FileBase
     {
         /// <summary>
@@ -46,90 +46,68 @@ namespace Structure.Sketching.Formats.Gif.Format
         /// <summary>
         /// Gets the application extension.
         /// </summary>
-        /// <value>
-        /// The application extension.
-        /// </value>
+        /// <value>The application extension.</value>
         public ApplicationExtension AppExtension { get; private set; }
 
         /// <summary>
         /// Gets the bit depth.
         /// </summary>
-        /// <value>
-        /// The bit depth.
-        /// </value>
+        /// <value>The bit depth.</value>
         public int BitDepth { get; private set; }
 
         /// <summary>
         /// Gets the color table.
         /// </summary>
-        /// <value>
-        /// The color table.
-        /// </value>
+        /// <value>The color table.</value>
         public ColorTable ColorTable { get; private set; }
 
         /// <summary>
         /// Gets the frames.
         /// </summary>
-        /// <value>
-        /// The frames.
-        /// </value>
+        /// <value>The frames.</value>
         public List<Frame> Frames { get; private set; }
 
         /// <summary>
         /// Gets the graphics control extension.
         /// </summary>
-        /// <value>
-        /// The graphics control extension.
-        /// </value>
+        /// <value>The graphics control extension.</value>
         public GraphicsControl GraphicsControlExtension { get; private set; }
 
         /// <summary>
         /// Gets the header.
         /// </summary>
-        /// <value>
-        /// The header.
-        /// </value>
+        /// <value>The header.</value>
         public FileHeader Header { get; private set; }
 
         /// <summary>
         /// Gets or sets the quality.
         /// </summary>
-        /// <value>
-        /// The quality.
-        /// </value>
+        /// <value>The quality.</value>
         public int Quality { get; set; } = 256;
 
         /// <summary>
         /// Gets or sets the quantizer.
         /// </summary>
-        /// <value>
-        /// The quantizer.
-        /// </value>
+        /// <value>The quantizer.</value>
         public IQuantizer Quantizer { get; set; }
 
         /// <summary>
         /// Gets the screen descriptor.
         /// </summary>
-        /// <value>
-        /// The screen descriptor.
-        /// </value>
+        /// <value>The screen descriptor.</value>
         public LogicalScreenDescriptor ScreenDescriptor { get; private set; }
 
         /// <summary>
         /// Gets or sets the transparency threshold.
         /// </summary>
-        /// <value>
-        /// The transparency threshold.
-        /// </value>
+        /// <value>The transparency threshold.</value>
         public byte TransparencyThreshold { get; set; } = 128;
 
         /// <summary>
         /// Decodes the specified stream.
         /// </summary>
         /// <param name="stream">The stream.</param>
-        /// <returns>
-        /// This.
-        /// </returns>
+        /// <returns>This.</returns>
         public override FileBase Decode(Stream stream)
         {
             Header = FileHeader.Read(stream);
@@ -180,9 +158,7 @@ namespace Structure.Sketching.Formats.Gif.Format
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="animation">The animation.</param>
-        /// <returns>
-        /// True if it writes successfully, false otherwise.
-        /// </returns>
+        /// <returns>True if it writes successfully, false otherwise.</returns>
         public override bool Write(BinaryWriter writer, Animation animation)
         {
             QuantizedImage Quantized = Quantizer.Quantize(animation[0], Quality);
@@ -196,9 +172,7 @@ namespace Structure.Sketching.Formats.Gif.Format
         /// </summary>
         /// <param name="stream">The stream.</param>
         /// <param name="image">The image.</param>
-        /// <returns>
-        /// True if it writes successfully, false otherwise.
-        /// </returns>
+        /// <returns>True if it writes successfully, false otherwise.</returns>
         public override bool Write(BinaryWriter stream, Image image)
         {
             QuantizedImage Quantized = Quantizer.Quantize(image, Quality);
@@ -214,18 +188,16 @@ namespace Structure.Sketching.Formats.Gif.Format
         protected override Animation ToAnimation()
         {
             short Delay = (GraphicsControlExtension ?? new GraphicsControl(0, 0, false, Enums.DisposalMethod.Undefined)).Delay;
-            return new Animation(Frames.Select(x => new Image(ScreenDescriptor.Width, ScreenDescriptor.Height, x.Data.Select(y => ((float)y / 255f)).ToArray())), Delay);
+            return new Animation(Frames.Select(x => new Image(ScreenDescriptor.Width, ScreenDescriptor.Height, x.Data)), Delay);
         }
 
         /// <summary>
         /// Converts the file to an image.
         /// </summary>
-        /// <returns>
-        /// The image version of the file.
-        /// </returns>
+        /// <returns>The image version of the file.</returns>
         protected override Image ToImage()
         {
-            return new Image(ScreenDescriptor.Width, ScreenDescriptor.Height, Frames[0].Data.Select(x => ((float)x / 255f)).ToArray());
+            return new Image(ScreenDescriptor.Width, ScreenDescriptor.Height, Frames[0].Data);
         }
 
         /// <summary>

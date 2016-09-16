@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters
@@ -38,43 +38,46 @@ namespace Structure.Sketching.Filters
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             var MaxValue = GetMaxValue(image, targetLocation);
-            MaxValue = new Vector4((float)(1d / Math.Log(1f + MaxValue.X)),
-                (float)(1d / Math.Log(1f + MaxValue.Y)),
-                (float)(1d / Math.Log(1f + MaxValue.Z)),
-                MaxValue.W);
+            MaxValue = new Color((byte)(255d / Math.Log(255 + MaxValue.Red)),
+                (byte)(255d / Math.Log(255 + MaxValue.Green)),
+                (byte)(255d / Math.Log(255 + MaxValue.Blue)),
+                MaxValue.Alpha);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* TargetPointer2 = TargetPointer;
+                    byte* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        *TargetPointer2 = new Vector4((float)(MaxValue.X * Math.Log(1f + (*TargetPointer2).X)),
-                            (float)(MaxValue.Y * Math.Log(1f + (*TargetPointer2).Y)),
-                            (float)(MaxValue.Z * Math.Log(1f + (*TargetPointer2).Z)),
-                            (*TargetPointer2).W);
+                        *TargetPointer2 = (byte)(MaxValue.Red * Math.Log(255 + (*TargetPointer2)));
                         ++TargetPointer2;
+                        *TargetPointer2 = (byte)(MaxValue.Green * Math.Log(255 + (*TargetPointer2)));
+                        ++TargetPointer2;
+                        *TargetPointer2 = (byte)(MaxValue.Blue * Math.Log(255 + (*TargetPointer2)));
+                        TargetPointer2 += 2;
                     }
                 }
             });
             return image;
         }
 
-        private Vector4 GetMaxValue(Image image, Rectangle targetLocation)
+        private Color GetMaxValue(Image image, Rectangle targetLocation)
         {
-            var ReturnValue = new Vector4(0, 0, 0, 1);
+            var ReturnValue = new Color(0, 0, 0, 255);
             for (int y = targetLocation.Bottom; y < targetLocation.Top; ++y)
             {
                 for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    Vector4 Pixel = image.Pixels[(y * image.Width) + x];
-                    if (ReturnValue.X < Pixel.X)
-                        ReturnValue.X = Pixel.X;
-                    if (ReturnValue.Y < Pixel.Y)
-                        ReturnValue.Y = Pixel.Y;
-                    if (ReturnValue.Z < Pixel.Z)
-                        ReturnValue.Z = Pixel.Z;
-                    if (ReturnValue == Vector4.One)
+                    byte Red = image.Pixels[((y * image.Width) + x) * 4];
+                    if (ReturnValue.Red < Red)
+                        ReturnValue.Red = Red;
+                    byte Green = image.Pixels[(((y * image.Width) + x) * 4) + 1];
+                    if (ReturnValue.Green < Green)
+                        ReturnValue.Green = Green;
+                    byte Blue = image.Pixels[(((y * image.Width) + x) * 4) + 2];
+                    if (ReturnValue.Blue < Blue)
+                        ReturnValue.Blue = Blue;
+                    if (ReturnValue == Color.White)
                         return ReturnValue;
                 }
             }

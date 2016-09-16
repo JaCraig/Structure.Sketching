@@ -17,7 +17,6 @@ limitations under the License.
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Filters.Resampling.Enums;
 using Structure.Sketching.Numerics;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters
@@ -25,7 +24,7 @@ namespace Structure.Sketching.Filters
     /// <summary>
     /// Flips the image
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter" />
+    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
     public class Flip : IFilter
     {
         /// <summary>
@@ -62,22 +61,33 @@ namespace Structure.Sketching.Filters
             }
             Parallel.For(StartY, EndY, y =>
             {
-                fixed (Vector4* TargetPointer = &image.Pixels[GetPointer(y, targetLocation, image)])
+                fixed (byte* TargetPointer = &image.Pixels[GetPointer(y, targetLocation, image)])
                 {
-                    Vector4* TargetPointer2 = TargetPointer;
-                    fixed (Vector4* SourcePointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                    byte* TargetPointer2 = TargetPointer;
+                    fixed (byte* SourcePointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                     {
-                        Vector4* SourcePointer2 = SourcePointer;
+                        byte* SourcePointer2 = SourcePointer;
                         for (int x = StartX; x < EndX; ++x)
                         {
-                            Vector4 value = *SourcePointer2;
+                            byte value = *SourcePointer2;
                             *SourcePointer2 = *TargetPointer2;
                             *TargetPointer2 = value;
                             ++SourcePointer2;
+                            ++TargetPointer2;
+                            *SourcePointer2 = *TargetPointer2;
+                            *TargetPointer2 = value;
+                            ++SourcePointer2;
+                            ++TargetPointer2;
+                            *SourcePointer2 = *TargetPointer2;
+                            *TargetPointer2 = value;
+                            ++SourcePointer2;
+                            ++TargetPointer2;
+                            *SourcePointer2 = *TargetPointer2;
+                            *TargetPointer2 = value;
+                            ++SourcePointer2;
+                            ++TargetPointer2;
                             if ((FlipDirection.Horizontal & Direction) == FlipDirection.Horizontal)
-                                --TargetPointer2;
-                            else
-                                ++TargetPointer2;
+                                TargetPointer2 -= 8;
                         }
                     }
                 }
@@ -104,7 +114,7 @@ namespace Structure.Sketching.Filters
             {
                 Value += targetLocation.Left;
             }
-            return Value;
+            return Value * 4;
         }
     }
 }

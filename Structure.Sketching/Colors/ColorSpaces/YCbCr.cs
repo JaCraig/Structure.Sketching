@@ -24,8 +24,8 @@ namespace Structure.Sketching.Colors.ColorSpaces
     /// <summary>
     /// YCbCr color space
     /// </summary>
-    /// <seealso cref="IColorSpace" />
-    /// <seealso cref="IEquatable{YCbCr}" />
+    /// <seealso cref="IColorSpace"/>
+    /// <seealso cref="IEquatable{YCbCr}"/>
     public struct YCbCr : IEquatable<YCbCr>, IColorSpace
     {
         /// <summary>
@@ -44,9 +44,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <summary>
         /// Gets or sets the cb chroma.
         /// </summary>
-        /// <value>
-        /// The cb chroma.
-        /// </value>
+        /// <value>The cb chroma.</value>
         public float CbChroma
         {
             get { return cb; }
@@ -56,9 +54,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <summary>
         /// Gets or sets the cr chroma.
         /// </summary>
-        /// <value>
-        /// The cr chroma.
-        /// </value>
+        /// <value>The cr chroma.</value>
         public float CrChroma
         {
             get { return cr; }
@@ -68,9 +64,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <summary>
         /// Gets or sets the y luminance.
         /// </summary>
-        /// <value>
-        /// The y luminance.
-        /// </value>
+        /// <value>The y luminance.</value>
         public float YLuminance
         {
             get { return y; }
@@ -101,30 +95,26 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Performs an implicit conversion from <see cref="YCbCr"/> to <see cref="Color"/>.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Color(YCbCr color)
         {
             float y = color.YLuminance;
             float cb = color.CbChroma - 128;
             float cr = color.CrChroma - 128;
 
-            return new Color((y + (1.402f * cr)).Clamp(0, 255) / 255f,
-                                (y - (0.34414f * cb) - (0.71414f * cr)).Clamp(0, 255) / 255f,
-                                (y + (1.772f * cb)).Clamp(0, 255) / 255f);
+            return new Color((byte)((y + (1.402f * cr))).Clamp(0, 255),
+                                (byte)((y - (0.34414f * cb) - (0.71414f * cr))).Clamp(0, 255),
+                                (byte)((y + (1.772f * cb))).Clamp(0, 255));
         }
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="Color"/> to <see cref="YCbCr"/>.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator YCbCr(Color color)
         {
-            color = color.Clamp() * 255f;
+            color = color.Clamp();
             float r = color.Red;
             float g = color.Green;
             float b = color.Blue;
@@ -139,9 +129,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// </summary>
         /// <param name="color1">The color1.</param>
         /// <param name="color2">The color2.</param>
-        /// <returns>
-        /// The result of the operator.
-        /// </returns>
+        /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(YCbCr color1, YCbCr color2)
         {
@@ -153,9 +141,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// </summary>
         /// <param name="color1">The color1.</param>
         /// <param name="color2">The color2.</param>
-        /// <returns>
-        /// The result of the operator.
-        /// </returns>
+        /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(YCbCr color1, YCbCr color2)
         {
@@ -163,11 +149,11 @@ namespace Structure.Sketching.Colors.ColorSpaces
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="object" />, is equal to this instance.
+        /// Determines whether the specified <see cref="object"/>, is equal to this instance.
         /// </summary>
-        /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
+        /// <param name="obj">The <see cref="object"/> to compare with this instance.</param>
         /// <returns>
-        ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
@@ -180,7 +166,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>
-        /// true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(YCbCr other)
@@ -194,7 +180,8 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures
+        /// like a hash table.
         /// </returns>
         public override int GetHashCode()
         {
@@ -204,11 +191,9 @@ namespace Structure.Sketching.Colors.ColorSpaces
         }
 
         /// <summary>
-        /// Returns a <see cref="string" /> that represents this instance.
+        /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
-        /// <returns>
-        /// A <see cref="string" /> that represents this instance.
-        /// </returns>
+        /// <returns>A <see cref="string"/> that represents this instance.</returns>
         public override string ToString() => $"({y:#0.##},{cb:#0.##},{cr:#0.##})";
 
         /// <summary>

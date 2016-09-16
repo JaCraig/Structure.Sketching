@@ -17,7 +17,6 @@ limitations under the License.
 using Structure.Sketching.ExtensionMethods;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters
@@ -56,14 +55,14 @@ namespace Structure.Sketching.Filters
             {
                 int MinY = (y - (PixelSize / 2)).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
                 int MaxY = (y + (PixelSize / 2)).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-                fixed (Vector4* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* TargetPointer2 = TargetPointer;
+                    byte* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; x += PixelSize)
                     {
-                        float RValue = 0;
-                        float GValue = 0;
-                        float BValue = 0;
+                        uint RValue = 0;
+                        uint GValue = 0;
+                        uint BValue = 0;
                         int MinX = (x - (PixelSize / 2)).Clamp(targetLocation.Left, targetLocation.Right - 1);
                         int MaxX = (x + (PixelSize / 2)).Clamp(targetLocation.Left, targetLocation.Right - 1);
                         int NumberPixels = 0;
@@ -71,22 +70,22 @@ namespace Structure.Sketching.Filters
                         {
                             for (int y2 = MinY; y2 < MaxY; ++y2)
                             {
-                                RValue += image.Pixels[(y * image.Width) + x].X;
-                                GValue += image.Pixels[(y * image.Width) + x].Y;
-                                BValue += image.Pixels[(y * image.Width) + x].Z;
+                                RValue += image.Pixels[((y * image.Width) + x) * 4];
+                                GValue += image.Pixels[(((y * image.Width) + x) * 4) + 1];
+                                BValue += image.Pixels[(((y * image.Width) + x) * 4) + 2];
                                 ++NumberPixels;
                             }
                         }
-                        RValue /= NumberPixels;
-                        GValue /= NumberPixels;
-                        BValue /= NumberPixels;
+                        RValue /= (uint)NumberPixels;
+                        GValue /= (uint)NumberPixels;
+                        BValue /= (uint)NumberPixels;
                         Parallel.For(MinX, MaxX, x2 =>
                         {
                             for (int y2 = MinY; y2 < MaxY; ++y2)
                             {
-                                image.Pixels[(y2 * image.Width) + x2].X = RValue;
-                                image.Pixels[(y2 * image.Width) + x2].Y = GValue;
-                                image.Pixels[(y2 * image.Width) + x2].Z = BValue;
+                                image.Pixels[((y2 * image.Width) + x2) * 4] = (byte)RValue;
+                                image.Pixels[(((y2 * image.Width) + x2) * 4) + 1] = (byte)GValue;
+                                image.Pixels[(((y2 * image.Width) + x2) * 4) + 2] = (byte)BValue;
                             }
                         });
                     }

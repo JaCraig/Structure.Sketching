@@ -58,6 +58,15 @@
           "lib/net45/BenchmarkDotNet.Toolchains.Roslyn.dll": {}
         }
       },
+      "ImageProcessor/2.4.4": {
+        "type": "package",
+        "compile": {
+          "lib/net45/ImageProcessor.dll": {}
+        },
+        "runtime": {
+          "lib/net45/ImageProcessor.dll": {}
+        }
+      },
       "Microsoft.CodeAnalysis.Analyzers/1.1.0": {
         "type": "package",
         "frameworkAssemblies": [
@@ -954,12 +963,6 @@
           "NETStandard.Library": "1.6.0",
           "System.Numerics.Vectors": "4.1.1",
           "System.Threading.Tasks.Parallel": "4.0.1"
-        },
-        "compile": {
-          "netstandard1.3/Structure.Sketching.dll": {}
-        },
-        "runtime": {
-          "netstandard1.3/Structure.Sketching.dll": {}
         }
       }
     }
@@ -1011,6 +1014,17 @@
         "BenchmarkDotNet.Toolchains.Roslyn.nuspec",
         "lib/net45/BenchmarkDotNet.Toolchains.Roslyn.dll",
         "lib/net45/BenchmarkDotNet.Toolchains.Roslyn.xml"
+      ]
+    },
+    "ImageProcessor/2.4.4": {
+      "sha512": "eflRSDzqquWgbP3sxhUYKycxEGkrjuJjBaprbKiaH+vmg51W4ZRDgR9ocLHMpk5KRk5QeryXRIGpYRtgGvkgwA==",
+      "type": "package",
+      "path": "ImageProcessor/2.4.4",
+      "files": [
+        "ImageProcessor.2.4.4.nupkg.sha512",
+        "ImageProcessor.nuspec",
+        "lib/net40/ImageProcessor.dll",
+        "lib/net45/ImageProcessor.dll"
       ]
     },
     "Microsoft.CodeAnalysis.Analyzers/1.1.0": {
@@ -4237,15 +4251,17 @@
     "Structure.Sketching/1.0.0": {
       "type": "project",
       "path": "../Structure.Sketching/project.json",
-      "msbuildProject": "../Structure.Sketching/Structure.Sketching.xproj"
+      "msbuildProject": "../Structure.Sketching/Structure.Sketching.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "": [
       "BenchmarkDotNet.Diagnostics.Windows >= 0.9.9",
-      "Structure.Sketching >= 1.0.0-*"
+      "ImageProcessor >= 2.4.4",
+      "System.Numerics.Vectors >= 4.1.1"
     ],
     ".NETFramework,Version=v4.6.1": [
+      "Structure.Sketching",
       "System.Drawing"
     ]
   },

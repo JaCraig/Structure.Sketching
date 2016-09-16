@@ -17,7 +17,6 @@ limitations under the License.
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Morphology
@@ -52,20 +51,20 @@ namespace Structure.Sketching.Filters.Morphology
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var TempValues = new Vector4[image.Pixels.Length];
+            var TempValues = new byte[image.Pixels.Length];
             Array.Copy(image.Pixels, TempValues, TempValues.Length);
             int ApetureMin = -ApetureRadius;
             int ApetureMax = ApetureRadius;
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* TargetPointer2 = TargetPointer;
+                    byte* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        float RValue = float.MaxValue;
-                        float GValue = float.MaxValue;
-                        float BValue = float.MaxValue;
+                        byte RValue = byte.MaxValue;
+                        byte GValue = byte.MaxValue;
+                        byte BValue = byte.MaxValue;
                         for (int y2 = ApetureMin; y2 < ApetureMax; ++y2)
                         {
                             int TempY = y + y2;
@@ -78,18 +77,20 @@ namespace Structure.Sketching.Filters.Morphology
                                     Length += TempX;
                                     TempX = 0;
                                 }
-                                var Start = (TempY * image.Width) + TempX;
-                                fixed (Vector4* ImagePointer = &TempValues[Start])
+                                var Start = ((TempY * image.Width) + TempX) * 4;
+                                fixed (byte* ImagePointer = &TempValues[Start])
                                 {
-                                    Vector4* ImagePointer2 = ImagePointer;
+                                    byte* ImagePointer2 = ImagePointer;
                                     for (int x2 = 0; x2 < Length; ++x2)
                                     {
                                         if (TempX >= image.Width)
                                             break;
-                                        var TempR = (*ImagePointer2).X;
-                                        var TempG = (*ImagePointer2).Y;
-                                        var TempB = (*ImagePointer2).Z;
-                                        ImagePointer2++;
+                                        var TempR = (*ImagePointer2);
+                                        ++ImagePointer2;
+                                        var TempG = (*ImagePointer2);
+                                        ++ImagePointer2;
+                                        var TempB = (*ImagePointer2);
+                                        ImagePointer2 += 2;
                                         RValue = RValue < TempR ? RValue : TempR;
                                         GValue = GValue < TempG ? GValue : TempG;
                                         BValue = BValue < TempB ? BValue : TempB;
@@ -98,10 +99,12 @@ namespace Structure.Sketching.Filters.Morphology
                                 }
                             }
                         }
-                        (*TargetPointer2).X = RValue;
-                        (*TargetPointer2).Y = GValue;
-                        (*TargetPointer2).Z = BValue;
-                        TargetPointer2++;
+                        (*TargetPointer2) = RValue;
+                        ++TargetPointer2;
+                        (*TargetPointer2) = GValue;
+                        ++TargetPointer2;
+                        (*TargetPointer2) = BValue;
+                        TargetPointer2 += 2;
                     }
                 }
             });

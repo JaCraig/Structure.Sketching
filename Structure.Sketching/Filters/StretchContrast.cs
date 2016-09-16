@@ -18,7 +18,6 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters
@@ -38,61 +37,59 @@ namespace Structure.Sketching.Filters
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            Vector3 MinValue;
-            Vector3 MaxValue;
-            GetMinMaxPixel(out MinValue, out MaxValue, image);
+            byte[] MinValue = new byte[3];
+            byte[] MaxValue = new byte[3];
+            GetMinMaxPixel(MinValue, MaxValue, image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* TargetPointer2 = TargetPointer;
+                    byte* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        image.Pixels[(y * image.Width) + x].X = Map(image.Pixels[(y * image.Width) + x].X, MinValue.X, MaxValue.X);
-                        image.Pixels[(y * image.Width) + x].Y = Map(image.Pixels[(y * image.Width) + x].Y, MinValue.Y, MaxValue.Y);
-                        image.Pixels[(y * image.Width) + x].Z = Map(image.Pixels[(y * image.Width) + x].Z, MinValue.Z, MaxValue.Z);
+                        image.Pixels[((y * image.Width) + x) * 4] = Map(image.Pixels[(((y * image.Width) + x) * 4)], MinValue[0], MaxValue[0]);
+                        image.Pixels[(((y * image.Width) + x) * 4) + 1] = Map(image.Pixels[(((y * image.Width) + x) * 4) + 1], MinValue[1], MaxValue[1]);
+                        image.Pixels[(((y * image.Width) + x) * 4) + 2] = Map(image.Pixels[(((y * image.Width) + x) * 4) + 2], MinValue[2], MaxValue[2]);
                     }
                 }
             });
             return image;
         }
 
-        private void GetMinMaxPixel(out Vector3 minValue, out Vector3 maxValue, Image image)
+        private void GetMinMaxPixel(byte[] minValue, byte[] maxValue, Image image)
         {
-            float MinR = 1, MinG = 1, MinB = 1;
-            float MaxR = 0, MaxG = 0, MaxB = 0;
+            minValue[0] = minValue[1] = minValue[2] = 255;
+            maxValue[0] = maxValue[1] = maxValue[2] = 0;
             for (int x = 0; x < image.Width; ++x)
             {
                 for (int y = 0; y < image.Height; ++y)
                 {
-                    var TempValue = new Vector3(image.Pixels[(y * image.Width) + x].X,
-                        image.Pixels[(y * image.Width) + x].Y,
-                        image.Pixels[(y * image.Width) + x].Z);
-                    if (MinR > TempValue.X)
-                        MinR = TempValue.X;
-                    if (MaxR < TempValue.X)
-                        MaxR = TempValue.X;
+                    var TempR = image.Pixels[((y * image.Width) + x) * 4];
+                    var TempG = image.Pixels[(((y * image.Width) + x) * 4) + 1];
+                    var TempB = image.Pixels[(((y * image.Width) + x) * 4) + 2];
+                    if (minValue[0] > TempR)
+                        minValue[0] = TempR;
+                    if (maxValue[0] < TempR)
+                        maxValue[0] = TempR;
 
-                    if (MinG > TempValue.Y)
-                        MinG = TempValue.Y;
-                    if (MaxG < TempValue.Y)
-                        MaxG = TempValue.Y;
+                    if (minValue[1] > TempG)
+                        minValue[1] = TempG;
+                    if (maxValue[1] < TempG)
+                        maxValue[1] = TempG;
 
-                    if (MinB > TempValue.Z)
-                        MinB = TempValue.Z;
-                    if (MaxB < TempValue.Z)
-                        MaxB = TempValue.Z;
+                    if (minValue[2] > TempB)
+                        minValue[2] = TempB;
+                    if (maxValue[2] < TempB)
+                        maxValue[2] = TempB;
                 }
             }
-            minValue = new Vector3(MinR, MinG, MinB);
-            maxValue = new Vector3(MaxR, MaxG, MaxB);
         }
 
-        private float Map(float v, float min, float max)
+        private byte Map(byte v, byte min, byte max)
         {
             float TempVal = v - min;
             TempVal /= max - min;
-            return TempVal.Clamp(0, 1);
+            return (byte)TempVal.Clamp(0, 255);
         }
     }
 }

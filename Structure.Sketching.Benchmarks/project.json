@@ -15,7 +15,8 @@
   },
   "dependencies": {
     "BenchmarkDotNet.Diagnostics.Windows": "0.9.9",
-    "Structure.Sketching": "1.0.0-*"
+    "ImageProcessor": "2.4.4",
+    "System.Numerics.Vectors": "4.1.1"
   },
   "commands": {
     "Structure.Sketching.Benchmarks": "Structure.Sketching.Benchmarks"
@@ -23,6 +24,9 @@
   "frameworks": {
     "net461": {
       "dependencies": {
+        "Structure.Sketching": {
+          "target": "project"
+        },
       },
       "frameworkAssemblies": {
         "System.Drawing": ""

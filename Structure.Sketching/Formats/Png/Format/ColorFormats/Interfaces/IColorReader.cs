@@ -28,6 +28,6 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces
         /// <param name="pixels">Resulting pixels</param>
         /// <param name="header">Header information</param>
         /// <param name="row">Current row</param>
-        void ReadScanline(byte[] scanline, float[] pixels, Header header, int row);
+        void ReadScanline(byte[] scanline, byte[] pixels, Header header, int row);
     }
 }

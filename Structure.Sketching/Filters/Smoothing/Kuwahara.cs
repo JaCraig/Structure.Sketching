@@ -17,7 +17,6 @@ limitations under the License.
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Smoothing
@@ -61,25 +60,25 @@ namespace Structure.Sketching.Filters.Smoothing
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            Vector4[] Result = new Vector4[image.Width * image.Height];
+            byte[] Result = new byte[image.Width * image.Height * 4];
             Array.Copy(image.Pixels, Result, Result.Length);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* SourcePointer = Pointer;
+                    byte* SourcePointer = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        float[] RValues = { 0, 0, 0, 0 };
-                        float[] GValues = { 0, 0, 0, 0 };
-                        float[] BValues = { 0, 0, 0, 0 };
-                        float[] NumPixels = { 0, 0, 0, 0 };
-                        float[] MaxRValue = { 0, 0, 0, 0 };
-                        float[] MaxGValue = { 0, 0, 0, 0 };
-                        float[] MaxBValue = { 0, 0, 0, 0 };
-                        float[] MinRValue = { 1, 1, 1, 1 };
-                        float[] MinGValue = { 1, 1, 1, 1 };
-                        float[] MinBValue = { 1, 1, 1, 1 };
+                        uint[] RValues = { 0, 0, 0, 0 };
+                        uint[] GValues = { 0, 0, 0, 0 };
+                        uint[] BValues = { 0, 0, 0, 0 };
+                        uint[] NumPixels = { 0, 0, 0, 0 };
+                        uint[] MaxRValue = { 0, 0, 0, 0 };
+                        uint[] MaxGValue = { 0, 0, 0, 0 };
+                        uint[] MaxBValue = { 0, 0, 0, 0 };
+                        uint[] MinRValue = { 255, 255, 255, 255 };
+                        uint[] MinGValue = { 255, 255, 255, 255 };
+                        uint[] MinBValue = { 255, 255, 255, 255 };
 
                         for (int i = 0; i < 4; ++i)
                         {
@@ -93,24 +92,24 @@ namespace Structure.Sketching.Filters.Smoothing
                                         int TempY = y + y2;
                                         if (TempY >= 0 && TempY < image.Height)
                                         {
-                                            RValues[i] += image.Pixels[(TempY * image.Width) + TempX].X;
-                                            GValues[i] += image.Pixels[(TempY * image.Width) + TempX].Y;
-                                            BValues[i] += image.Pixels[(TempY * image.Width) + TempX].Z;
+                                            RValues[i] += image.Pixels[((TempY * image.Width) + TempX) * 4];
+                                            GValues[i] += image.Pixels[(((TempY * image.Width) + TempX) * 4) + 1];
+                                            BValues[i] += image.Pixels[(((TempY * image.Width) + TempX) * 4) + 2];
 
-                                            if (image.Pixels[(TempY * image.Width) + TempX].X > MaxRValue[i])
-                                                MaxRValue[i] = image.Pixels[(TempY * image.Width) + TempX].X;
-                                            else if (image.Pixels[(TempY * image.Width) + TempX].X < MinRValue[i])
-                                                MinRValue[i] = image.Pixels[(TempY * image.Width) + TempX].X;
+                                            if (image.Pixels[(((TempY * image.Width) + TempX) * 4)] > MaxRValue[i])
+                                                MaxRValue[i] = image.Pixels[(((TempY * image.Width) + TempX) * 4)];
+                                            else if (image.Pixels[(((TempY * image.Width) + TempX) * 4)] < MinRValue[i])
+                                                MinRValue[i] = image.Pixels[(((TempY * image.Width) + TempX) * 4)];
 
-                                            if (image.Pixels[(TempY * image.Width) + TempX].Y > MaxGValue[i])
-                                                MaxGValue[i] = image.Pixels[(TempY * image.Width) + TempX].Y;
-                                            else if (image.Pixels[(TempY * image.Width) + TempX].Y < MinGValue[i])
-                                                MinGValue[i] = image.Pixels[(TempY * image.Width) + TempX].Y;
+                                            if (image.Pixels[(((TempY * image.Width) + TempX) * 4) + 1] > MaxGValue[i])
+                                                MaxGValue[i] = image.Pixels[(((TempY * image.Width) + TempX) * 4) + 1];
+                                            else if (image.Pixels[(((TempY * image.Width) + TempX) * 4) + 1] < MinGValue[i])
+                                                MinGValue[i] = image.Pixels[(((TempY * image.Width) + TempX) * 4) + 1];
 
-                                            if (image.Pixels[(TempY * image.Width) + TempX].Z > MaxBValue[i])
-                                                MaxBValue[i] = image.Pixels[(TempY * image.Width) + TempX].Z;
-                                            else if (image.Pixels[(TempY * image.Width) + TempX].Z < MinBValue[i])
-                                                MinBValue[i] = image.Pixels[(TempY * image.Width) + TempX].Z;
+                                            if (image.Pixels[(((TempY * image.Width) + TempX) * 4) + 2] > MaxBValue[i])
+                                                MaxBValue[i] = image.Pixels[(((TempY * image.Width) + TempX) * 4) + 2];
+                                            else if (image.Pixels[(((TempY * image.Width) + TempX) * 4) + 2] < MinBValue[i])
+                                                MinBValue[i] = image.Pixels[(((TempY * image.Width) + TempX) * 4) + 2];
 
                                             ++NumPixels[i];
                                         }
@@ -120,10 +119,10 @@ namespace Structure.Sketching.Filters.Smoothing
                         }
 
                         int j = 0;
-                        float MinDifference = float.MaxValue;
+                        uint MinDifference = uint.MaxValue;
                         for (int i = 0; i < 4; ++i)
                         {
-                            float CurrentDifference = (MaxRValue[i] - MinRValue[i]) + (MaxGValue[i] - MinGValue[i]) + (MaxBValue[i] - MinBValue[i]);
+                            uint CurrentDifference = (MaxRValue[i] - MinRValue[i]) + (MaxGValue[i] - MinGValue[i]) + (MaxBValue[i] - MinBValue[i]);
                             if (CurrentDifference < MinDifference && NumPixels[i] > 0)
                             {
                                 j = i;
@@ -134,7 +133,9 @@ namespace Structure.Sketching.Filters.Smoothing
                         GValues[j] = GValues[j] / NumPixels[j];
                         BValues[j] = BValues[j] / NumPixels[j];
 
-                        Result[(y * image.Width) + x] = new Vector4(RValues[j], GValues[j], BValues[j], image.Pixels[(y * image.Width) + x].W);
+                        Result[((y * image.Width) + x) * 4] = (byte)RValues[j];
+                        Result[(((y * image.Width) + x) * 4) + 1] = (byte)GValues[j];
+                        Result[(((y * image.Width) + x) * 4) + 2] = (byte)BValues[j];
                     }
                 }
             });

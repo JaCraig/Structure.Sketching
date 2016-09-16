@@ -16,7 +16,6 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters
@@ -53,9 +52,9 @@ namespace Structure.Sketching.Filters
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* SourcePointer = Pointer;
+                    byte* SourcePointer = Pointer;
                     for (int x = 0; x < image.Width; ++x)
                     {
                         int NewX = Random.ThreadSafeNext(-Amount, Amount);
@@ -64,7 +63,13 @@ namespace Structure.Sketching.Filters
                         NewY += y;
                         NewX = NewX < targetLocation.Left ? targetLocation.Left : NewX >= targetLocation.Right ? targetLocation.Right - 1 : NewX;
                         NewY = NewY < targetLocation.Bottom ? targetLocation.Bottom : NewY >= targetLocation.Top ? targetLocation.Top - 1 : NewY;
-                        image.Pixels[(NewY * image.Width) + NewX] = *SourcePointer;
+                        image.Pixels[((NewY * image.Width) + NewX) * 4] = *SourcePointer;
+                        ++SourcePointer;
+                        image.Pixels[(((NewY * image.Width) + NewX) * 4) + 1] = *SourcePointer;
+                        ++SourcePointer;
+                        image.Pixels[(((NewY * image.Width) + NewX) * 4) + 2] = *SourcePointer;
+                        ++SourcePointer;
+                        image.Pixels[(((NewY * image.Width) + NewX) * 4) + 3] = *SourcePointer;
                         ++SourcePointer;
                     }
                 }

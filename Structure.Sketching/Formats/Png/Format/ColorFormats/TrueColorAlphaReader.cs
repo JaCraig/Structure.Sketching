@@ -22,7 +22,7 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
     /// <summary>
     /// True color with alpha reader
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces.IColorReader" />
+    /// <seealso cref="Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces.IColorReader"/>
     public class TrueColorAlphaReader : IColorReader
     {
         /// <summary>
@@ -32,7 +32,7 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
         /// <param name="pixels">The pixels.</param>
         /// <param name="header">The header.</param>
         /// <param name="row">The row.</param>
-        public unsafe void ReadScanline(byte[] scanline, float[] pixels, Header header, int row)
+        public unsafe void ReadScanline(byte[] scanline, byte[] pixels, Header header, int row)
         {
             scanline = scanline.ExpandArray(header.BitDepth);
             fixed (byte* ScanlinePointer = &scanline[0])
@@ -41,13 +41,13 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
                 for (int x = 0; x < scanline.Length; x += 4)
                 {
                     int Offset = ((row * header.Width) + (x >> 2)) * 4;
-                    pixels[Offset] = *ScanlinePointer2 / 255f;
+                    pixels[Offset] = *ScanlinePointer2;
                     ++ScanlinePointer2;
-                    pixels[Offset + 1] = *ScanlinePointer2 / 255f;
+                    pixels[Offset + 1] = *ScanlinePointer2;
                     ++ScanlinePointer2;
-                    pixels[Offset + 2] = *ScanlinePointer2 / 255f;
+                    pixels[Offset + 2] = *ScanlinePointer2;
                     ++ScanlinePointer2;
-                    pixels[Offset + 3] = *ScanlinePointer2 / 255f;
+                    pixels[Offset + 3] = *ScanlinePointer2;
                     ++ScanlinePointer2;
                 }
             }

@@ -127,9 +127,7 @@ namespace Structure.Sketching.Numerics
         /// <summary>
         /// Gets the identity.
         /// </summary>
-        /// <value>
-        /// The identity.
-        /// </value>
+        /// <value>The identity.</value>
         public static Matrix5x5 Identity => _identity;
 
         /// <summary>
@@ -490,32 +488,15 @@ namespace Structure.Sketching.Numerics
         /// <param name="value2">The vector</param>
         /// <returns>The resulting vector</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe Vector4 operator *(Matrix5x5 value1, float* value2)
+        public static unsafe Vector4 operator *(Matrix5x5 value1, byte* value2)
         {
-            float* g = value2 + 1;
-            float* b = value2 + 2;
-            float* a = value2 + 3;
+            byte* g = value2 + 1;
+            byte* b = value2 + 2;
+            byte* a = value2 + 3;
             return new Vector4(*value2 * value1.M11 + *g * value1.M21 + *b * value1.M31 + *a * value1.M41 + value1.M51,
                                 *value2 * value1.M12 + *g * value1.M22 + *b * value1.M32 + *a * value1.M42 + value1.M52,
                                 *value2 * value1.M13 + *g * value1.M23 + *b * value1.M33 + *a * value1.M43 + value1.M53,
                                 *value2 * value1.M14 + *g * value1.M24 + *b * value1.M34 + *a * value1.M44 + value1.M54);
-        }
-
-        /// <summary>
-        /// Multiplies a matrix by a vector.
-        /// </summary>
-        /// <param name="value1">The source matrix</param>
-        /// <param name="value2">The vector</param>
-        /// <returns>
-        /// The result of the operator.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe Vector4 operator *(Matrix5x5 value1, Vector4 value2)
-        {
-            return new Vector4(value2.X * value1.M11 + value2.Y * value1.M21 + value2.Z * value1.M31 + value2.W * value1.M41 + value1.M51,
-                               value2.X * value1.M12 + value2.Y * value1.M22 + value2.Z * value1.M32 + value2.W * value1.M42 + value1.M52,
-                               value2.X * value1.M13 + value2.Y * value1.M23 + value2.Z * value1.M33 + value2.W * value1.M43 + value1.M53,
-                               value2.X * value1.M14 + value2.Y * value1.M24 + value2.Z * value1.M34 + value2.W * value1.M44 + value1.M54);
         }
 
         /// <summary>

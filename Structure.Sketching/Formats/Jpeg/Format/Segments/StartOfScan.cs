@@ -29,7 +29,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
     /// <summary>
     /// Start of scan segment
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.Jpeg.Format.Segments.SegmentBase" />
+    /// <seealso cref="Structure.Sketching.Formats.Jpeg.Format.Segments.SegmentBase"/>
     public class StartOfScan : SegmentBase
     {
         /// <summary>
@@ -43,7 +43,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StartOfScan" /> class.
+        /// Initializes a new instance of the <see cref="StartOfScan"/> class.
         /// </summary>
         /// <param name="image">The image.</param>
         /// <param name="defineHuffmanTableSegment">The define huffman table segment.</param>
@@ -59,25 +59,19 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
         /// <summary>
         /// Gets or sets the image.
         /// </summary>
-        /// <value>
-        /// The image.
-        /// </value>
+        /// <value>The image.</value>
         public Image Image { get; set; }
 
         /// <summary>
         /// Gets or sets the define huffman table segment.
         /// </summary>
-        /// <value>
-        /// The define huffman table segment.
-        /// </value>
+        /// <value>The define huffman table segment.</value>
         private DefineHuffmanTable DefineHuffmanTableSegment { get; set; }
 
         /// <summary>
         /// Gets or sets the define quantization table segment.
         /// </summary>
-        /// <value>
-        /// The define quantization table segment.
-        /// </value>
+        /// <value>The define quantization table segment.</value>
         private DefineQuantizationTable DefineQuantizationTableSegment { get; set; }
 
         /// <summary>
@@ -143,9 +137,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
         /// </summary>
         /// <param name="image">The image.</param>
         /// <param name="segments">The segments.</param>
-        /// <returns>
-        /// The resulting image
-        /// </returns>
+        /// <returns>The resulting image</returns>
         public Image Convert(Image image, IEnumerable<SegmentBase> segments)
         {
             StartOfFrame Frame = segments.OfType<StartOfFrame>().FirstOrDefault();
@@ -166,35 +158,11 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
         /// </summary>
         /// <param name="segments">The segments.</param>
         /// <exception cref="System.Exception">
-        /// missing SOF marker
-        /// or
-        /// SOS has wrong length
-        /// or
-        /// SOS length inconsistent with number of components
-        /// or
-        /// Unknown component selector
-        /// or
-        /// Repeated component selector
-        /// or
-        /// bad Td value
-        /// or
-        /// bad Ta value
-        /// or
-        /// Total sampling factors too large.
-        /// or
-        /// bad spectral selection bounds
-        /// or
-        /// progressive AC coefficients for more than one component
-        /// or
-        /// bad successive approximation values
-        /// or
-        /// Excessive DC component
-        /// or
-        /// Too many components
-        /// or
-        /// Too many components
-        /// or
-        /// Bad RST marker
+        /// missing SOF marker or SOS has wrong length or SOS length inconsistent with number of
+        /// components or Unknown component selector or Repeated component selector or bad Td value
+        /// or bad Ta value or Total sampling factors too large. or bad spectral selection bounds or
+        /// progressive AC coefficients for more than one component or bad successive approximation
+        /// values or Excessive DC component or Too many components or Too many components or Bad RST marker
         /// </exception>
         public override void Setup(IEnumerable<SegmentBase> segments)
         {
@@ -764,8 +732,8 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
             {
                 for (int i = 0; i < 8; i++)
                 {
-                    var Offset = Math.Min(x + i, xmax) + (Math.Min(y + j, ymax) * Image.Width);
-                    YCbCr color = (Color)Image.Pixels[Offset];
+                    var Offset = Math.Min(x + i, xmax) + (Math.Min(y + j, ymax) * Image.Width) * 4;
+                    YCbCr color = new Color(Image.Pixels[Offset], Image.Pixels[Offset + 1], Image.Pixels[Offset + 2], Image.Pixels[Offset + 3]);
                     int index = (8 * j) + i;
                     yBlock[index] = (int)color.YLuminance;
                     cbBlock[index] = (int)color.CbChroma;

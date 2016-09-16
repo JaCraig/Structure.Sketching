@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters
@@ -31,7 +31,7 @@ namespace Structure.Sketching.Filters
         /// Initializes a new instance of the <see cref="Fill"/> class.
         /// </summary>
         /// <param name="color">The color.</param>
-        public Fill(Vector4 color)
+        public Fill(Color color)
         {
             Color = color;
         }
@@ -40,7 +40,7 @@ namespace Structure.Sketching.Filters
         /// Gets or sets the color.
         /// </summary>
         /// <value>The color.</value>
-        public Vector4 Color { get; set; }
+        public Color Color { get; set; }
 
         /// <summary>
         /// Applies the filter to the specified image.
@@ -53,12 +53,18 @@ namespace Structure.Sketching.Filters
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* TargetPointer2 = TargetPointer;
+                    byte* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        *TargetPointer2 = Color;
+                        *TargetPointer2 = Color.Red;
+                        ++TargetPointer2;
+                        *TargetPointer2 = Color.Green;
+                        ++TargetPointer2;
+                        *TargetPointer2 = Color.Blue;
+                        ++TargetPointer2;
+                        *TargetPointer2 = Color.Alpha;
                         ++TargetPointer2;
                     }
                 }

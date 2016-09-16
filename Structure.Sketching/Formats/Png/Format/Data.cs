@@ -40,7 +40,7 @@ namespace Structure.Sketching.Formats.Png.Format
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Data" /> class.
+        /// Initializes a new instance of the <see cref="Data"/> class.
         /// </summary>
         /// <param name="imageData">The image data.</param>
         public Data(byte[] imageData)
@@ -59,26 +59,20 @@ namespace Structure.Sketching.Formats.Png.Format
         /// <summary>
         /// Gets or sets the image data.
         /// </summary>
-        /// <value>
-        /// The image data.
-        /// </value>
+        /// <value>The image data.</value>
         public byte[] ImageData { get; set; }
 
         /// <summary>
         /// Gets or sets the color types.
         /// </summary>
-        /// <value>
-        /// The color types.
-        /// </value>
+        /// <value>The color types.</value>
         private Dictionary<int, ColorTypeInformation> ColorTypes { get; set; }
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="Data"/> to <see cref="Chunk"/>.
         /// </summary>
         /// <param name="data">The data.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Chunk(Data data)
         {
             return new Chunk(data.ImageData.Length, ChunkTypes.Data, data.ImageData);
@@ -88,9 +82,7 @@ namespace Structure.Sketching.Formats.Png.Format
         /// Performs an implicit conversion from <see cref="Chunk"/> to <see cref="Data"/>.
         /// </summary>
         /// <param name="chunk">The chunk.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Data(Chunk chunk)
         {
             return new Data(chunk.Data);
@@ -101,9 +93,7 @@ namespace Structure.Sketching.Formats.Png.Format
         /// </summary>
         /// <param name="Object1">The object1.</param>
         /// <param name="Object2">The object2.</param>
-        /// <returns>
-        /// The result of the operator.
-        /// </returns>
+        /// <returns>The result of the operator.</returns>
         public static Data operator +(Data Object1, Data Object2)
         {
             if (Object1 == null && Object2 == null)
@@ -127,7 +117,7 @@ namespace Structure.Sketching.Formats.Png.Format
         /// <returns>The resulting image</returns>
         public Image Parse(Header header, Palette palette, Palette alphaPalette)
         {
-            float[] Pixels = new float[header.Width * header.Height * 4];
+            byte[] Pixels = new byte[header.Width * header.Height * 4];
             var ColorTypeInfo = ColorTypes[header.ColorType];
 
             if (ColorTypeInfo != null)
@@ -208,17 +198,17 @@ namespace Structure.Sketching.Formats.Png.Format
                 Parallel.For(0, image.Width, x =>
                 {
                     int dataOffset = (y * RowLength) + (x * 4) + 1;
-                    data[dataOffset] = (byte)(image.Pixels[(image.Width * y) + x].X * 255f);
-                    data[dataOffset + 1] = (byte)(image.Pixels[(image.Width * y) + x].Y * 255f);
-                    data[dataOffset + 2] = (byte)(image.Pixels[(image.Width * y) + x].Z * 255f);
-                    data[dataOffset + 3] = (byte)(image.Pixels[(image.Width * y) + x].W * 255f);
+                    data[dataOffset] = image.Pixels[(image.Width * y) + x];
+                    data[dataOffset + 1] = image.Pixels[(image.Width * y) + x + 1];
+                    data[dataOffset + 2] = image.Pixels[(image.Width * y) + x + 2];
+                    data[dataOffset + 3] = image.Pixels[(image.Width * y) + x + 3];
 
                     if (y > 0)
                     {
-                        data[dataOffset] -= (byte)(image.Pixels[(image.Width * (y - 1)) + x].X * 255f);
-                        data[dataOffset + 1] -= (byte)(image.Pixels[(image.Width * (y - 1)) + x].Y * 255f);
-                        data[dataOffset + 2] -= (byte)(image.Pixels[(image.Width * (y - 1)) + x].Z * 255f);
-                        data[dataOffset + 3] -= (byte)(image.Pixels[(image.Width * (y - 1)) + x].W * 255f);
+                        data[dataOffset] -= image.Pixels[(image.Width * (y - 1)) + x];
+                        data[dataOffset + 1] -= image.Pixels[(image.Width * (y - 1)) + x + 1];
+                        data[dataOffset + 2] -= image.Pixels[(image.Width * (y - 1)) + x + 2];
+                        data[dataOffset + 3] -= image.Pixels[(image.Width * (y - 1)) + x + 3];
                     }
                 });
             }
@@ -255,7 +245,7 @@ namespace Structure.Sketching.Formats.Png.Format
         /// <param name="colorReader">The color reader.</param>
         /// <param name="colorTypeInformation">The color type information.</param>
         /// <param name="header">The header.</param>
-        private void ReadScanlines(MemoryStream dataStream, float[] pixels, IColorReader colorReader, ColorTypeInformation colorTypeInformation, Header header)
+        private void ReadScanlines(MemoryStream dataStream, byte[] pixels, IColorReader colorReader, ColorTypeInformation colorTypeInformation, Header header)
         {
             dataStream.Seek(0, SeekOrigin.Begin);
 

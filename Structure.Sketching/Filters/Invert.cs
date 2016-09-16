@@ -16,7 +16,6 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters
@@ -24,7 +23,7 @@ namespace Structure.Sketching.Filters
     /// <summary>
     /// Inverts the image's colors
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter" />
+    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
     public class Invert : IFilter
     {
         /// <summary>
@@ -38,13 +37,17 @@ namespace Structure.Sketching.Filters
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* TargetPointer2 = TargetPointer;
+                    byte* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        *TargetPointer2 = Vector4.Clamp(new Vector4(1 - (*TargetPointer2).X, 1 - (*TargetPointer2).Y, 1 - (*TargetPointer2).Z, (*TargetPointer2).W), Vector4.Zero, Vector4.One);
+                        *TargetPointer2 = (byte)(255 - *TargetPointer2);
                         ++TargetPointer2;
+                        *TargetPointer2 = (byte)(255 - *TargetPointer2);
+                        ++TargetPointer2;
+                        *TargetPointer2 = (byte)(255 - *TargetPointer2);
+                        TargetPointer2 += 2;
                     }
                 }
             });

@@ -24,8 +24,8 @@ namespace Structure.Sketching.Colors.ColorSpaces
     /// <summary>
     /// CIELAB
     /// </summary>
-    /// <seealso cref="IColorSpace" />
-    /// <seealso cref="IEquatable{CIELab}" />
+    /// <seealso cref="IColorSpace"/>
+    /// <seealso cref="IEquatable{CIELab}"/>
     public struct CIELab : IEquatable<CIELab>, IColorSpace
     {
         /// <summary>
@@ -44,9 +44,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <summary>
         /// Gets or sets a component.
         /// </summary>
-        /// <value>
-        /// a component.
-        /// </value>
+        /// <value>a component.</value>
         public float AComponent
         {
             get { return a; }
@@ -56,9 +54,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <summary>
         /// Gets or sets the b component.
         /// </summary>
-        /// <value>
-        /// The b component.
-        /// </value>
+        /// <value>The b component.</value>
         public float BComponent
         {
             get { return b; }
@@ -68,9 +64,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <summary>
         /// Gets or sets the lightness.
         /// </summary>
-        /// <value>
-        /// The lightness.
-        /// </value>
+        /// <value>The lightness.</value>
         public float Lightness
         {
             get { return l; }
@@ -101,14 +95,12 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Performs an implicit conversion from <see cref="Color"/> to <see cref="CIELab"/>.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator CIELab(Color color)
         {
-            float x = ((color.Red * 0.4124F) + (color.Green * 0.3576F) + (color.Blue * 0.1805F)) / 0.95047f;
-            float y = (color.Red * 0.2126F) + (color.Green * 0.7152F) + (color.Blue * 0.0722F);
-            float z = ((color.Red * 0.0193F) + (color.Green * 0.1192F) + (color.Blue * 0.9505F)) / 1.08883f;
+            float x = (((color.Red / 255f) * 0.4124F) + ((color.Green / 255f) * 0.3576F) + ((color.Blue / 255f) * 0.1805F)) / 0.95047f;
+            float y = ((color.Red / 255f) * 0.2126F) + ((color.Green / 255f) * 0.7152F) + ((color.Blue / 255f) * 0.0722F);
+            float z = (((color.Red / 255f) * 0.0193F) + ((color.Green / 255f) * 0.1192F) + ((color.Blue / 255f) * 0.9505F)) / 1.08883f;
 
             x = x > 0.008856f ? (float)Math.Pow(x, 0.3333333f) : (903.3f * x + 16f) / 116f;
             y = y > 0.008856f ? (float)Math.Pow(y, 0.3333333f) : (903.3f * y + 16f) / 116f;
@@ -125,9 +117,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Performs an implicit conversion from <see cref="CIELab"/> to <see cref="Color"/>.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Color(CIELab color)
         {
             float y = (color.Lightness + 16f) / 116f;
@@ -146,7 +136,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
             float g = (x * -0.9689f) + (y * 1.8758f) + (z * 0.0415f);
             float b = (x * 0.0557f) + (y * -0.2040f) + (z * 1.0570f);
 
-            return new Color(r, g, b);
+            return new Color((byte)(r * 255f), (byte)(g * 255f), (byte)(b * 255f));
         }
 
         /// <summary>
@@ -154,9 +144,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// </summary>
         /// <param name="left">The left.</param>
         /// <param name="right">The right.</param>
-        /// <returns>
-        /// The result of the operator.
-        /// </returns>
+        /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(CIELab left, CIELab right)
         {
@@ -168,9 +156,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// </summary>
         /// <param name="left">The left.</param>
         /// <param name="right">The right.</param>
-        /// <returns>
-        /// The result of the operator.
-        /// </returns>
+        /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(CIELab left, CIELab right)
         {
@@ -178,11 +164,11 @@ namespace Structure.Sketching.Colors.ColorSpaces
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="object" />, is equal to this instance.
+        /// Determines whether the specified <see cref="object"/>, is equal to this instance.
         /// </summary>
-        /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
+        /// <param name="obj">The <see cref="object"/> to compare with this instance.</param>
         /// <returns>
-        ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
@@ -207,7 +193,8 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures
+        /// like a hash table.
         /// </returns>
         public override int GetHashCode()
         {
@@ -217,11 +204,9 @@ namespace Structure.Sketching.Colors.ColorSpaces
         }
 
         /// <summary>
-        /// Returns a <see cref="string" /> that represents this instance.
+        /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
-        /// <returns>
-        /// A <see cref="string" /> that represents this instance.
-        /// </returns>
+        /// <returns>A <see cref="string"/> that represents this instance.</returns>
         public override string ToString() => $"({l:#0.##},{a:#0.##},{b:#0.##})";
 
         /// <summary>

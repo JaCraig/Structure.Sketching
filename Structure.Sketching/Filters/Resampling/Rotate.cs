@@ -25,7 +25,7 @@ namespace Structure.Sketching.Filters.Resampling
     /// <summary>
     /// Rotates an image
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter" />
+    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
     public class Rotate : IFilter
     {
         /// <summary>
@@ -48,29 +48,45 @@ namespace Structure.Sketching.Filters.Resampling
         /// </summary>
         /// <param name="image">The image to resize.</param>
         /// <param name="targetLocation">The target location.</param>
-        /// <returns>
-        /// The image
-        /// </returns>
+        /// <returns>The image</returns>
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var Copy = new Vector4[image.Pixels.Length];
+            var Copy = new byte[image.Pixels.Length];
             Array.Copy(image.Pixels, Copy, Copy.Length);
             var Rotation = Matrix3x2.CreateRotation(Angle, targetLocation.Center);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* OutputPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* OutputPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* OutputPointer2 = OutputPointer;
+                    byte* OutputPointer2 = OutputPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
                         var rotated = Vector2.Transform(new Vector2(x, y), Rotation);
                         var rotatedY = (int)rotated.Y;
                         var rotatedX = (int)rotated.X;
-                        *OutputPointer2 = rotatedX >= 0 && rotatedX < image.Width && rotatedY >= 0 && rotatedY < image.Height ?
-                                                Copy[(rotatedY * image.Width) + rotatedX] :
-                                                new Vector4(0, 0, 0, 1);
-                        OutputPointer2++;
+                        if (rotatedX >= 0 && rotatedX < image.Width && rotatedY >= 0 && rotatedY < image.Height)
+                        {
+                            *OutputPointer2 = Copy[((rotatedY * image.Width) + rotatedX) * 4];
+                            ++OutputPointer2;
+                            *OutputPointer2 = Copy[(((rotatedY * image.Width) + rotatedX) * 4) + 1];
+                            ++OutputPointer2;
+                            *OutputPointer2 = Copy[(((rotatedY * image.Width) + rotatedX) * 4) + 2];
+                            ++OutputPointer2;
+                            *OutputPointer2 = Copy[(((rotatedY * image.Width) + rotatedX) * 4) + 3];
+                            ++OutputPointer2;
+                        }
+                        else
+                        {
+                            *OutputPointer2 = 0;
+                            ++OutputPointer2;
+                            *OutputPointer2 = 0;
+                            ++OutputPointer2;
+                            *OutputPointer2 = 0;
+                            ++OutputPointer2;
+                            *OutputPointer2 = 255;
+                            ++OutputPointer2;
+                        }
                     }
                 }
             });

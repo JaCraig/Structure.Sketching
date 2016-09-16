@@ -63,6 +63,18 @@ namespace Structure.Sketching.ExtensionMethods
         }
 
         /// <summary>
+        /// Linearly interpolates a value to the destination based on the amount specified
+        /// </summary>
+        /// <param name="value1">The value1.</param>
+        /// <param name="value2">The value2.</param>
+        /// <param name="amount">The amount.</param>
+        /// <returns>The resulting byte</returns>
+        public static byte Lerp(this byte value1, byte value2, float amount)
+        {
+            return (byte)((value1 * (1 - amount)) + (value2 * amount));
+        }
+
+        /// <summary>
         /// Converts an int to a byte value
         /// </summary>
         /// <param name="value">The value.</param>

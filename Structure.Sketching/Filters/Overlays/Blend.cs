@@ -17,18 +17,17 @@ limitations under the License.
 using Structure.Sketching.Filters.ColorMatrix;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
 
 namespace Structure.Sketching.Filters.Overlays
 {
     /// <summary>
     /// Blends two images together.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter" />
+    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
     public class Blend : IFilter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Blend" /> class.
+        /// Initializes a new instance of the <see cref="Blend"/> class.
         /// </summary>
         /// <param name="image">The image to apply.</param>
         /// <param name="alpha">The alpha value for the image.</param>
@@ -72,15 +71,24 @@ namespace Structure.Sketching.Filters.Overlays
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             for (int y1 = targetLocation.Bottom, y2 = SourceLocation.Bottom; y1 < targetLocation.Top && y2 < SourceLocation.Top; ++y1, ++y2)
             {
-                fixed (Vector4* TargetPointer = &image.Pixels[(y1 * image.Width) + targetLocation.Left])
+                fixed (byte* TargetPointer = &image.Pixels[((y1 * image.Width) + targetLocation.Left) * 4])
                 {
-                    fixed (Vector4* SourcePointer = &Image.Pixels[(y2 * Image.Width) + SourceLocation.Left])
+                    fixed (byte* SourcePointer = &Image.Pixels[((y2 * Image.Width) + SourceLocation.Left) * 4])
                     {
-                        Vector4* TargetPointer2 = TargetPointer;
-                        Vector4* SourcePointer2 = SourcePointer;
+                        byte* TargetPointer2 = TargetPointer;
+                        byte* SourcePointer2 = SourcePointer;
                         for (int x1 = targetLocation.Left, x2 = SourceLocation.Left; x1 < targetLocation.Right && x2 < SourceLocation.Right; ++x1, ++x2)
                         {
-                            *TargetPointer2 = (*TargetPointer2 * (1 - (*SourcePointer2).W)) + (*SourcePointer2 * (*SourcePointer2).W);
+                            *TargetPointer2 = (byte)((*TargetPointer2 * (255 - *(SourcePointer2 + 3))) + (*SourcePointer2 * *(SourcePointer2 + 3)));
+                            ++TargetPointer2;
+                            ++SourcePointer2;
+                            *TargetPointer2 = (byte)((*TargetPointer2 * (255 - *(SourcePointer2 + 2))) + (*SourcePointer2 * *(SourcePointer2 + 2)));
+                            ++TargetPointer2;
+                            ++SourcePointer2;
+                            *TargetPointer2 = (byte)((*TargetPointer2 * (255 - *(SourcePointer2 + 1))) + (*SourcePointer2 * *(SourcePointer2 + 1)));
+                            ++TargetPointer2;
+                            ++SourcePointer2;
+                            *TargetPointer2 = (byte)((*TargetPointer2 * (255 - *SourcePointer2)) + (*SourcePointer2 * *SourcePointer2));
                             ++TargetPointer2;
                             ++SourcePointer2;
                         }

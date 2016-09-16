@@ -22,7 +22,7 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
     /// <summary>
     /// True color without alpha channel reader
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces.IColorReader" />
+    /// <seealso cref="Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces.IColorReader"/>
     public class TrueColorNoAlphaReader : IColorReader
     {
         /// <summary>
@@ -32,28 +32,28 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
         /// <param name="pixels">The pixels.</param>
         /// <param name="header">The header.</param>
         /// <param name="row">The row.</param>
-        public unsafe void ReadScanline(byte[] scanline, float[] pixels, Header header, int row)
+        public unsafe void ReadScanline(byte[] scanline, byte[] pixels, Header header, int row)
         {
             scanline = scanline.ExpandArray(header.BitDepth);
 
-            fixed (float* PixelPointer = &pixels[row * header.Width * 4])
+            fixed (byte* PixelPointer = &pixels[row * header.Width * 4])
             {
-                float* PixelPointer2 = PixelPointer;
+                byte* PixelPointer2 = PixelPointer;
                 fixed (byte* ScanlinePointer = &scanline[0])
                 {
                     byte* ScanlinePointer2 = ScanlinePointer;
                     for (int x = 0; x < scanline.Length; x += 3)
                     {
-                        *PixelPointer2 = *ScanlinePointer2 / 255f;
+                        *PixelPointer2 = *ScanlinePointer2;
                         ++PixelPointer2;
                         ++ScanlinePointer2;
-                        *PixelPointer2 = *ScanlinePointer2 / 255f;
+                        *PixelPointer2 = *ScanlinePointer2;
                         ++PixelPointer2;
                         ++ScanlinePointer2;
-                        *PixelPointer2 = *ScanlinePointer2 / 255f;
+                        *PixelPointer2 = *ScanlinePointer2;
                         ++PixelPointer2;
                         ++ScanlinePointer2;
-                        *PixelPointer2 = 1;
+                        *PixelPointer2 = 255;
                         ++PixelPointer2;
                     }
                 }

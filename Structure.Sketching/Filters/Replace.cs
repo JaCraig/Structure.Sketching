@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters
@@ -24,7 +24,7 @@ namespace Structure.Sketching.Filters
     /// <summary>
     /// Replaces a color with another color in the image
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter" />
+    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
     public class Replace : IFilter
     {
         /// <summary>
@@ -33,7 +33,7 @@ namespace Structure.Sketching.Filters
         /// <param name="sourceColor">Color in the image to replace.</param>
         /// <param name="targetColor">Color to replace the sourceColor with.</param>
         /// <param name="epsilon">The epsilon.</param>
-        public Replace(Vector4 sourceColor, Vector4 targetColor, float epsilon)
+        public Replace(Color sourceColor, Color targetColor, float epsilon)
         {
             Epsilon = epsilon;
             TargetColor = targetColor;
@@ -50,13 +50,13 @@ namespace Structure.Sketching.Filters
         /// Gets or sets the color of the source.
         /// </summary>
         /// <value>The color of the source.</value>
-        public Vector4 SourceColor { get; set; }
+        public Color SourceColor { get; set; }
 
         /// <summary>
         /// Gets or sets the color of the target.
         /// </summary>
         /// <value>The color of the target.</value>
-        public Vector4 TargetColor { get; set; }
+        public Color TargetColor { get; set; }
 
         /// <summary>
         /// Applies the specified image.
@@ -69,14 +69,21 @@ namespace Structure.Sketching.Filters
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* OutputPointer = Pointer;
+                    byte* OutputPointer = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        if (Vector4.Abs(*OutputPointer - SourceColor).Length() < Epsilon)
+                        if (Distance.Euclidean(new Color(*OutputPointer, *(OutputPointer + 1), *(OutputPointer + 2), *(OutputPointer + 3)), SourceColor) < Epsilon)
                         {
-                            *(OutputPointer++) = TargetColor;
+                            *(OutputPointer) = TargetColor.Red;
+                            ++OutputPointer;
+                            *(OutputPointer) = TargetColor.Green;
+                            ++OutputPointer;
+                            *(OutputPointer) = TargetColor.Blue;
+                            ++OutputPointer;
+                            *(OutputPointer) = TargetColor.Alpha;
+                            ++OutputPointer;
                         }
                     }
                 }

@@ -28,7 +28,7 @@ namespace Structure.Sketching.Filters.Resampling
     /// <summary>
     /// Resizes an image
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter" />
+    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
     public class Resize : IFilter
     {
         /// <summary>
@@ -94,12 +94,10 @@ namespace Structure.Sketching.Filters.Resampling
         /// </summary>
         /// <param name="image">The image to resize.</param>
         /// <param name="targetLocation">The target location.</param>
-        /// <returns>
-        /// The image
-        /// </returns>
+        /// <returns>The image</returns>
         public Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
-            var Output = new Vector4[Width * Height];
+            var Output = new byte[Width * Height * 4];
 
             double XScale = (double)Width / image.Width;
             double YScale = (double)Height / image.Height;
@@ -109,17 +107,17 @@ namespace Structure.Sketching.Filters.Resampling
             return image;
         }
 
-        private unsafe Vector4[] Sample(Image image, double xScale, double yScale, int oldWidth, int oldHeight)
+        private unsafe byte[] Sample(Image image, double xScale, double yScale, int oldWidth, int oldHeight)
         {
-            var Output = new Vector4[Width * Height];
+            var Output = new byte[Width * Height * 4];
             double YRadius = yScale < 1f ? (Filter.FilterRadius / yScale) : Filter.FilterRadius;
             double XRadius = xScale < 1f ? (Filter.FilterRadius / xScale) : Filter.FilterRadius;
 
             Parallel.For(0, Height, y =>
             {
-                fixed (Vector4* OutputPointer = &Output[y * Width])
+                fixed (byte* OutputPointer = &Output[y * Width * 4])
                 {
-                    Vector4* OutputPointer2 = OutputPointer;
+                    byte* OutputPointer2 = OutputPointer;
                     var YCenter = (y + 0.5) / yScale;
                     var Top = (int)(YCenter - YRadius);
                     var Bottom = (int)(YCenter + YRadius);
@@ -137,13 +135,13 @@ namespace Structure.Sketching.Filters.Resampling
                         {
                             if (i < 0 || i >= oldHeight)
                                 continue;
-                            fixed (Vector4* PixelPointer = &image.Pixels[i * oldWidth])
+                            fixed (byte* PixelPointer = &image.Pixels[i * oldWidth * 4])
                             {
                                 for (int j = Left; j <= Right; ++j)
                                 {
                                     if (j < 0 || j >= oldWidth)
                                         continue;
-                                    Vector4* PixelPointer2 = PixelPointer + j;
+                                    byte* PixelPointer2 = PixelPointer + (j * 4);
                                     var TempYWeight = yScale < 1f ?
                                         Filter.GetValue((YCenter - i - 0.5) * yScale) :
                                         Filter.GetValue(YCenter - i - 0.5);
@@ -157,7 +155,13 @@ namespace Structure.Sketching.Filters.Resampling
 
                                     if (TempWeight == 0)
                                         continue;
-                                    Values = Values + (*PixelPointer2 * (float)TempWeight);
+                                    Values.X = Values.X + (*PixelPointer2 * (float)TempWeight);
+                                    ++PixelPointer2;
+                                    Values.Y = Values.Y + (*PixelPointer2 * (float)TempWeight);
+                                    ++PixelPointer2;
+                                    Values.Z = Values.Z + (*PixelPointer2 * (float)TempWeight);
+                                    ++PixelPointer2;
+                                    Values.W = Values.W + (*PixelPointer2 * (float)TempWeight);
                                     Weight += (float)TempWeight;
                                 }
                             }
@@ -167,9 +171,18 @@ namespace Structure.Sketching.Filters.Resampling
                         if (Weight > 0)
                         {
                             Values /= Weight;
-                            *OutputPointer2 = Vector4.Clamp(Values, Vector4.Zero, Vector4.One);
+                            Vector4.Clamp(Values, Vector4.Zero, new Vector4(255, 255, 255, 255));
+                            *OutputPointer2 = (byte)Values.X;
+                            ++OutputPointer2;
+                            *OutputPointer2 = (byte)Values.Y;
+                            ++OutputPointer2;
+                            *OutputPointer2 = (byte)Values.Z;
+                            ++OutputPointer2;
+                            *OutputPointer2 = (byte)Values.W;
+                            ++OutputPointer2;
                         }
-                        ++OutputPointer2;
+                        else
+                            OutputPointer2 += 4;
                     }
                 }
             });

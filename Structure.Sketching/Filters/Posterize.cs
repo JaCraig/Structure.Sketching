@@ -16,7 +16,6 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters
@@ -28,30 +27,28 @@ namespace Structure.Sketching.Filters
     public class Posterize : IFilter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Posterize" /> class.
+        /// Initializes a new instance of the <see cref="Posterize"/> class.
         /// </summary>
         /// <param name="divisions">The number of divisions for each channel.</param>
         public Posterize(int divisions)
         {
             if (divisions < 1)
                 divisions = 1;
-            var Step = 1f / divisions;
-            Divisions = new float[divisions + 1];
+            var Step = 255 / divisions;
+            Divisions = new byte[divisions + 1];
             Divisions[0] = 0;
             for (int x = 1; x < divisions; ++x)
             {
-                Divisions[x] = Divisions[x - 1] + Step;
+                Divisions[x] = (byte)(Divisions[x - 1] + Step);
             }
-            Divisions[divisions] = 1;
+            Divisions[divisions] = 255;
         }
 
         /// <summary>
         /// Gets or sets the divisions.
         /// </summary>
-        /// <value>
-        /// The divisions.
-        /// </value>
-        public float[] Divisions { get; set; }
+        /// <value>The divisions.</value>
+        public byte[] Divisions { get; set; }
 
         /// <summary>
         /// Applies the filter to the specified image.
@@ -64,22 +61,24 @@ namespace Structure.Sketching.Filters
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* OutputPointer = Pointer;
+                    byte* OutputPointer = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        (*OutputPointer).X = FindValue((*OutputPointer).X);
-                        (*OutputPointer).Y = FindValue((*OutputPointer).Y);
-                        (*OutputPointer).Z = FindValue((*OutputPointer).Z);
-                        OutputPointer++;
+                        (*OutputPointer) = FindValue(*OutputPointer);
+                        ++OutputPointer;
+                        (*OutputPointer) = FindValue(*OutputPointer);
+                        ++OutputPointer;
+                        (*OutputPointer) = FindValue(*OutputPointer);
+                        OutputPointer += 2;
                     }
                 }
             });
             return image;
         }
 
-        private float FindValue(float x)
+        private byte FindValue(byte x)
         {
             if (Divisions.Length == 1)
                 return Divisions[0];

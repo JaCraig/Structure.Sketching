@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System;
@@ -25,7 +26,7 @@ namespace Structure.Sketching.Filters.Overlays
     /// <summary>
     /// Adds a glow effect to an image
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter" />
+    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
     public class Glow : IFilter
     {
         /// <summary>
@@ -34,7 +35,7 @@ namespace Structure.Sketching.Filters.Overlays
         /// <param name="color">The glow color.</param>
         /// <param name="xRadius">The x radius (between 0 and 1).</param>
         /// <param name="yRadius">The y radius (between 0 and 1).</param>
-        public Glow(Vector4 color, float xRadius, float yRadius)
+        public Glow(Color color, float xRadius, float yRadius)
         {
             XRadius = xRadius > 0 ? xRadius : 0.5f;
             YRadius = yRadius > 0 ? yRadius : 0.5f;
@@ -45,7 +46,7 @@ namespace Structure.Sketching.Filters.Overlays
         /// Gets or sets the color.
         /// </summary>
         /// <value>The color.</value>
-        public Vector4 Color { get; private set; }
+        public Color Color { get; private set; }
 
         /// <summary>
         /// Gets the x radius.
@@ -74,16 +75,22 @@ namespace Structure.Sketching.Filters.Overlays
 
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* Pointer2 = Pointer;
+                    byte* Pointer2 = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
                         float Distance = Vector2.Distance(image.Center, new Vector2(x, y));
-
-                        var Result = Vector4.Lerp(Color, *Pointer2, .5f * (Distance / MaxDistance));
-
-                        *Pointer2 = Vector4.Clamp(*Pointer2 * (1 - Result.W) + (*Pointer2 * Result * Result.W), Vector4.Zero, Vector4.One);
+                        var SourceColor = new Color(*Pointer2, *(Pointer2 + 1), *(Pointer2 + 2), *(Pointer2 + 3));
+                        var Result = Color.Lerp(SourceColor, .5f * (Distance / MaxDistance));
+                        Result = (SourceColor * (1 - Result.Alpha) + (SourceColor * Result * Result.Alpha)).Clamp();
+                        *Pointer2 = Result.Red;
+                        ++Pointer2;
+                        *Pointer2 = Result.Green;
+                        ++Pointer2;
+                        *Pointer2 = Result.Blue;
+                        ++Pointer2;
+                        *Pointer2 = Result.Alpha;
                         ++Pointer2;
                     }
                 }

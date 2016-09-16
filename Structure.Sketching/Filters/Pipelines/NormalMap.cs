@@ -25,7 +25,7 @@ namespace Structure.Sketching.Filters.Pipelines
     /// <summary>
     /// Normal map processing pipeline
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter" />
+    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
     public class NormalMap : IFilter
     {
         /// <summary>
@@ -64,20 +64,20 @@ namespace Structure.Sketching.Filters.Pipelines
             Image TempImageY = new BumpMap(YDirection == YDirection.TopToBottom ? Direction.TopToBottom : Direction.BottomToTop).Apply(image.Copy(), targetLocation);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* TargetPointer2 = TargetPointer;
+                    byte* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        var TempVector = new Vector3(TempImageX.Pixels[(y * image.Width) + x].X,
-                            TempImageY.Pixels[(y * image.Width) + x].X,
+                        var TempVector = new Vector3(TempImageX.Pixels[((y * image.Width) + x) * 4] / 255f,
+                            TempImageY.Pixels[((y * image.Width) + x) * 4] / 255f,
                             1f);
                         TempVector = Vector3.Normalize(TempVector);
                         TempVector = new Vector3(TempVector.X + 1.0f, TempVector.Y + 1f, TempVector.Z + 1f);
                         TempVector /= 2.0f;
-                        image.Pixels[(y * image.Width) + x].X = TempVector.X;
-                        image.Pixels[(y * image.Width) + x].Y = TempVector.Y;
-                        image.Pixels[(y * image.Width) + x].Z = TempVector.Z;
+                        image.Pixels[((y * image.Width) + x) * 4] = (byte)(TempVector.X * 255);
+                        image.Pixels[(((y * image.Width) + x) * 4) + 1] = (byte)(TempVector.Y * 255);
+                        image.Pixels[(((y * image.Width) + x) * 4) + 2] = (byte)(TempVector.Z * 255);
                     }
                 }
             });

@@ -16,7 +16,6 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters
@@ -24,7 +23,7 @@ namespace Structure.Sketching.Filters
     /// <summary>
     /// Crops the image
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter" />
+    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
     public class Crop : IFilter
     {
         /// <summary>
@@ -36,17 +35,20 @@ namespace Structure.Sketching.Filters
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var Result = new Vector4[targetLocation.Width * targetLocation.Height];
+            var Result = new byte[targetLocation.Width * targetLocation.Height * 4];
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* TargetPointer = &Result[(y - targetLocation.Bottom) * targetLocation.Width])
+                fixed (byte* TargetPointer = &Result[((y - targetLocation.Bottom) * targetLocation.Width) * 4])
                 {
-                    Vector4* TargetPointer2 = TargetPointer;
-                    fixed (Vector4* SourcePointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                    byte* TargetPointer2 = TargetPointer;
+                    fixed (byte* SourcePointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                     {
-                        Vector4* SourcePointer2 = SourcePointer;
+                        byte* SourcePointer2 = SourcePointer;
                         for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                         {
+                            *(TargetPointer2++) = *(SourcePointer2++);
+                            *(TargetPointer2++) = *(SourcePointer2++);
+                            *(TargetPointer2++) = *(SourcePointer2++);
                             *(TargetPointer2++) = *(SourcePointer2++);
                         }
                     }

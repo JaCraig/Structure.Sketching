@@ -19,7 +19,6 @@ using Structure.Sketching.Numerics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Morphology
@@ -54,20 +53,20 @@ namespace Structure.Sketching.Filters.Morphology
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var TempValues = new Vector4[image.Width * image.Height];
+            var TempValues = new byte[image.Width * image.Height * 4];
             Array.Copy(image.Pixels, TempValues, TempValues.Length);
             int ApetureMin = -ApetureRadius;
             int ApetureMax = ApetureRadius;
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* TargetPointer = &TempValues[(y * image.Width) + targetLocation.Left])
+                fixed (byte* TargetPointer = &TempValues[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* TargetPointer2 = TargetPointer;
+                    byte* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        var RValues = new List<float>();
-                        var GValues = new List<float>();
-                        var BValues = new List<float>();
+                        var RValues = new List<byte>();
+                        var GValues = new List<byte>();
+                        var BValues = new List<byte>();
                         for (int x2 = ApetureMin; x2 < ApetureMax; ++x2)
                         {
                             int TempX = x + x2;
@@ -78,17 +77,17 @@ namespace Structure.Sketching.Filters.Morphology
                                     int TempY = y + y2;
                                     if (TempY >= targetLocation.Bottom && TempY < targetLocation.Top)
                                     {
-                                        RValues.Add(image.Pixels[(TempY * image.Width) + TempX].X);
-                                        GValues.Add(image.Pixels[(TempY * image.Width) + TempX].Y);
-                                        BValues.Add(image.Pixels[(TempY * image.Width) + TempX].Z);
+                                        RValues.Add(image.Pixels[((TempY * image.Width) + TempX) * 4]);
+                                        GValues.Add(image.Pixels[(((TempY * image.Width) + TempX) * 4) + 1]);
+                                        BValues.Add(image.Pixels[(((TempY * image.Width) + TempX) * 4) + 2]);
                                     }
                                 }
                             }
                         }
-                        TempValues[(y * image.Width) + x].X = RValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
-                        TempValues[(y * image.Width) + x].Y = GValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
-                        TempValues[(y * image.Width) + x].Z = BValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
-                        TempValues[(y * image.Width) + x].W = image.Pixels[(y * image.Width) + x].W;
+                        TempValues[((y * image.Width) + x)] = RValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
+                        TempValues[((y * image.Width) + x) + 1] = GValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
+                        TempValues[((y * image.Width) + x) + 2] = BValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
+                        TempValues[((y * image.Width) + x) + 3] = image.Pixels[(y * image.Width) + x].W;
                     }
                 }
             });

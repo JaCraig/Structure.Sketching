@@ -27,7 +27,7 @@ namespace Structure.Sketching.Quantizers.Octree
     /// <summary>
     /// Octree quantizer class
     /// </summary>
-    /// <seealso cref="QuantizerBase" />
+    /// <seealso cref="QuantizerBase"/>
     public class OctreeQuantizer : QuantizerBase
     {
         /// <summary>
@@ -43,9 +43,7 @@ namespace Structure.Sketching.Quantizers.Octree
         /// <summary>
         /// Gets the palette.
         /// </summary>
-        /// <returns>
-        /// The list of colors in the palette
-        /// </returns>
+        /// <returns>The list of colors in the palette</returns>
         protected override Bgra[] GetPalette()
         {
             List<Bgra> palette = octree.Palletize(Math.Max(colors, 1));
@@ -71,8 +69,12 @@ namespace Structure.Sketching.Quantizers.Octree
             {
                 for (int x = 0; x < image.Width; x++)
                 {
-                    var Pixel = image.Pixels[(y * image.Width) + x];
-                    octree.AddColor(new Color(Pixel));
+                    int TempOffset = (y * image.Width * 4) + (x * 4);
+                    var PixelR = image.Pixels[TempOffset];
+                    var PixelG = image.Pixels[TempOffset + 1];
+                    var PixelB = image.Pixels[TempOffset + 2];
+                    var PixelA = image.Pixels[TempOffset + 3];
+                    octree.AddColor(new Color(PixelR, PixelG, PixelB, PixelA));
                 }
             }
         }
@@ -81,9 +83,7 @@ namespace Structure.Sketching.Quantizers.Octree
         /// Processes the specified image.
         /// </summary>
         /// <param name="image">The image.</param>
-        /// <returns>
-        /// The resulting byte array.
-        /// </returns>
+        /// <returns>The resulting byte array.</returns>
         protected override byte[] Process(Image image)
         {
             byte[] quantizedPixels = new byte[image.Width * image.Height];
@@ -94,7 +94,11 @@ namespace Structure.Sketching.Quantizers.Octree
                 {
                     for (int x = 0; x < image.Width; x++)
                     {
-                        Bgra sourcePixel = new Color(image.Pixels[(y * image.Width) + x]);
+                        int TempOffset = (y * image.Width * 4) + (x * 4);
+                        Bgra sourcePixel = new Color(image.Pixels[TempOffset],
+                                                        image.Pixels[TempOffset + 1],
+                                                        image.Pixels[TempOffset + 2],
+                                                        image.Pixels[TempOffset + 3]);
                         quantizedPixels[(y * image.Width) + x] = QuantizePixel(sourcePixel);
                     }
                 });

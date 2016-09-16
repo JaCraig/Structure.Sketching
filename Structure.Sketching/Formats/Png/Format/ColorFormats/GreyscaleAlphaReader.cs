@@ -23,7 +23,7 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
     /// <summary>
     /// Greyscale with alpha reader
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces.IColorReader" />
+    /// <seealso cref="Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces.IColorReader"/>
     public class GreyscaleAlphaReader : IColorReader
     {
         /// <summary>
@@ -33,16 +33,16 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
         /// <param name="pixels">The pixels.</param>
         /// <param name="header">The header.</param>
         /// <param name="row">The row.</param>
-        public void ReadScanline(byte[] scanline, float[] pixels, Header header, int row)
+        public void ReadScanline(byte[] scanline, byte[] pixels, Header header, int row)
         {
             scanline = scanline.ExpandArray(header.BitDepth);
             Parallel.For(0, header.Width, x =>
             {
                 int Offset = ((row * header.Width) + x) * 4;
-                pixels[Offset] = scanline[x * 2] / 255f;
-                pixels[Offset + 1] = scanline[x * 2] / 255f;
-                pixels[Offset + 2] = scanline[x * 2] / 255f;
-                pixels[Offset + 3] = scanline[(x * 2) + 1] / 255f;
+                pixels[Offset] = scanline[x * 2];
+                pixels[Offset + 1] = scanline[x * 2];
+                pixels[Offset + 2] = scanline[x * 2];
+                pixels[Offset + 3] = scanline[(x * 2) + 1];
             });
         }
     }

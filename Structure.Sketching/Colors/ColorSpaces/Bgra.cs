@@ -24,8 +24,8 @@ namespace Structure.Sketching.Colors.ColorSpaces
     /// <summary>
     /// BGRA color space
     /// </summary>
-    /// <seealso cref="IColorSpace" />
-    /// <seealso cref="IEquatable{Bgra}" />
+    /// <seealso cref="IColorSpace"/>
+    /// <seealso cref="IEquatable{Bgra}"/>
     public struct Bgra : IEquatable<Bgra>, IColorSpace
     {
         /// <summary>
@@ -46,9 +46,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <summary>
         /// Gets or sets the alpha.
         /// </summary>
-        /// <value>
-        /// The alpha.
-        /// </value>
+        /// <value>The alpha.</value>
         public byte Alpha
         {
             get { return a; }
@@ -58,9 +56,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <summary>
         /// Gets or sets the blue.
         /// </summary>
-        /// <value>
-        /// The blue.
-        /// </value>
+        /// <value>The blue.</value>
         public byte Blue
         {
             get { return b; }
@@ -70,9 +66,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <summary>
         /// Gets or sets the green.
         /// </summary>
-        /// <value>
-        /// The green.
-        /// </value>
+        /// <value>The green.</value>
         public byte Green
         {
             get { return g; }
@@ -82,9 +76,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <summary>
         /// Gets or sets the red.
         /// </summary>
-        /// <value>
-        /// The red.
-        /// </value>
+        /// <value>The red.</value>
         public byte Red
         {
             get { return r; }
@@ -115,12 +107,9 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Performs an implicit conversion from <see cref="Color"/> to <see cref="Bgra"/>.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Bgra(Color color)
         {
-            color = color.Clamp() * 255f;
             return new Bgra((byte)color.Blue, (byte)color.Green, (byte)color.Red, (byte)color.Alpha);
         }
 
@@ -128,21 +117,17 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Performs an implicit conversion from <see cref="Bgra"/> to <see cref="Color"/>.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Color(Bgra color)
         {
-            return new Color(color.Red / 255f, color.Green / 255f, color.Blue / 255f, color.Alpha / 255f);
+            return new Color(color.Red, color.Green, color.Blue, color.Alpha);
         }
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="Bgra"/> to <see cref="int"/>.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator int(Bgra color)
         {
             return color.r << 16 | color.g << 8 | color.b << 0 | color.a << 24;
@@ -153,9 +138,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// </summary>
         /// <param name="left">The left.</param>
         /// <param name="right">The right.</param>
-        /// <returns>
-        /// The result of the operator.
-        /// </returns>
+        /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(Bgra left, Bgra right)
         {
@@ -167,9 +150,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// </summary>
         /// <param name="left">The left.</param>
         /// <param name="right">The right.</param>
-        /// <returns>
-        /// The result of the operator.
-        /// </returns>
+        /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(Bgra left, Bgra right)
         {
@@ -177,11 +158,11 @@ namespace Structure.Sketching.Colors.ColorSpaces
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="object" />, is equal to this instance.
+        /// Determines whether the specified <see cref="object"/>, is equal to this instance.
         /// </summary>
-        /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
+        /// <param name="obj">The <see cref="object"/> to compare with this instance.</param>
         /// <returns>
-        ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
@@ -207,7 +188,8 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures
+        /// like a hash table.
         /// </returns>
         public override int GetHashCode()
         {
@@ -218,11 +200,9 @@ namespace Structure.Sketching.Colors.ColorSpaces
         }
 
         /// <summary>
-        /// Returns a <see cref="string" /> that represents this instance.
+        /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
-        /// <returns>
-        /// A <see cref="string" /> that represents this instance.
-        /// </returns>
+        /// <returns>A <see cref="string"/> that represents this instance.</returns>
         public override string ToString() => $"({b:#0.##},{g:#0.##},{r:#0.##},{a:#0.##})";
 
         /// <summary>
