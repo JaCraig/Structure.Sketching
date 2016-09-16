@@ -195,14 +195,6 @@
     <Compile Include="Formats\Gif\Format\Frame.cs" />
     <Compile Include="Formats\Gif\Format\FrameIndices.cs" />
     <Compile Include="Formats\Gif\Format\GraphicsControl.cs" />
-    <Compile Include="Formats\Gif\Format\HelpersA\BitEncoder.cs" />
-    <Compile Include="Formats\Gif\Format\HelpersA\DisposalMethod.cs" />
-    <Compile Include="Formats\Gif\Format\HelpersA\GifConstants.cs" />
-    <Compile Include="Formats\Gif\Format\HelpersA\GifEncoderCore.cs" />
-    <Compile Include="Formats\Gif\Format\HelpersA\LzwEncoder.cs" />
-    <Compile Include="Formats\Gif\Format\HelpersA\Sections\GifGraphicsControlExtension.cs" />
-    <Compile Include="Formats\Gif\Format\HelpersA\Sections\GifImageDescriptor.cs" />
-    <Compile Include="Formats\Gif\Format\HelpersA\Sections\GifLogicalScreenDescriptor.cs" />
     <Compile Include="Formats\Gif\Format\Helpers\LzwDecoder.cs" />
     <Compile Include="Formats\Gif\Format\Helpers\LZWEncoder.cs" />
     <Compile Include="Formats\Gif\Format\Helpers\PackedField.cs" />
@@ -285,6 +277,7 @@
     <Compile Include="IO\Converters\Structs\IntFloatUnion.cs" />
     <Compile Include="IO\EndianBinaryReader.cs" />
     <Compile Include="IO\EndianBinaryWriter.cs" />
+    <Compile Include="Numerics\Distance.cs" />
     <Compile Include="Numerics\Matrix5x5.cs" />
     <Compile Include="Numerics\Random.cs" />
     <Compile Include="Numerics\Rectangle.cs" />
