@@ -2,3 +2,4 @@ syntax: glob
 Structure.Sketching.Tests/TestOutput/*
 */bin/*
 */obj/*
+.vs/*
