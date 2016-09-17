@@ -490,13 +490,14 @@ namespace Structure.Sketching.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe Vector4 operator *(Matrix5x5 value1, byte* value2)
         {
-            byte* g = value2 + 1;
-            byte* b = value2 + 2;
-            byte* a = value2 + 3;
-            return new Vector4(*value2 * value1.M11 + *g * value1.M21 + *b * value1.M31 + *a * value1.M41 + value1.M51,
-                                *value2 * value1.M12 + *g * value1.M22 + *b * value1.M32 + *a * value1.M42 + value1.M52,
-                                *value2 * value1.M13 + *g * value1.M23 + *b * value1.M33 + *a * value1.M43 + value1.M53,
-                                *value2 * value1.M14 + *g * value1.M24 + *b * value1.M34 + *a * value1.M44 + value1.M54);
+            float r = *value2 / 255f;
+            float g = *(value2 + 1) / 255f;
+            float b = *(value2 + 2) / 255f;
+            float a = *(value2 + 3) / 255f;
+            return new Vector4(r * value1.M11 + g * value1.M21 + b * value1.M31 + a * value1.M41 + value1.M51,
+                                r * value1.M12 + g * value1.M22 + b * value1.M32 + a * value1.M42 + value1.M52,
+                                r * value1.M13 + g * value1.M23 + b * value1.M33 + a * value1.M43 + value1.M53,
+                                r * value1.M14 + g * value1.M24 + b * value1.M34 + a * value1.M44 + value1.M54);
         }
 
         /// <summary>

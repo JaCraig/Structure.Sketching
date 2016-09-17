@@ -16,6 +16,7 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.ColorMatrix.BaseClasses
@@ -59,6 +60,7 @@ namespace Structure.Sketching.Filters.ColorMatrix.BaseClasses
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
                         var TempVector = Matrix * pointer2;
+                        TempVector = Vector4.Clamp(TempVector, Vector4.Zero, Vector4.One) * 255f;
                         *pointer2 = (byte)TempVector.X;
                         ++pointer2;
                         *pointer2 = (byte)TempVector.Y;

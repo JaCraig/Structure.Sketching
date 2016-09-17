@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.ExtensionMethods;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
@@ -70,16 +71,20 @@ namespace Structure.Sketching.Filters.Arithmetic
                                 break;
                             }
                             ++x2;
-                            *OutputPointer = (byte)(*OutputPointer % *Image2Pointer2);
+                            if (*Image2Pointer2 != 0)
+                                *OutputPointer = (byte)((((*OutputPointer / 255f) % (*Image2Pointer2 / 255f)) * 255).Clamp(0, 255));
                             ++OutputPointer;
                             ++Image2Pointer2;
-                            *OutputPointer = (byte)(*OutputPointer % *Image2Pointer2);
+                            if (*Image2Pointer2 != 0)
+                                *OutputPointer = (byte)((((*OutputPointer / 255f) % (*Image2Pointer2 / 255f)) * 255).Clamp(0, 255));
                             ++OutputPointer;
                             ++Image2Pointer2;
-                            *OutputPointer = (byte)(*OutputPointer % *Image2Pointer2);
+                            if (*Image2Pointer2 != 0)
+                                *OutputPointer = (byte)((((*OutputPointer / 255f) % (*Image2Pointer2 / 255f)) * 255).Clamp(0, 255));
                             ++OutputPointer;
                             ++Image2Pointer2;
-                            *OutputPointer = (byte)(*OutputPointer % *Image2Pointer2);
+                            if (*Image2Pointer2 != 0)
+                                *OutputPointer = (byte)((((*OutputPointer / 255f) % (*Image2Pointer2 / 255f)) * 255).Clamp(0, 255));
                             ++OutputPointer;
                             ++Image2Pointer2;
                         }

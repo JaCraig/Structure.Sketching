@@ -113,7 +113,7 @@ namespace Structure.Sketching.Filters.Binary
                                 }
                             }
                         }
-                        var ColorToUse = RValues.Average(_ => _) >= Threshold ? Color1 : Color2;
+                        var ColorToUse = RValues.Average(_ => _ / 255f) >= Threshold ? Color1 : Color2;
                         *TargetPointer2 = ColorToUse.Red;
                         ++TargetPointer2;
                         *TargetPointer2 = ColorToUse.Green;
