@@ -49,10 +49,10 @@ namespace Structure.Sketching.Procedural
                     Value = (Value * 0.5f) + 0.5f;
                     Value *= 255;
                     byte RGBValue = (byte)Value.Clamp(MinRGBValue, MaxRGBValue);
-                    ReturnValue.Pixels[(y * Width) + x] = RGBValue;
-                    ReturnValue.Pixels[(y * Width) + x + 1] = RGBValue;
-                    ReturnValue.Pixels[(y * Width) + x + 2] = RGBValue;
-                    ReturnValue.Pixels[(y * Width) + x + 3] = 255;
+                    ReturnValue.Pixels[((y * Width) + x) * 4] = RGBValue;
+                    ReturnValue.Pixels[(((y * Width) + x) * 4) + 1] = RGBValue;
+                    ReturnValue.Pixels[(((y * Width) + x) * 4) + 2] = RGBValue;
+                    ReturnValue.Pixels[(((y * Width) + x) * 4) + 3] = 255;
                 }
             }
             return ReturnValue;

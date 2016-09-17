@@ -35,7 +35,7 @@ namespace Structure.Sketching.Filters
         /// <param name="epsilon">The epsilon.</param>
         public Replace(Color sourceColor, Color targetColor, float epsilon)
         {
-            Epsilon = epsilon;
+            Epsilon = epsilon * 255;
             TargetColor = targetColor;
             SourceColor = sourceColor;
         }
