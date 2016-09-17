@@ -39,8 +39,8 @@ namespace Structure.Sketching.Filters.Binary
         /// <param name="threshold2">The threshold2.</param>
         public NonMaximalSuppression(Color color1, Color color2, float threshold1, float threshold2)
         {
-            Threshold2 = threshold2;
-            Threshold1 = threshold1;
+            Threshold2 = threshold2 * 255;
+            Threshold1 = threshold1 * 255;
             Color1 = color1;
             Color2 = color2;
         }

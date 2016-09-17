@@ -74,14 +74,17 @@ namespace Structure.Sketching.Filters
                             *TargetPointer2 = value;
                             ++SourcePointer2;
                             ++TargetPointer2;
+                            value = *SourcePointer2;
                             *SourcePointer2 = *TargetPointer2;
                             *TargetPointer2 = value;
                             ++SourcePointer2;
                             ++TargetPointer2;
+                            value = *SourcePointer2;
                             *SourcePointer2 = *TargetPointer2;
                             *TargetPointer2 = value;
                             ++SourcePointer2;
                             ++TargetPointer2;
+                            value = *SourcePointer2;
                             *SourcePointer2 = *TargetPointer2;
                             *TargetPointer2 = value;
                             ++SourcePointer2;

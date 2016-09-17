@@ -63,7 +63,7 @@ namespace Structure.Sketching.Filters
             Array.Copy(image.Pixels, Result, Result.Length);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* SourcePointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* SourcePointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
                     byte* SourcePointer2 = SourcePointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)

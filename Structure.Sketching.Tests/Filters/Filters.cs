@@ -30,7 +30,7 @@ namespace Structure.Sketching.Tests.Filters.ColorMatrix
         {
             { "Logarithm", new Logarithm(),default(Rectangle) },
             { "Posterize", new Posterize(10),default(Rectangle) },
-            { "Solarize", new Solarize(1.5f),default(Rectangle) },
+            { "Solarize", new Solarize(1f),default(Rectangle) },
             { "NonMaximalSuppression", new NonMaximalSuppression(Color.White,Color.Black,0.8f,0.5f),default(Rectangle) },
             { "CannyEdgeDetection", new CannyEdgeDetection(Color.White,Color.Black,0.8f,0.5f),default(Rectangle) },
             { "Translate", new Translate(50,50),default(Rectangle) },
@@ -114,7 +114,7 @@ namespace Structure.Sketching.Tests.Filters.ColorMatrix
 
             { "Logarithm-Partial", new Logarithm(),new Rectangle(100,100,500,500) },
             { "Posterize-Partial", new Posterize(10),new Rectangle(100,100,500,500) },
-            { "Solarize-Partial", new Solarize(1.5f),new Rectangle(100,100,500,500) },
+            { "Solarize-Partial", new Solarize(1f),new Rectangle(100,100,500,500) },
             { "NonMaximalSuppression-Partial", new NonMaximalSuppression(Color.White,Color.Black,0.8f,0.5f),new Rectangle(100,100,500,500) },
             { "CannyEdgeDetection-Partial", new CannyEdgeDetection(Color.White,Color.Black,0.8f,0.5f),new Rectangle(100,100,500,500) },
             { "Translate-Partial", new Translate(50,50),new Rectangle(100,100,500,500) },

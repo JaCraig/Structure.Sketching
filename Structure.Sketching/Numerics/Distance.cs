@@ -16,10 +16,10 @@ namespace Structure.Sketching.Numerics
         /// <returns>The distance between the colors</returns>
         public static double Euclidean(Color color1, Color color2)
         {
-            var Red = color1.Red - color2.Red;
-            var Green = color1.Green - color2.Green;
-            var Blue = color1.Blue - color2.Blue;
-            var Alpha = color1.Alpha - color2.Alpha;
+            int Red = color1.Red - color2.Red;
+            int Green = color1.Green - color2.Green;
+            int Blue = color1.Blue - color2.Blue;
+            int Alpha = color1.Alpha - color2.Alpha;
             Red = Red * Red;
             Green = Green * Green;
             Blue = Blue * Blue;

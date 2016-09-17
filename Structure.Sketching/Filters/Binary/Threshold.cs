@@ -76,7 +76,7 @@ namespace Structure.Sketching.Filters.Binary
                     byte* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        var ColorToUse = *TargetPointer2 >= ThresholdValue ? Color1 : Color2;
+                        var ColorToUse = *TargetPointer2 / 255f >= ThresholdValue ? Color1 : Color2;
                         *TargetPointer2 = ColorToUse.Red;
                         ++TargetPointer2;
                         *TargetPointer2 = ColorToUse.Green;

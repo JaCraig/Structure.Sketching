@@ -93,7 +93,7 @@ namespace Structure.Sketching.Filters.Convolution
         /// Gets the offset.
         /// </summary>
         /// <value>The offset.</value>
-        public override float Offset => 0.5f;
+        public override float Offset => 127.5f;
 
         /// <summary>
         /// Gets the width.

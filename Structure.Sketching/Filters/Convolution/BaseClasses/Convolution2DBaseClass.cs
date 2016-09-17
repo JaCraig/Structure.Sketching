@@ -141,7 +141,7 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
                             XValue /= WeightX;
                             YValue /= WeightY;
                             var TempResult = Vector4.SquareRoot((XValue * XValue) + (YValue * YValue));
-                            TempResult = Vector4.Clamp(TempResult, Vector4.Zero, Vector4.One) * 255;
+                            TempResult = Vector4.Clamp(TempResult, Vector4.Zero, new Vector4(255, 255, 255, 255));
                             *OutputPointer = (byte)TempResult.X;
                             ++OutputPointer;
                             *OutputPointer = (byte)TempResult.Y;

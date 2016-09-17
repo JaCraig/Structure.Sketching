@@ -71,7 +71,7 @@ namespace Structure.Sketching.ExtensionMethods
         /// <returns>The resulting byte</returns>
         public static byte Lerp(this byte value1, byte value2, float amount)
         {
-            return (byte)((value1 * (1 - amount)) + (value2 * amount));
+            return (byte)(value1 + (value2 - value1) * amount);
         }
 
         /// <summary>

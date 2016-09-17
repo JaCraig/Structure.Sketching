@@ -81,16 +81,17 @@ namespace Structure.Sketching.Filters.Overlays
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
                         float Distance = Vector2.Distance(image.Center, new Vector2(x, y));
-                        var SourceColor = new Color(*Pointer2, *(Pointer2 + 1), *(Pointer2 + 2), *(Pointer2 + 3));
-                        var Result = Color.Lerp(SourceColor, .5f * (Distance / MaxDistance));
-                        Result = (SourceColor * (1 - Result.Alpha) + (SourceColor * Result * Result.Alpha)).Clamp();
-                        *Pointer2 = Result.Red;
+                        var SourceColor = new Vector4(*Pointer2 / 255f, *(Pointer2 + 1) / 255f, *(Pointer2 + 2) / 255f, *(Pointer2 + 3) / 255f);
+                        var Result = Vector4.Lerp(Color, SourceColor, .5f * (Distance / MaxDistance));
+                        var TempAlpha = Result.W;
+                        Result = Vector4.Clamp((SourceColor * (1 - TempAlpha) + (Result * SourceColor * TempAlpha)), Vector4.Zero, Vector4.One);
+                        *Pointer2 = (byte)(Result.X * 255);
                         ++Pointer2;
-                        *Pointer2 = Result.Green;
+                        *Pointer2 = (byte)(Result.Y * 255);
                         ++Pointer2;
-                        *Pointer2 = Result.Blue;
+                        *Pointer2 = (byte)(Result.Z * 255);
                         ++Pointer2;
-                        *Pointer2 = Result.Alpha;
+                        *Pointer2 = (byte)(Result.W * 255);
                         ++Pointer2;
                     }
                 }

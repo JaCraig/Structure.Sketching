@@ -33,7 +33,7 @@ namespace Structure.Sketching.Filters
         /// <param name="threshold">The threshold (between 0 and 3).</param>
         public Solarize(float threshold)
         {
-            Threshold = threshold;
+            Threshold = threshold * 255;
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Structure.Sketching.Filters
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
                     byte* OutputPointer = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
@@ -67,7 +67,10 @@ namespace Structure.Sketching.Filters
                             (*OutputPointer) = (byte)(255 - (*OutputPointer));
                             OutputPointer += 2;
                         }
-                        OutputPointer += 4;
+                        else
+                        {
+                            OutputPointer += 4;
+                        }
                     }
                 }
             });

@@ -161,7 +161,7 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
                             }
                             Values /= Weight;
                             Values = new Vector4(Values.X + Offset, Values.Y + Offset, Values.Z + Offset, 1);
-                            Values = Vector4.Clamp(Values, Vector4.Zero, Vector4.One) * 255;
+                            Values = Vector4.Clamp(Values, Vector4.Zero, new Vector4(255, 255, 255, 255));
                             *OutputPointer = (byte)Values.X;
                             ++OutputPointer;
                             *OutputPointer = (byte)Values.Y;

@@ -16,6 +16,7 @@ limitations under the License.
 
 using Structure.Sketching.ExtensionMethods;
 using System;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace Structure.Sketching.Colors
@@ -216,6 +217,18 @@ namespace Structure.Sketching.Colors
         }
 
         /// <summary>
+        /// Performs an implicit conversion from <see cref="Color"/> to <see cref="Vector4"/>.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        /// <returns>
+        /// The result of the conversion.
+        /// </returns>
+        public static implicit operator Vector4(Color color)
+        {
+            return new Vector4(color.r / 255f, color.g / 255f, color.b / 255f, color.a / 255f);
+        }
+
+        /// <summary>
         /// Implements the operator -.
         /// </summary>
         /// <param name="color1">The color1.</param>
@@ -308,6 +321,30 @@ namespace Structure.Sketching.Colors
         public static Color operator *(Color color1, Color color2)
         {
             return new Color((byte)(color1.r * color2.r), (byte)(color1.g * color2.g), (byte)(color1.b * color2.b), (byte)(color1.a * color2.a));
+        }
+
+        /// <summary>
+        /// Implements the operator *.
+        /// </summary>
+        /// <param name="color1">The color1.</param>
+        /// <param name="factor">The factor.</param>
+        /// <returns>The result of the operator.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Color operator *(Color color1, float factor)
+        {
+            return new Color((byte)(color1.r * factor), (byte)(color1.g * factor), (byte)(color1.b * factor), (byte)(color1.a * factor));
+        }
+
+        /// <summary>
+        /// Implements the operator *.
+        /// </summary>
+        /// <param name="factor">The factor.</param>
+        /// <param name="color1">The color1.</param>
+        /// <returns>The result of the operator.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Color operator *(float factor, Color color1)
+        {
+            return color1 * factor;
         }
 
         /// <summary>
@@ -488,7 +525,8 @@ namespace Structure.Sketching.Colors
         {
             return new Color(Red.Lerp(color.Red, amount),
                 Green.Lerp(color.Green, amount),
-                Blue.Lerp(color.Blue, amount));
+                Blue.Lerp(color.Blue, amount),
+                Alpha.Lerp(color.Alpha, amount));
         }
 
         /// <summary>

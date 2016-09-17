@@ -79,16 +79,17 @@ namespace Structure.Sketching.Filters.Overlays
                         byte* SourcePointer2 = SourcePointer;
                         for (int x1 = targetLocation.Left, x2 = SourceLocation.Left; x1 < targetLocation.Right && x2 < SourceLocation.Right; ++x1, ++x2)
                         {
-                            *TargetPointer2 = (byte)((*TargetPointer2 * (255 - *(SourcePointer2 + 3))) + (*SourcePointer2 * *(SourcePointer2 + 3)));
+                            float TempAlpha = *(SourcePointer2 + 3) / 255f;
+                            *TargetPointer2 = (byte)((*TargetPointer2 * (1f - TempAlpha)) + (*SourcePointer2 * TempAlpha));
                             ++TargetPointer2;
                             ++SourcePointer2;
-                            *TargetPointer2 = (byte)((*TargetPointer2 * (255 - *(SourcePointer2 + 2))) + (*SourcePointer2 * *(SourcePointer2 + 2)));
+                            *TargetPointer2 = (byte)((*TargetPointer2 * (1f - TempAlpha)) + (*SourcePointer2 * TempAlpha));
                             ++TargetPointer2;
                             ++SourcePointer2;
-                            *TargetPointer2 = (byte)((*TargetPointer2 * (255 - *(SourcePointer2 + 1))) + (*SourcePointer2 * *(SourcePointer2 + 1)));
+                            *TargetPointer2 = (byte)((*TargetPointer2 * (1f - TempAlpha)) + (*SourcePointer2 * TempAlpha));
                             ++TargetPointer2;
                             ++SourcePointer2;
-                            *TargetPointer2 = (byte)((*TargetPointer2 * (255 - *SourcePointer2)) + (*SourcePointer2 * *SourcePointer2));
+                            *TargetPointer2 = (byte)((*TargetPointer2 * (1f - TempAlpha)) + (*SourcePointer2 * TempAlpha));
                             ++TargetPointer2;
                             ++SourcePointer2;
                         }

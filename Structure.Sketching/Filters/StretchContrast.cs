@@ -89,6 +89,7 @@ namespace Structure.Sketching.Filters
         {
             float TempVal = v - min;
             TempVal /= max - min;
+            TempVal *= 255;
             return (byte)TempVal.Clamp(0, 255);
         }
     }
