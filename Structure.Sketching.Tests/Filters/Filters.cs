@@ -1,4 +1,5 @@
-﻿using Structure.Sketching.Filters;
+﻿using Structure.Sketching.Colors;
+using Structure.Sketching.Filters;
 using Structure.Sketching.Filters.Arithmetic;
 using Structure.Sketching.Filters.Binary;
 using Structure.Sketching.Filters.ColorMatrix;
@@ -15,7 +16,6 @@ using Structure.Sketching.Filters.Smoothing;
 using Structure.Sketching.Numerics;
 using Structure.Sketching.Tests.BaseClasses;
 using System.IO;
-using System.Numerics;
 using Xunit;
 
 namespace Structure.Sketching.Tests.Filters.ColorMatrix
@@ -31,22 +31,22 @@ namespace Structure.Sketching.Tests.Filters.ColorMatrix
             { "Logarithm", new Logarithm(),default(Rectangle) },
             { "Posterize", new Posterize(10),default(Rectangle) },
             { "Solarize", new Solarize(1.5f),default(Rectangle) },
-            { "NonMaximalSuppression", new NonMaximalSuppression(Vector4.One,Vector4.Zero,0.8f,0.5f),default(Rectangle) },
-            { "CannyEdgeDetection", new CannyEdgeDetection(Vector4.One,Vector4.Zero,0.8f,0.5f),default(Rectangle) },
+            { "NonMaximalSuppression", new NonMaximalSuppression(Color.White,Color.Black,0.8f,0.5f),default(Rectangle) },
+            { "CannyEdgeDetection", new CannyEdgeDetection(Color.White,Color.Black,0.8f,0.5f),default(Rectangle) },
             { "Translate", new Translate(50,50),default(Rectangle) },
             { "Alpha-50", new Alpha(.5f),default(Rectangle) },
             { "Blend-50", new Blend(new Resize(500,500,ResamplingFiltersAvailable.Bilinear).Apply(new Image("./TestImages/EncodingTest.bmp")),0.5f),new Rectangle(100,100,500,500) },
-            { "Replace-Black-For-White", new Replace(new Vector4(0,0,0,1),new Vector4(1,1,1,1),0.2f),default(Rectangle) },
+            { "Replace-Black-For-White", new Replace(Color.Black,Color.White,0.2f),default(Rectangle) },
             { "Invert", new Invert(),default(Rectangle) },
             { "Crop", new Crop(),new Rectangle(100,100,500,500) },
             { "Flip-Vertical", new Flip(FlipDirection.Vertical),default(Rectangle) },
             { "Flip-Horizontal", new Flip(FlipDirection.Horizontal),default(Rectangle) },
             { "Flip-Both", new Flip(FlipDirection.Horizontal|FlipDirection.Vertical),default(Rectangle) },
             { "Rotate-45", new Rotate(45f),default(Rectangle) },
-            { "Fill-Purple", new Fill(new Vector4(.5f,0,.5f,1)),new Rectangle(100,100,500,500) },
+            { "Fill-Purple", new Fill(new Color(127,0,127,255)),new Rectangle(100,100,500,500) },
             //{ "Noise-20", new Noise(.2f),default(Rectangle) },                    //Will never be correct as final result contains random noise
-            { "AdaptiveThreshold", new AdaptiveThreshold(10,new Vector4(1,1,1,1),new Vector4(0,0,0,0),.5f),default(Rectangle) },
-            { "Threshold", new Threshold(new Vector4(1,1,1,1),new Vector4(0,0,0,0),.5f),default(Rectangle) },
+            { "AdaptiveThreshold", new AdaptiveThreshold(10,Color.White,Color.Black,.5f),default(Rectangle) },
+            { "Threshold", new Threshold(Color.White,Color.Black,.5f),default(Rectangle) },
             { "BlackWhite", new BlackWhite(),default(Rectangle) },
             { "BlueFilter", new BlueFilter(),default(Rectangle) },
             { "Tritanopia", new Tritanopia(),default(Rectangle) },
@@ -115,18 +115,18 @@ namespace Structure.Sketching.Tests.Filters.ColorMatrix
             { "Logarithm-Partial", new Logarithm(),new Rectangle(100,100,500,500) },
             { "Posterize-Partial", new Posterize(10),new Rectangle(100,100,500,500) },
             { "Solarize-Partial", new Solarize(1.5f),new Rectangle(100,100,500,500) },
-            { "NonMaximalSuppression-Partial", new NonMaximalSuppression(Vector4.One,Vector4.Zero,0.8f,0.5f),new Rectangle(100,100,500,500) },
-            { "CannyEdgeDetection-Partial", new CannyEdgeDetection(Vector4.One,Vector4.Zero,0.8f,0.5f),new Rectangle(100,100,500,500) },
+            { "NonMaximalSuppression-Partial", new NonMaximalSuppression(Color.White,Color.Black,0.8f,0.5f),new Rectangle(100,100,500,500) },
+            { "CannyEdgeDetection-Partial", new CannyEdgeDetection(Color.White,Color.Black,0.8f,0.5f),new Rectangle(100,100,500,500) },
             { "Translate-Partial", new Translate(50,50),new Rectangle(100,100,500,500) },
             { "Alpha-50-Partial", new Alpha(.5f),new Rectangle(100,100,500,500) },
-            { "Replace-Black-For-White-Partial", new Replace(new Vector4(0,0,0,1),new Vector4(1,1,1,1),0.2f),new Rectangle(100,100,500,500) },
+            { "Replace-Black-For-White-Partial", new Replace(Color.Black,Color.White,0.2f),new Rectangle(100,100,500,500) },
             { "Invert-Partial", new Invert(),new Rectangle(100,100,500,500) },
             { "Flip-Vertical-Partial", new Flip(FlipDirection.Vertical),new Rectangle(100,100,500,500) },
             { "Flip-Horizontal-Partial", new Flip(FlipDirection.Horizontal),new Rectangle(100,100,500,500) },
             { "Flip-Both-Partial", new Flip(FlipDirection.Horizontal|FlipDirection.Vertical),new Rectangle(100,100,500,500) },
             { "Rotate-45-Partial", new Rotate(45f),new Rectangle(100,100,500,500) },
-            { "AdaptiveThreshold-Partial", new AdaptiveThreshold(10,new Vector4(1,1,1,1),new Vector4(0,0,0,0),.5f),new Rectangle(100,100,500,500) },
-            { "Threshold-Partial", new Threshold(new Vector4(1,1,1,1),new Vector4(0,0,0,0),.5f),new Rectangle(100,100,500,500) },
+            { "AdaptiveThreshold-Partial", new AdaptiveThreshold(10,Color.White,Color.Black,.5f),new Rectangle(100,100,500,500) },
+            { "Threshold-Partial", new Threshold(Color.White,Color.Black,.5f),new Rectangle(100,100,500,500) },
             { "BlackWhite-Partial", new BlackWhite(),new Rectangle(100,100,500,500) },
             { "BlueFilter-Partial", new BlueFilter(),new Rectangle(100,100,500,500) },
             { "Tritanopia-Partial", new Tritanopia(),new Rectangle(100,100,500,500) },

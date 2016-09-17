@@ -110,13 +110,13 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var tempPixels = new Vector4[image.Pixels.Length];
+            var tempPixels = new byte[image.Pixels.Length];
             Array.Copy(image.Pixels, tempPixels, image.Pixels.Length);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* OutputPointer = Pointer;
+                    byte* OutputPointer = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
                         var Values = new Vector4(0, 0, 0, 0);
@@ -139,8 +139,11 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
                                 {
                                     if (*MatrixValue != 0)
                                     {
-                                        Start = ((YCurrent + y) * image.Width) + (x + XCurrent);
-                                        Values = Values + (*MatrixValue * tempPixels[Start]);
+                                        Start = (((YCurrent + y) * image.Width) + (x + XCurrent)) * 4;
+                                        Values = Values + new Vector4((*MatrixValue * tempPixels[Start]),
+                                                                            (*MatrixValue * tempPixels[Start + 1]),
+                                                                            (*MatrixValue * tempPixels[Start + 2]),
+                                                                            (*MatrixValue * tempPixels[Start + 3]));
                                         Weight += *MatrixValue;
                                     }
                                     ++MatrixValue;
@@ -157,10 +160,19 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
                                 Values = Vector4.Abs(Values);
                             }
                             Values /= Weight;
-                            Values = new Vector4(Values.X + Offset, Values.Y + Offset, Values.Z + Offset, (*OutputPointer).W);
-                            *OutputPointer = Vector4.Clamp(Values, Vector4.Zero, Vector4.One);
+                            Values = new Vector4(Values.X + Offset, Values.Y + Offset, Values.Z + Offset, 1);
+                            Values = Vector4.Clamp(Values, Vector4.Zero, Vector4.One) * 255;
+                            *OutputPointer = (byte)Values.X;
+                            ++OutputPointer;
+                            *OutputPointer = (byte)Values.Y;
+                            ++OutputPointer;
+                            *OutputPointer = (byte)Values.Z;
+                            OutputPointer += 2;
                         }
-                        ++OutputPointer;
+                        else
+                        {
+                            OutputPointer += 4;
+                        }
                     }
                 }
             });

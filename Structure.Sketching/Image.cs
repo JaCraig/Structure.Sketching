@@ -330,13 +330,13 @@ namespace Structure.Sketching
             bool ShowLine = true;
             var TempImage = new Greyscale601().Apply(Copy());
             var Builder = new StringBuilder();
-            for (int x = 0; x < TempImage.Height; ++x)
+            for (int y = 0; y < TempImage.Height; ++y)
             {
-                for (int y = 0; y < TempImage.Width; ++y)
+                for (int x = 0; x < TempImage.Width; ++x)
                 {
                     if (ShowLine)
                     {
-                        var RValue = TempImage.Pixels[(y * TempImage.Width * 4) + (x * 4)];
+                        var RValue = TempImage.Pixels[((y * TempImage.Width) + x) * 4] / 255f;
                         Builder.Append(_ASCIICharacters[(int)(RValue * _ASCIICharacters.Length)]);
                     }
                 }

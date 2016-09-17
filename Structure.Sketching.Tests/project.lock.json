@@ -2583,12 +2583,6 @@
           "NETStandard.Library": "1.6.0",
           "System.Numerics.Vectors": "4.1.1",
           "System.Threading.Tasks.Parallel": "4.0.1"
-        },
-        "compile": {
-          "netstandard1.3/Structure.Sketching.dll": {}
-        },
-        "runtime": {
-          "netstandard1.3/Structure.Sketching.dll": {}
         }
       }
     }
@@ -7658,7 +7652,7 @@
     "Structure.Sketching/1.0.0": {
       "type": "project",
       "path": "../Structure.Sketching/project.json",
-      "msbuildProject": "../Structure.Sketching/Structure.Sketching.xproj"
+      "msbuildProject": "../Structure.Sketching/Structure.Sketching.csproj"
     }
   },
   "projectFileDependencyGroups": {

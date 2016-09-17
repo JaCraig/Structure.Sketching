@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.ColorMatrix;
 using Structure.Sketching.Filters.Pipelines.BaseClasses;
-using System.Numerics;
 
 namespace Structure.Sketching.Filters.Pipelines
 {
@@ -33,7 +33,7 @@ namespace Structure.Sketching.Filters.Pipelines
             : base(true)
         {
             AddFilter(new LomographColorMatrix())
-                .AddFilter(new Vignette(new Vector4(0, 0.0392156862745f, 0, 1), 0, 0));
+                .AddFilter(new Vignette(new Color(0, 10, 0, 255), 0, 0));
         }
     }
 }

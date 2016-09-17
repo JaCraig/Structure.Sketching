@@ -16,7 +16,6 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.ColorMatrix.BaseClasses
@@ -54,12 +53,19 @@ namespace Structure.Sketching.Filters.ColorMatrix.BaseClasses
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* pointer2 = pointer;
+                    byte* pointer2 = pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        *pointer2 = Vector4.Clamp(Matrix * *pointer2, Vector4.Zero, Vector4.One);
+                        var TempVector = Matrix * pointer2;
+                        *pointer2 = (byte)TempVector.X;
+                        ++pointer2;
+                        *pointer2 = (byte)TempVector.Y;
+                        ++pointer2;
+                        *pointer2 = (byte)TempVector.Z;
+                        ++pointer2;
+                        *pointer2 = (byte)TempVector.W;
                         ++pointer2;
                     }
                 }

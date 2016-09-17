@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.ColorMatrix;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Binary
@@ -34,7 +34,7 @@ namespace Structure.Sketching.Filters.Binary
         /// <param name="color1">The first color.</param>
         /// <param name="color2">The second color.</param>
         /// <param name="threshold">The threshold.</param>
-        public Threshold(Vector4 color1, Vector4 color2, float threshold)
+        public Threshold(Color color1, Color color2, float threshold)
         {
             Color1 = color1;
             Color2 = color2;
@@ -45,13 +45,13 @@ namespace Structure.Sketching.Filters.Binary
         /// Gets or sets the color1.
         /// </summary>
         /// <value>The color1.</value>
-        public Vector4 Color1 { get; set; }
+        public Color Color1 { get; set; }
 
         /// <summary>
         /// Gets or sets the color2.
         /// </summary>
         /// <value>The color2.</value>
-        public Vector4 Color2 { get; set; }
+        public Color Color2 { get; set; }
 
         /// <summary>
         /// Gets or sets the threshold value.
@@ -71,12 +71,19 @@ namespace Structure.Sketching.Filters.Binary
             new Greyscale709().Apply(image, targetLocation);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* TargetPointer2 = TargetPointer;
+                    byte* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        *TargetPointer2 = (*TargetPointer2).X >= ThresholdValue ? Color1 : Color2;
+                        var ColorToUse = *TargetPointer2 >= ThresholdValue ? Color1 : Color2;
+                        *TargetPointer2 = ColorToUse.Red;
+                        ++TargetPointer2;
+                        *TargetPointer2 = ColorToUse.Green;
+                        ++TargetPointer2;
+                        *TargetPointer2 = ColorToUse.Blue;
+                        ++TargetPointer2;
+                        *TargetPointer2 = ColorToUse.Alpha;
                         ++TargetPointer2;
                     }
                 }

@@ -87,7 +87,7 @@ namespace Structure.Sketching.Filters.Morphology
                         TempValues[((y * image.Width) + x)] = RValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
                         TempValues[((y * image.Width) + x) + 1] = GValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
                         TempValues[((y * image.Width) + x) + 2] = BValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
-                        TempValues[((y * image.Width) + x) + 3] = image.Pixels[(y * image.Width) + x].W;
+                        TempValues[((y * image.Width) + x) + 3] = image.Pixels[(((y * image.Width) + x) * 4) + 3];
                     }
                 }
             });

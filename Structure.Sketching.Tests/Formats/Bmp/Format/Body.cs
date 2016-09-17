@@ -17,7 +17,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format
         [Fact]
         public void CreateImage()
         {
-            var data = new float[1600];
+            var data = new byte[1600];
             var image = new Image(10, 40, data);
             var TestBody = new Sketching.Formats.Bmp.Format.Body(image);
             Assert.Equal(1280, TestBody.Data.Length);
@@ -37,7 +37,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format
         [Fact]
         public void Write()
         {
-            var data = new float[7040];
+            var data = new byte[7040];
             var image = new Image(44, 40, data);
             var TestBody = new Sketching.Formats.Bmp.Format.Body(image);
             using (var BWriter = new BinaryWriter(new MemoryStream()))

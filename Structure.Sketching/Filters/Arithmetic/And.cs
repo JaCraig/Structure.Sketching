@@ -16,7 +16,6 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Arithmetic
@@ -55,26 +54,28 @@ namespace Structure.Sketching.Filters.Arithmetic
             {
                 if (y >= SecondImage.Height)
                     return;
-                fixed (Vector4* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* OutputPointer = Pointer;
-                    fixed (Vector4* Image2Pointer = &SecondImage.Pixels[(y - targetLocation.Bottom) * SecondImage.Width])
+                    byte* OutputPointer = Pointer;
+                    fixed (byte* Image2Pointer = &SecondImage.Pixels[((y - targetLocation.Bottom) * SecondImage.Width) * 4])
                     {
-                        Vector4* Image2Pointer2 = Image2Pointer;
+                        byte* Image2Pointer2 = Image2Pointer;
                         int x2 = 0;
                         for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                         {
                             if (x2 > SecondImage.Width)
                                 break;
                             ++x2;
-                            var TempOutput = *OutputPointer;
-                            var TempImage2 = *Image2Pointer2;
-                            TempOutput = TempOutput * 255;
-                            TempImage2 = TempImage2 * 255;
-                            (*OutputPointer).X = ((byte)TempOutput.X & (byte)TempImage2.X) / 255f;
-                            (*OutputPointer).Y = ((byte)TempOutput.Y & (byte)TempImage2.Y) / 255f;
-                            (*OutputPointer).Z = ((byte)TempOutput.Z & (byte)TempImage2.Z) / 255f;
-                            (*OutputPointer).W = ((byte)TempOutput.W & (byte)TempImage2.W) / 255f;
+                            *OutputPointer = (byte)(*OutputPointer & *Image2Pointer2);
+                            ++OutputPointer;
+                            ++Image2Pointer2;
+                            *OutputPointer = (byte)(*OutputPointer & *Image2Pointer2);
+                            ++OutputPointer;
+                            ++Image2Pointer2;
+                            *OutputPointer = (byte)(*OutputPointer & *Image2Pointer2);
+                            ++OutputPointer;
+                            ++Image2Pointer2;
+                            *OutputPointer = (byte)(*OutputPointer & *Image2Pointer2);
                             ++OutputPointer;
                             ++Image2Pointer2;
                         }

@@ -16,7 +16,6 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Arithmetic
@@ -54,20 +53,33 @@ namespace Structure.Sketching.Filters.Arithmetic
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
                 if (y >= SecondImage.Height)
-                    return;
-                fixed (Vector4* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
                 {
-                    Vector4* OutputPointer = Pointer;
-                    fixed (Vector4* Image2Pointer = &SecondImage.Pixels[(y - targetLocation.Bottom) * SecondImage.Width])
+                    return;
+                }
+                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
+                {
+                    byte* OutputPointer = Pointer;
+                    fixed (byte* Image2Pointer = &SecondImage.Pixels[((y - targetLocation.Bottom) * SecondImage.Width) * 4])
                     {
-                        Vector4* Image2Pointer2 = Image2Pointer;
+                        byte* Image2Pointer2 = Image2Pointer;
                         int x2 = 0;
                         for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                         {
                             if (x2 > SecondImage.Width)
+                            {
                                 break;
+                            }
                             ++x2;
-                            *OutputPointer = Vector4.Clamp(*OutputPointer * *Image2Pointer2, Vector4.Zero, Vector4.One);
+                            *OutputPointer = (byte)(*OutputPointer * *Image2Pointer2);
+                            ++OutputPointer;
+                            ++Image2Pointer2;
+                            *OutputPointer = (byte)(*OutputPointer * *Image2Pointer2);
+                            ++OutputPointer;
+                            ++Image2Pointer2;
+                            *OutputPointer = (byte)(*OutputPointer * *Image2Pointer2);
+                            ++OutputPointer;
+                            ++Image2Pointer2;
+                            *OutputPointer = (byte)(*OutputPointer * *Image2Pointer2);
                             ++OutputPointer;
                             ++Image2Pointer2;
                         }

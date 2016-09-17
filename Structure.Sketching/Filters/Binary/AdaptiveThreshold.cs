@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.ColorMatrix;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Binary
@@ -38,7 +38,7 @@ namespace Structure.Sketching.Filters.Binary
         /// <param name="color1">The color1.</param>
         /// <param name="color2">The color2.</param>
         /// <param name="threshold">The threshold.</param>
-        public AdaptiveThreshold(int apetureRadius, Vector4 color1, Vector4 color2, float threshold)
+        public AdaptiveThreshold(int apetureRadius, Color color1, Color color2, float threshold)
         {
             Threshold = threshold;
             Color2 = color2;
@@ -58,7 +58,7 @@ namespace Structure.Sketching.Filters.Binary
         /// <value>
         /// The color1.
         /// </value>
-        public Vector4 Color1 { get; set; }
+        public Color Color1 { get; set; }
 
         /// <summary>
         /// Gets or sets the color2.
@@ -66,7 +66,7 @@ namespace Structure.Sketching.Filters.Binary
         /// <value>
         /// The color2.
         /// </value>
-        public Vector4 Color2 { get; set; }
+        public Color Color2 { get; set; }
 
         /// <summary>
         /// Gets or sets the threshold.
@@ -86,18 +86,18 @@ namespace Structure.Sketching.Filters.Binary
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             new Greyscale709().Apply(image, targetLocation);
-            var TempValues = new Vector4[image.Width * image.Height];
+            var TempValues = new byte[image.Width * image.Height * 4];
             Array.Copy(image.Pixels, TempValues, TempValues.Length);
             int ApetureMin = -ApetureRadius;
             int ApetureMax = ApetureRadius;
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Vector4* TargetPointer = &TempValues[(y * image.Width) + targetLocation.Left])
+                fixed (byte* TargetPointer = &TempValues[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    Vector4* TargetPointer2 = TargetPointer;
+                    byte* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        var RValues = new List<float>();
+                        var RValues = new List<byte>();
                         for (int x2 = ApetureMin; x2 < ApetureMax; ++x2)
                         {
                             int TempX = x + x2;
@@ -108,12 +108,19 @@ namespace Structure.Sketching.Filters.Binary
                                     int TempY = y + y2;
                                     if (TempY >= targetLocation.Bottom && TempY < targetLocation.Top)
                                     {
-                                        RValues.Add(image.Pixels[(TempY * image.Width) + TempX].X);
+                                        RValues.Add(image.Pixels[((TempY * image.Width) + TempX) * 4]);
                                     }
                                 }
                             }
                         }
-                        *TargetPointer2 = RValues.Average() >= Threshold ? Color1 : Color2;
+                        var ColorToUse = RValues.Average(_ => _) >= Threshold ? Color1 : Color2;
+                        *TargetPointer2 = ColorToUse.Red;
+                        ++TargetPointer2;
+                        *TargetPointer2 = ColorToUse.Green;
+                        ++TargetPointer2;
+                        *TargetPointer2 = ColorToUse.Blue;
+                        ++TargetPointer2;
+                        *TargetPointer2 = ColorToUse.Alpha;
                         ++TargetPointer2;
                     }
                 }

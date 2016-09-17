@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.ColorMatrix;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Binary
@@ -37,7 +37,7 @@ namespace Structure.Sketching.Filters.Binary
         /// <param name="color2">The second color.</param>
         /// <param name="threshold1">The threshold1.</param>
         /// <param name="threshold2">The threshold2.</param>
-        public NonMaximalSuppression(Vector4 color1, Vector4 color2, float threshold1, float threshold2)
+        public NonMaximalSuppression(Color color1, Color color2, float threshold1, float threshold2)
         {
             Threshold2 = threshold2;
             Threshold1 = threshold1;
@@ -49,13 +49,13 @@ namespace Structure.Sketching.Filters.Binary
         /// Gets or sets the color1.
         /// </summary>
         /// <value>The color1.</value>
-        public Vector4 Color1 { get; set; }
+        public Color Color1 { get; set; }
 
         /// <summary>
         /// Gets or sets the color2.
         /// </summary>
         /// <value>The color2.</value>
-        public Vector4 Color2 { get; set; }
+        public Color Color2 { get; set; }
 
         /// <summary>
         /// Gets or sets the threshold1.
@@ -83,21 +83,21 @@ namespace Structure.Sketching.Filters.Binary
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             new Greyscale709().Apply(image, targetLocation);
-            var Result = new Image(image.Width, image.Height, new Vector4[image.Pixels.Length]);
+            var Result = new Image(image.Width, image.Height, new byte[image.Pixels.Length]);
             Array.Copy(image.Pixels, Result.Pixels, Result.Pixels.Length);
             new Fill(Color2).Apply(Result, targetLocation);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
                 for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    if (image.Pixels[(y * image.Width) + x].X >= Threshold1)
+                    if (image.Pixels[((y * image.Width) + x) * 4] >= Threshold1)
                         FillPixels(Result.Pixels, image, x, y, targetLocation);
                 }
             });
             return image.ReCreate(image.Width, image.Height, Result.Pixels);
         }
 
-        private void FillPixels(Vector4[] result, Image image, int x, int y, Rectangle targetLocation)
+        private void FillPixels(byte[] result, Image image, int x, int y, Rectangle targetLocation)
         {
             var TempPixels = new Stack<Tuple<int, int>>();
             TempPixels.Push(new Tuple<int, int>(x, y));
@@ -107,76 +107,118 @@ namespace Structure.Sketching.Filters.Binary
                 var Left = CurrentPixel.Item1 - 1;
                 if (Left >= targetLocation.Left)
                 {
-                    if (image.Pixels[(CurrentPixel.Item2 * image.Width) + Left].X > Threshold2
-                        && result[(CurrentPixel.Item2 * image.Width) + Left] != Color1)
+                    if (image.Pixels[((CurrentPixel.Item2 * image.Width) + Left) * 4] > Threshold2
+                        && new Color(result[((CurrentPixel.Item2 * image.Width) + Left) * 4],
+                                    result[(((CurrentPixel.Item2 * image.Width) + Left) * 4) + 1],
+                                    result[(((CurrentPixel.Item2 * image.Width) + Left) * 4) + 2],
+                                    result[(((CurrentPixel.Item2 * image.Width) + Left) * 4) + 3]) != Color1)
                     {
-                        result[(CurrentPixel.Item2 * image.Width) + Left] = Color1;
+                        result[((CurrentPixel.Item2 * image.Width) + Left) * 4] = Color1.Red;
+                        result[(((CurrentPixel.Item2 * image.Width) + Left) * 4) + 1] = Color1.Green;
+                        result[(((CurrentPixel.Item2 * image.Width) + Left) * 4) + 2] = Color1.Blue;
+                        result[(((CurrentPixel.Item2 * image.Width) + Left) * 4) + 3] = Color1.Alpha;
                         TempPixels.Push(new Tuple<int, int>(Left, CurrentPixel.Item2));
                     }
                 }
                 var Right = CurrentPixel.Item1 + 1;
                 if (Right < targetLocation.Right)
                 {
-                    if (image.Pixels[(CurrentPixel.Item2 * image.Width) + Right].X > Threshold2
-                        && result[(CurrentPixel.Item2 * image.Width) + Right] != Color1)
+                    if (image.Pixels[((CurrentPixel.Item2 * image.Width) + Right) * 4] > Threshold2
+                        && new Color(result[((CurrentPixel.Item2 * image.Width) + Right) * 4],
+                                    result[(((CurrentPixel.Item2 * image.Width) + Right) * 4) + 1],
+                                    result[(((CurrentPixel.Item2 * image.Width) + Right) * 4) + 2],
+                                    result[(((CurrentPixel.Item2 * image.Width) + Right) * 4) + 3]) != Color1)
                     {
-                        result[(CurrentPixel.Item2 * image.Width) + Right] = Color1;
+                        result[((CurrentPixel.Item2 * image.Width) + Right) * 4] = Color1.Red;
+                        result[(((CurrentPixel.Item2 * image.Width) + Right) * 4) + 1] = Color1.Green;
+                        result[(((CurrentPixel.Item2 * image.Width) + Right) * 4) + 2] = Color1.Blue;
+                        result[(((CurrentPixel.Item2 * image.Width) + Right) * 4) + 3] = Color1.Alpha;
                         TempPixels.Push(new Tuple<int, int>(Right, CurrentPixel.Item2));
                     }
                 }
                 var Bottom = CurrentPixel.Item2 - 1;
                 if (Bottom >= targetLocation.Bottom)
                 {
-                    if (image.Pixels[(Bottom * image.Width) + CurrentPixel.Item1].X > Threshold2
-                        && result[(Bottom * image.Width) + CurrentPixel.Item1] != Color1)
+                    if (image.Pixels[((Bottom * image.Width) + CurrentPixel.Item1) * 4] > Threshold2
+                        && new Color(result[((Bottom * image.Width) + CurrentPixel.Item1) * 4],
+                                    result[(((Bottom * image.Width) + CurrentPixel.Item1) * 4) + 1],
+                                    result[(((Bottom * image.Width) + CurrentPixel.Item1) * 4) + 2]) != Color1)
                     {
-                        result[(Bottom * image.Width) + CurrentPixel.Item1] = Color1;
+                        result[((Bottom * image.Width) + CurrentPixel.Item1) * 4] = Color1.Red;
+                        result[(((Bottom * image.Width) + CurrentPixel.Item1) * 4) + 1] = Color1.Green;
+                        result[(((Bottom * image.Width) + CurrentPixel.Item1) * 4) + 2] = Color1.Blue;
+                        result[(((Bottom * image.Width) + CurrentPixel.Item1) * 4) + 3] = Color1.Alpha;
                         TempPixels.Push(new Tuple<int, int>(CurrentPixel.Item1, Bottom));
                     }
                 }
                 var Top = CurrentPixel.Item2 + 1;
                 if (Top < targetLocation.Top)
                 {
-                    if (image.Pixels[(Top * image.Width) + CurrentPixel.Item1].X > Threshold2
-                        && result[(Top * image.Width) + CurrentPixel.Item1] != Color1)
+                    if (image.Pixels[((Top * image.Width) + CurrentPixel.Item1) * 4] > Threshold2
+                        && new Color(result[((Top * image.Width) + CurrentPixel.Item1) * 4],
+                                    result[(((Top * image.Width) + CurrentPixel.Item1) * 4) + 1],
+                                    result[(((Top * image.Width) + CurrentPixel.Item1) * 4) + 2]) != Color1)
                     {
-                        result[(Top * image.Width) + CurrentPixel.Item1] = Color1;
+                        result[((Top * image.Width) + CurrentPixel.Item1) * 4] = Color1.Red;
+                        result[(((Top * image.Width) + CurrentPixel.Item1) * 4) + 1] = Color1.Green;
+                        result[(((Top * image.Width) + CurrentPixel.Item1) * 4) + 2] = Color1.Blue;
+                        result[(((Top * image.Width) + CurrentPixel.Item1) * 4) + 3] = Color1.Alpha;
                         TempPixels.Push(new Tuple<int, int>(CurrentPixel.Item1, Top));
                     }
                 }
                 if (Left >= targetLocation.Left && Bottom >= targetLocation.Bottom)
                 {
-                    if (image.Pixels[(Bottom * image.Width) + Left].X > Threshold2
-                        && result[(Bottom * image.Width) + Left] != Color1)
+                    if (image.Pixels[((Bottom * image.Width) + Left) * 4] > Threshold2
+                        && new Color(result[((Bottom * image.Width) + Left) * 4],
+                                    result[(((Bottom * image.Width) + Left) * 4) + 1],
+                                    result[(((Bottom * image.Width) + Left) * 4) + 2]) != Color1)
                     {
-                        result[(Bottom * image.Width) + Left] = Color1;
+                        result[((Bottom * image.Width) + Left) * 4] = Color1.Red;
+                        result[(((Bottom * image.Width) + Left) * 4) + 1] = Color1.Green;
+                        result[(((Bottom * image.Width) + Left) * 4) + 2] = Color1.Blue;
+                        result[(((Bottom * image.Width) + Left) * 4) + 3] = Color1.Alpha;
                         TempPixels.Push(new Tuple<int, int>(Left, Bottom));
                     }
                 }
                 if (Left >= targetLocation.Left && Top < targetLocation.Top)
                 {
-                    if (image.Pixels[(Top * image.Width) + Left].X > Threshold2
-                        && result[(Top * image.Width) + Left] != Color1)
+                    if (image.Pixels[((Top * image.Width) + Left) * 4] > Threshold2
+                        && new Color(result[((Top * image.Width) + Left) * 4],
+                                    result[(((Top * image.Width) + Left) * 4) + 1],
+                                    result[(((Top * image.Width) + Left) * 4) + 2]) != Color1)
                     {
-                        result[(Top * image.Width) + Left] = Color1;
+                        result[((Top * image.Width) + Left) * 4] = Color1.Red;
+                        result[(((Top * image.Width) + Left) * 4) + 1] = Color1.Green;
+                        result[(((Top * image.Width) + Left) * 4) + 2] = Color1.Blue;
+                        result[(((Top * image.Width) + Left) * 4) + 3] = Color1.Alpha;
                         TempPixels.Push(new Tuple<int, int>(Left, Top));
                     }
                 }
                 if (Right < targetLocation.Right && Bottom >= targetLocation.Bottom)
                 {
-                    if (image.Pixels[(Bottom * image.Width) + Right].X > Threshold2
-                        && result[(Bottom * image.Width) + Right] != Color1)
+                    if (image.Pixels[((Bottom * image.Width) + Right) * 4] > Threshold2
+                        && new Color(result[((Bottom * image.Width) + Right) * 4],
+                                    result[(((Bottom * image.Width) + Right) * 4) + 1],
+                                    result[(((Bottom * image.Width) + Right) * 4) + 2]) != Color1)
                     {
-                        result[(Bottom * image.Width) + Right] = Color1;
+                        result[((Bottom * image.Width) + Right) * 4] = Color1.Red;
+                        result[(((Bottom * image.Width) + Right) * 4) + 1] = Color1.Green;
+                        result[(((Bottom * image.Width) + Right) * 4) + 2] = Color1.Blue;
+                        result[(((Bottom * image.Width) + Right) * 4) + 3] = Color1.Alpha;
                         TempPixels.Push(new Tuple<int, int>(Right, Bottom));
                     }
                 }
                 if (Right < targetLocation.Left && Top < targetLocation.Top)
                 {
-                    if (image.Pixels[(Top * image.Width) + Right].X > Threshold2
-                        && result[(Top * image.Width) + Right] != Color1)
+                    if (image.Pixels[((Top * image.Width) + Right) * 4] > Threshold2
+                        && new Color(result[((Top * image.Width) + Right) * 4],
+                                    result[(((Top * image.Width) + Right) * 4) + 1],
+                                    result[(((Top * image.Width) + Right) * 4) + 2]) != Color1)
                     {
-                        result[(Top * image.Width) + Right] = Color1;
+                        result[((Top * image.Width) + Right) * 4] = Color1.Red;
+                        result[(((Top * image.Width) + Right) * 4) + 1] = Color1.Green;
+                        result[(((Top * image.Width) + Right) * 4) + 2] = Color1.Blue;
+                        result[(((Top * image.Width) + Right) * 4) + 3] = Color1.Alpha;
                         TempPixels.Push(new Tuple<int, int>(Right, Top));
                     }
                 }

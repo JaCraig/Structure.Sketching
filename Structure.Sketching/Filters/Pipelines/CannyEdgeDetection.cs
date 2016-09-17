@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Binary;
 using Structure.Sketching.Filters.Convolution;
 using Structure.Sketching.Filters.Pipelines.BaseClasses;
-using System.Numerics;
 
 namespace Structure.Sketching.Filters.Pipelines
 {
@@ -34,7 +34,7 @@ namespace Structure.Sketching.Filters.Pipelines
         /// <param name="color2">The color2.</param>
         /// <param name="threshold1">The threshold1.</param>
         /// <param name="threshold2">The threshold2.</param>
-        public CannyEdgeDetection(Vector4 color1, Vector4 color2, float threshold1, float threshold2)
+        public CannyEdgeDetection(Color color1, Color color2, float threshold1, float threshold2)
             : base(false)
         {
             AddFilter(new RobertsCross())

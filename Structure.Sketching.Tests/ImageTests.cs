@@ -2,7 +2,6 @@
 using Structure.Sketching.Tests.BaseClasses;
 using System;
 using System.IO;
-using System.Numerics;
 using Xunit;
 
 namespace Structure.Sketching.Tests
@@ -41,7 +40,7 @@ namespace Structure.Sketching.Tests
         [Fact]
         public void BadDataConstructor()
         {
-            var TempImage = new Image(-1, -1, (Vector4[])null);
+            var TempImage = new Image(-1, -1, null);
             Assert.Equal(1, TempImage.Width);
             Assert.Equal(1, TempImage.Height);
             Assert.Equal(1, TempImage.PixelRatio);
@@ -110,21 +109,30 @@ namespace Structure.Sketching.Tests
             Assert.Equal(1, TempImage.Width);
             Assert.Equal(1, TempImage.Height);
             Assert.Equal(1, TempImage.PixelRatio);
-            Assert.Null(TempImage.Pixels);
+            Assert.Equal(new byte[] { 0, 0, 0, 0 }, TempImage.Pixels);
         }
 
         [Fact]
         public void ToASCIIArt()
         {
-            var TestImage = new Image(1, 10, new float[] { .1f, .2f, .3f, .4f, .5f, .6f, .7f, .8f, .9f, 1f, .1f, .2f, .3f, .4f, .5f, .6f, .7f, .8f, .9f, 1f, .1f, .2f, .3f, .4f, .5f, .6f, .7f, .8f, .9f, 1f, .1f, .2f, .3f, .4f, .5f, .6f, .7f, .8f, .9f, 1f });
+            var TestImage = new Image(1, 10, new byte[] { 25, 51, 76, 102,
+                127, 153, 178, 204,
+                229, 255, 25, 51,
+                76, 102, 127, 153,
+                178, 204, 229, 255,
+                25, 51, 76, 102,
+                127, 153, 178, 204,
+                229, 255, 25, 51,
+                76, 102, 127, 153,
+                178, 204, 229, 255 });
             Assert.Equal("#\r\n.\r\n-\r\n*\r\n=\r\n", TestImage.ToASCIIArt());
         }
 
         [Fact]
         public void ToBase64String()
         {
-            var TestImage = new Image(1, 10, new float[] { .1f, .2f, .3f, .4f, .5f, .6f, .7f, .8f, .9f, 1f, .1f, .2f, .3f, .4f, .5f, .6f, .7f, .8f, .9f, 1f, .1f, .2f, .3f, .4f, .5f, .6f, .7f, .8f, .9f, 1f, .1f, .2f, .3f, .4f, .5f, .6f, .7f, .8f, .9f, 1f });
-            Assert.Equal("Qk1UAAAAAAAAADYAAAAoAAAAAQAAAAoAAAABABgAAAAAAB4AAAAAAAAAAAAAAAAAAAAAAAAA5cyyAH9mTAAZ/+UAspl/AEwzGQDlzLIAf2ZMABn/5QCymX8ATDMZAA==", TestImage.ToString(FileFormats.BMP));
+            var TestImage = new Image(1, 10, new byte[] { 25, 51, 76, 102, 127, 153, 178, 204, 229, 255, 25, 51, 76, 102, 127, 153, 178, 204, 229, 255, 25, 51, 76, 102, 127, 153, 178, 204, 229, 255, 25, 51, 76, 102, 127, 153, 178, 204, 229, 255 });
+            Assert.Equal("Qk1eAAAAAAAAADYAAAAoAAAAAQAAAAoAAAABABgAAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAA5cyyAH9mTAAZ/+UAspl/AEwzGQDlzLIAf2ZMABn/5QCymX8ATDMZAA==", TestImage.ToString(FileFormats.BMP));
         }
     }
 }

@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.ColorMatrix;
 using Structure.Sketching.Filters.Overlays;
 using Structure.Sketching.Filters.Pipelines.BaseClasses;
-using System.Numerics;
 
 namespace Structure.Sketching.Filters.Pipelines
 {
@@ -34,8 +34,8 @@ namespace Structure.Sketching.Filters.Pipelines
             : base(true)
         {
             AddFilter(new PolaroidColorMatrix())
-                .AddFilter(new Vignette(new Vector4(.4f, 0.1333333333333f, 0, 1), .75f, .75f))
-                .AddFilter(new Glow(new Vector4(1, .6f, .4f, .7f), .25f, .25f));
+                .AddFilter(new Vignette(new Color(102, 34, 0, 255), .75f, .75f))
+                .AddFilter(new Glow(new Color(255, 153, 102, 179), .25f, .25f));
         }
     }
 }

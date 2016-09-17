@@ -198,17 +198,17 @@ namespace Structure.Sketching.Formats.Png.Format
                 Parallel.For(0, image.Width, x =>
                 {
                     int dataOffset = (y * RowLength) + (x * 4) + 1;
-                    data[dataOffset] = image.Pixels[(image.Width * y) + x];
-                    data[dataOffset + 1] = image.Pixels[(image.Width * y) + x + 1];
-                    data[dataOffset + 2] = image.Pixels[(image.Width * y) + x + 2];
-                    data[dataOffset + 3] = image.Pixels[(image.Width * y) + x + 3];
+                    data[dataOffset] = image.Pixels[((image.Width * y) + x) * 4];
+                    data[dataOffset + 1] = image.Pixels[(((image.Width * y) + x) * 4) + 1];
+                    data[dataOffset + 2] = image.Pixels[(((image.Width * y) + x) * 4) + 2];
+                    data[dataOffset + 3] = image.Pixels[(((image.Width * y) + x) * 4) + 3];
 
                     if (y > 0)
                     {
-                        data[dataOffset] -= image.Pixels[(image.Width * (y - 1)) + x];
-                        data[dataOffset + 1] -= image.Pixels[(image.Width * (y - 1)) + x + 1];
-                        data[dataOffset + 2] -= image.Pixels[(image.Width * (y - 1)) + x + 2];
-                        data[dataOffset + 3] -= image.Pixels[(image.Width * (y - 1)) + x + 3];
+                        data[dataOffset] -= image.Pixels[((image.Width * (y - 1)) + x) * 4];
+                        data[dataOffset + 1] -= image.Pixels[(((image.Width * (y - 1)) + x) * 4) + 1];
+                        data[dataOffset + 2] -= image.Pixels[(((image.Width * (y - 1)) + x) * 4) + 2];
+                        data[dataOffset + 3] -= image.Pixels[(((image.Width * (y - 1)) + x) * 4) + 3];
                     }
                 });
             }
