@@ -626,6 +626,15 @@
           "lib/net45/_._": {}
         }
       },
+      "System.Runtime.CompilerServices.Unsafe/4.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll": {}
+        }
+      },
       "System.Runtime.Extensions/4.1.0": {
         "type": "package",
         "frameworkAssemblies": [
@@ -3007,6 +3016,19 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
+    "System.Runtime.CompilerServices.Unsafe/4.0.0": {
+      "sha512": "LDvjxLx2fkThOFo/SC+901fJrh5artALmgzeSqnVxzvFp4q3HO8BkeLyshPdcbs5zpN7Xh9G23M6sDhgIPbG9A==",
+      "type": "package",
+      "path": "System.Runtime.CompilerServices.Unsafe/4.0.0",
+      "files": [
+        "System.Runtime.CompilerServices.Unsafe.4.0.0.nupkg.sha512",
+        "System.Runtime.CompilerServices.Unsafe.nuspec",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.xml"
+      ]
+    },
     "System.Runtime.Extensions/4.1.0": {
       "sha512": "CUOHjTT/vgP0qGW22U4/hDlOqXmcPq5YicBaXdUR2UiUoLwBT+olO6we4DVbq57jeX5uXH2uerVZhf0qGj+sVQ==",
       "type": "package",
@@ -4258,7 +4280,8 @@
     "": [
       "BenchmarkDotNet.Diagnostics.Windows >= 0.9.9",
       "ImageProcessor >= 2.4.4",
-      "System.Numerics.Vectors >= 4.1.1"
+      "System.Numerics.Vectors >= 4.1.1",
+      "System.Runtime.CompilerServices.Unsafe >= 4.0.0"
     ],
     ".NETFramework,Version=v4.6.1": [
       "Structure.Sketching",
