@@ -1,42 +1,40 @@
 ﻿using BenchmarkDotNet.Attributes;
-using ImageProcessor;
+using Structure.Sketching.Benchmarks.Filters.TestClasses;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 
 namespace Structure.Sketching.Benchmarks.Filters
 {
     public class Crop
     {
-        [Benchmark(Description = "ImageProcessorCore Crop")]
-        public void CropResizeImageProcessor()
-        {
-            ImageFactory image = new ImageFactory();
-            image.Load("../../../../TestImage/BitmapFilter.bmp")
-                .Crop(new Rectangle(0, 0, 100, 100));
-        }
+        [Params(10, 100, 1000, 5000)]
+        public int Count { get; set; }
+
+        private int Height => 8000;
+        private int Width => 8000;
 
         [Benchmark(Description = "Structure.Sketching Crop")]
         public void CropStructureSketching()
         {
-            var TestImage = new Image("../../../../TestImage/BitmapFilter.bmp");
+            var TestImage = new Image(Width, Height, new byte[Width * Height * 4]);
             var CropFilter = new Sketching.Filters.Crop();
-            CropFilter.Apply(TestImage, new Numerics.Rectangle(0, 0, 100, 100));
+            CropFilter.Apply(TestImage, new Numerics.Rectangle(0, 0, Count, Count));
+        }
+
+        [Benchmark(Description = "Structure.Sketching Test Crop")]
+        public void CropStructureSketchingTest()
+        {
+            var TestImage = new Image(Width, Height, new byte[Width * Height * 4]);
+            var TestCropFilter = new CropFilter();
+            TestCropFilter.Apply(TestImage, new Numerics.Rectangle(0, 0, Count, Count));
         }
 
         [Benchmark(Baseline = true, Description = "System.Drawing Crop")]
         public void CropSystemDrawing()
         {
-            using (Bitmap source = new Bitmap("../../../../TestImage/BitmapFilter.bmp"))
+            using (Bitmap source = new Bitmap(Width, Height))
             {
-                using (Bitmap destination = new Bitmap(100, 100))
+                using (var destination = source.Clone(new Rectangle(0, 0, Count, Count), source.PixelFormat))
                 {
-                    using (Graphics graphics = Graphics.FromImage(destination))
-                    {
-                        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                        graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                        graphics.CompositingQuality = CompositingQuality.HighQuality;
-                        graphics.DrawImage(source, new Rectangle(0, 0, 100, 100), 0, 0, 100, 100, GraphicsUnit.Pixel);
-                    }
                 }
             }
         }

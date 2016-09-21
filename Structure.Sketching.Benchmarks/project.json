@@ -16,6 +16,7 @@
   "dependencies": {
     "BenchmarkDotNet.Diagnostics.Windows": "0.9.9",
     "ImageProcessor": "2.4.4",
+    "System.IO.FileSystem": "4.0.1",
     "System.Numerics.Vectors": "4.1.1",
     "System.Runtime.CompilerServices.Unsafe": "4.0.0"
   },
@@ -27,7 +28,7 @@
       "dependencies": {
         "Structure.Sketching": {
           "target": "project"
-        },
+        }
       },
       "frameworkAssemblies": {
         "System.Drawing": ""

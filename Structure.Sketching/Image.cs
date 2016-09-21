@@ -364,7 +364,7 @@ namespace Structure.Sketching
             {
                 if (Save(Stream, desiredFormat))
                 {
-                    byte[] TempArray = Stream.ToArray();
+                    var TempArray = Stream.ToArray();
                     return Convert.ToBase64String(TempArray, 0, TempArray.Length);
                 }
                 return string.Empty;

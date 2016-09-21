@@ -103,11 +103,6 @@ namespace Structure.Sketching.Formats.Gif.Format
         /// </value>
         public ColorTable LocalColorTable { get; set; }
 
-        private int bitDepth;
-        private Image image;
-        private QuantizedImage quantizedImage;
-        private int v;
-
         /// <summary>
         /// Reads from the specified stream.
         /// </summary>

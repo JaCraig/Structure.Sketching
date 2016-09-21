@@ -9,7 +9,6 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests
         [Params(100, 1000, 10000)]
         public int Count { get; set; }
 
-        private long sizeInBytes;
         private byte[] source, destination;
 
         [Benchmark(Baseline = true, Description = "Copy using Array.Copy()")]

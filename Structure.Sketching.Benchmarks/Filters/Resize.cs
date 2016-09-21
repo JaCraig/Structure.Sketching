@@ -18,7 +18,7 @@ namespace Structure.Sketching.Benchmarks.Filters
         [Benchmark(Description = "ImageProcessorCore Resize")]
         public void ResizeCore()
         {
-            ImageFactory image = new ImageFactory();
+            var image = new ImageFactory();
             image.Load("../../TestImage/BitmapFilter.bmp");
             image.Resize(new Size(400, 400));
         }
