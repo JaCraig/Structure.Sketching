@@ -26,6 +26,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Debug\netstandard1.3\Structure.Sketching.XML</DocumentationFile>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,6 +37,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Release\netstandard1.3\Structure.Sketching.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <None Include="project.json" />
@@ -270,6 +273,7 @@
     <Compile Include="Formats\Png\Format\Palette.cs" />
     <Compile Include="Formats\Png\Format\Property.cs" />
     <Compile Include="Formats\Png\PngFormat.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="IO\Converters\BaseClasses\EndianBitConverterBase.cs" />
     <Compile Include="IO\Converters\BigEndianBitConverter.cs" />

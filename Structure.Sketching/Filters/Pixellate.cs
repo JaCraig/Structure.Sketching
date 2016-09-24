@@ -53,8 +53,8 @@ namespace Structure.Sketching.Filters
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             for (int y = targetLocation.Bottom; y < targetLocation.Top; y += PixelSize)
             {
-                int MinY = (y - (PixelSize / 2)).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-                int MaxY = (y + (PixelSize / 2)).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
+                var MinY = (y - (PixelSize / 2)).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
+                var MaxY = (y + (PixelSize / 2)).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
                 fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
                     byte* TargetPointer2 = TargetPointer;
@@ -63,8 +63,8 @@ namespace Structure.Sketching.Filters
                         uint RValue = 0;
                         uint GValue = 0;
                         uint BValue = 0;
-                        int MinX = (x - (PixelSize / 2)).Clamp(targetLocation.Left, targetLocation.Right - 1);
-                        int MaxX = (x + (PixelSize / 2)).Clamp(targetLocation.Left, targetLocation.Right - 1);
+                        var MinX = (x - (PixelSize / 2)).Clamp(targetLocation.Left, targetLocation.Right - 1);
+                        var MaxX = (x + (PixelSize / 2)).Clamp(targetLocation.Left, targetLocation.Right - 1);
                         int NumberPixels = 0;
                         for (int x2 = MinX; x2 < MaxX; ++x2)
                         {

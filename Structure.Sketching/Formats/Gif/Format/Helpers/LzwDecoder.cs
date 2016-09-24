@@ -179,7 +179,7 @@ namespace Structure.Sketching.Formats.Gif.Format.Helpers
         /// <returns>The next block</returns>
         private byte[] ReadBlock(Stream stream)
         {
-            int Size = stream.ReadByte();
+            var Size = stream.ReadByte();
             return stream.ReadBytes(Size);
         }
     }

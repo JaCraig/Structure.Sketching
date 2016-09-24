@@ -152,7 +152,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
         public override void Setup(IEnumerable<SegmentBase> segments)
         {
             Length = GetLength(Bytes);
-            StartOfFrame Frame = segments.OfType<StartOfFrame>().FirstOrDefault();
+            var Frame = segments.OfType<StartOfFrame>().FirstOrDefault();
             var n = Length;
             while (n > 0)
             {

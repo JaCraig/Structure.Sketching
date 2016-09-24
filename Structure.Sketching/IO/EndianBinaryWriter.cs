@@ -306,7 +306,7 @@ namespace Structure.Sketching.IO
             value = value ?? new char[0];
             if (BaseStream == null)
                 throw new NullReferenceException("Base stream is null");
-            byte[] data = Encoding.GetBytes(value, 0, value.Length);
+            var data = Encoding.GetBytes(value, 0, value.Length);
             WriteInternal(data, data.Length);
         }
 
@@ -320,7 +320,7 @@ namespace Structure.Sketching.IO
             value = value ?? "";
             if (BaseStream == null)
                 throw new NullReferenceException("Base stream is null");
-            byte[] data = Encoding.GetBytes(value);
+            var data = Encoding.GetBytes(value);
             Write7BitEncodedInt(data.Length);
             WriteInternal(data, data.Length);
         }

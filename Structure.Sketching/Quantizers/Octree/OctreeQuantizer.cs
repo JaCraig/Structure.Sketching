@@ -46,7 +46,7 @@ namespace Structure.Sketching.Quantizers.Octree
         /// <returns>The list of colors in the palette</returns>
         protected override Bgra[] GetPalette()
         {
-            List<Bgra> palette = octree.Palletize(Math.Max(colors, 1));
+            var palette = octree.Palletize(Math.Max(colors, 1));
             palette.Add(new Color(0, 0, 0, 0));
             TransparentIndex = colors;
             return palette.ToArray();

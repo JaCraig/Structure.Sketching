@@ -122,7 +122,7 @@ namespace Structure.Sketching.Formats.Gif.Format
                                             globalColorTable;
             var TempIndices = FrameIndices.Read(stream, TempDescriptor);
 
-            byte[] Data = ReadFrameColors(TempIndices, LocalColorTable, graphicsControl, TempDescriptor, screenDescriptor, frames);
+            var Data = ReadFrameColors(TempIndices, LocalColorTable, graphicsControl, TempDescriptor, screenDescriptor, frames);
 
             Skip(stream, 0);
 

@@ -122,7 +122,7 @@ namespace Structure.Sketching.Formats.Png.Format
 
             if (ColorTypeInfo != null)
             {
-                IColorReader ColorReader = ColorTypeInfo.CreateColorReader(palette, alphaPalette);
+                var ColorReader = ColorTypeInfo.CreateColorReader(palette, alphaPalette);
                 using (MemoryStream TempStream = new MemoryStream(ImageData))
                 {
                     ReadScanlines(TempStream, Pixels, ColorReader, ColorTypeInfo, header);
@@ -172,9 +172,9 @@ namespace Structure.Sketching.Formats.Png.Format
         private static byte PaethPredicator(byte left, byte above, byte upperLeft)
         {
             int p = left + above - upperLeft;
-            int pa = Math.Abs(p - left);
-            int pb = Math.Abs(p - above);
-            int pc = Math.Abs(p - upperLeft);
+            var pa = Math.Abs(p - left);
+            var pb = Math.Abs(p - above);
+            var pc = Math.Abs(p - upperLeft);
             if (pa <= pb && pa <= pc)
             {
                 return left;
@@ -249,8 +249,8 @@ namespace Structure.Sketching.Formats.Png.Format
         {
             dataStream.Seek(0, SeekOrigin.Begin);
 
-            int ScanlineLength = CalculateScanlineLength(colorTypeInformation, header);
-            int ScanlineStep = CalculateScanlineStep(colorTypeInformation, header);
+            var ScanlineLength = CalculateScanlineLength(colorTypeInformation, header);
+            var ScanlineStep = CalculateScanlineStep(colorTypeInformation, header);
 
             byte[] LastScanline = new byte[ScanlineLength];
             byte[] CurrentScanline = new byte[ScanlineLength];

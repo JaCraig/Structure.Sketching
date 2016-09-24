@@ -75,7 +75,7 @@ namespace Structure.Sketching.Formats.Gif.Format
         /// </returns>
         public static FrameIndices Read(Stream stream, ImageDescriptor descriptor)
         {
-            int DataSize = stream.ReadByte();
+            var DataSize = stream.ReadByte();
             var Decoder = new LZWDecoder(stream);
             return new FrameIndices(Decoder.Decode(descriptor.Width, descriptor.Height, DataSize), 0);
         }

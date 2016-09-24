@@ -95,7 +95,7 @@ namespace Structure.Sketching.IO.Converters.BaseClasses
         /// <param name="index">The index.</param>
         public void CopyBytes(decimal value, byte[] buffer, int index)
         {
-            int[] parts = decimal.GetBits(value);
+            var parts = decimal.GetBits(value);
             for (int i = 0; i < 4; i++)
             {
                 CopyBytesImpl(parts[i], 4, buffer, (i * 4) + index);
@@ -240,7 +240,7 @@ namespace Structure.Sketching.IO.Converters.BaseClasses
         public byte[] GetBytes(decimal value)
         {
             byte[] bytes = new byte[16];
-            int[] parts = decimal.GetBits(value);
+            var parts = decimal.GetBits(value);
             for (int i = 0; i < 4; i++)
             {
                 CopyBytesImpl(parts[i], 4, bytes, i * 4);

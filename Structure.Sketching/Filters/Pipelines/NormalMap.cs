@@ -60,8 +60,8 @@ namespace Structure.Sketching.Filters.Pipelines
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            Image TempImageX = new BumpMap(XDirection == XDirection.LeftToRight ? Direction.LeftToRight : Direction.RightToLeft).Apply(image.Copy(), targetLocation);
-            Image TempImageY = new BumpMap(YDirection == YDirection.TopToBottom ? Direction.TopToBottom : Direction.BottomToTop).Apply(image.Copy(), targetLocation);
+            var TempImageX = new BumpMap(XDirection == XDirection.LeftToRight ? Direction.LeftToRight : Direction.RightToLeft).Apply(image.Copy(), targetLocation);
+            var TempImageY = new BumpMap(YDirection == YDirection.TopToBottom ? Direction.TopToBottom : Direction.BottomToTop).Apply(image.Copy(), targetLocation);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
                 fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])

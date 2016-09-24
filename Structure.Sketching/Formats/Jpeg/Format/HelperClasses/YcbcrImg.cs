@@ -292,8 +292,8 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
                height,
                y =>
                {
-                   int yo = RowYOffset(y);
-                   int co = RowCOffset(y);
+                   var yo = RowYOffset(y);
+                   var co = RowCOffset(y);
 
                    for (int x = 0; x < width; x++)
                    {
@@ -325,8 +325,8 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
                 height,
                 y =>
                 {
-                    int yo = RowYOffset(y);
-                    int co = RowCOffset(y);
+                    var yo = RowYOffset(y);
+                    var co = RowCOffset(y);
 
                     for (int x = 0; x < width; x++)
                     {

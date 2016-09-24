@@ -52,7 +52,7 @@ namespace Structure.Sketching.Formats.Gif.Format
         /// <returns>The resulting comment</returns>
         public static Comment Read(Stream stream)
         {
-            int Size = stream.ReadByte();
+            var Size = stream.ReadByte();
             var Builder = new StringBuilder();
 
             while (Size != 0)

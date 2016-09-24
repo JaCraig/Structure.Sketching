@@ -34,8 +34,8 @@ namespace Structure.Sketching.Formats.Png.Format.Helpers.ZLib
         public InflateStream(Stream stream)
         {
             InternalStream = stream;
-            int CMF = InternalStream.ReadByte();
-            int Flag = InternalStream.ReadByte();
+            var CMF = InternalStream.ReadByte();
+            var Flag = InternalStream.ReadByte();
             if (CMF == -1 || Flag == -1)
                 return;
             if ((CMF & 0x0f) != 8)
@@ -135,7 +135,7 @@ namespace Structure.Sketching.Formats.Png.Format.Helpers.ZLib
         /// </returns>
         public override int Read(byte[] buffer, int offset, int count)
         {
-            int ReadCount = InternalDeflateStream.Read(buffer, offset, count);
+            var ReadCount = InternalDeflateStream.Read(buffer, offset, count);
             if (ReadCount < 1 && CRCData == null)
             {
                 CRCData = new byte[4];

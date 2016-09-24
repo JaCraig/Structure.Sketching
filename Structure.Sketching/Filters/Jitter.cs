@@ -57,8 +57,8 @@ namespace Structure.Sketching.Filters
                     byte* SourcePointer = Pointer;
                     for (int x = 0; x < image.Width; ++x)
                     {
-                        int NewX = Random.ThreadSafeNext(-Amount, Amount);
-                        int NewY = Random.ThreadSafeNext(-Amount, Amount);
+                        var NewX = Random.ThreadSafeNext(-Amount, Amount);
+                        var NewY = Random.ThreadSafeNext(-Amount, Amount);
                         NewX += x;
                         NewY += y;
                         NewX = NewX < targetLocation.Left ? targetLocation.Left : NewX >= targetLocation.Right ? targetLocation.Right - 1 : NewX;

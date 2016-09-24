@@ -167,9 +167,9 @@ namespace Structure.Sketching.Quantizers.Octree
                 // Consume the next palette index
                 this.paletteIndex = index++;
 
-                byte r = (this.red / this.pixelCount).ToByte();
-                byte g = (this.green / this.pixelCount).ToByte();
-                byte b = (this.blue / this.pixelCount).ToByte();
+                var r = (this.red / this.pixelCount).ToByte();
+                var g = (this.green / this.pixelCount).ToByte();
+                var b = (this.blue / this.pixelCount).ToByte();
 
                 // And set the color of the palette entry
                 palette.Add(new Bgra(b, g, r));

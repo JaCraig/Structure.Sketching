@@ -140,7 +140,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
         /// <returns>The resulting image</returns>
         public Image Convert(Image image, IEnumerable<SegmentBase> segments)
         {
-            StartOfFrame Frame = segments.OfType<StartOfFrame>().FirstOrDefault();
+            var Frame = segments.OfType<StartOfFrame>().FirstOrDefault();
             if (this.img1 != null)
             {
                 return img1.Convert(Frame.Width, Frame.Height, image, segments);
@@ -347,13 +347,13 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
                                 if (zig == 0)
                                 {
                                     zig++;
-                                    byte value = DefineHuffmanTableSegment.HuffmanCodes[dcTable, scan[i].Td].DecodeHuffman(Bytes);
+                                    var value = DefineHuffmanTableSegment.HuffmanCodes[dcTable, scan[i].Td].DecodeHuffman(Bytes);
                                     if (value > 16)
                                     {
                                         throw new Exception("Excessive DC component");
                                     }
 
-                                    int dcDelta = Bytes.receiveExtend(value);
+                                    var dcDelta = Bytes.receiveExtend(value);
                                     dc[compIndex] += dcDelta;
                                     b[0] = dc[compIndex] << al;
                                 }
@@ -367,7 +367,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
                                     var huffv = DefineHuffmanTableSegment.HuffmanCodes[acTable, scan[i].Ta];
                                     for (; zig <= zigEnd; zig++)
                                     {
-                                        byte value = huffv.DecodeHuffman(Bytes);
+                                        var value = huffv.DecodeHuffman(Bytes);
                                         var val0 = (byte)(value >> 4);
                                         var val1 = (byte)(value & 0x0f);
                                         if (val1 != 0)
@@ -634,7 +634,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
                 if (zigEnd != 0)
                     throw new Exception("Invalid state for zig DC component");
 
-                bool bit = Bytes.DecodeBit();
+                var bit = Bytes.DecodeBit();
                 if (bit)
                     b[0] |= delta;
 
@@ -660,7 +660,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
                                 EndOfBlockRun = (ushort)(1 << val0);
                                 if (val0 != 0)
                                 {
-                                    uint bits = Bytes.DecodeBits(val0);
+                                    var bits = Bytes.DecodeBits(val0);
                                     EndOfBlockRun |= (ushort)bits;
                                 }
 
@@ -670,7 +670,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
 
                         case 1:
                             z = delta;
-                            bool bit = Bytes.DecodeBit();
+                            var bit = Bytes.DecodeBit();
                             if (!bit)
                                 z = -z;
                             break;
@@ -711,7 +711,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
                     continue;
                 }
 
-                bool bit = Bytes.DecodeBit();
+                var bit = Bytes.DecodeBit();
                 if (!bit)
                     continue;
 
@@ -747,7 +747,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
             ForwardDiscreteCosineTransform.Transform(b);
 
             // Emit the DC delta.
-            int dc = div(b[0], 8 * DefineQuantizationTableSegment.quant[(int)q][0]);
+            var dc = div(b[0], 8 * DefineQuantizationTableSegment.quant[(int)q][0]);
             emitHuffRLE((HuffmanIndex)(2 * (int)q + 0), 0, dc - prevDC, writer);
 
             // Emit the AC components.
@@ -756,7 +756,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
 
             for (int zig = 1; zig < Block.BlockSize; zig++)
             {
-                int ac = div(b[unzig[zig]], 8 * DefineQuantizationTableSegment.quant[(int)q][zig]);
+                var ac = div(b[unzig[zig]], 8 * DefineQuantizationTableSegment.quant[(int)q][zig]);
 
                 if (ac == 0)
                 {

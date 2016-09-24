@@ -106,7 +106,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
             y = y > 0.008856f ? (float)Math.Pow(y, 0.3333333f) : (903.3f * y + 16f) / 116f;
             z = z > 0.008856f ? (float)Math.Pow(z, 0.3333333f) : (903.3f * z + 16f) / 116f;
 
-            float l = Math.Max(0, (116f * y) - 16f);
+            var l = Math.Max(0, (116f * y) - 16f);
             float a = 500f * (x - y);
             float b = 200f * (y - z);
 
@@ -198,7 +198,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// </returns>
         public override int GetHashCode()
         {
-            int hash = l.GetHashCode();
+            var hash = l.GetHashCode();
             hash = ComputeHash(hash, a);
             return ComputeHash(hash, b);
         }

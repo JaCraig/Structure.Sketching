@@ -40,15 +40,15 @@ namespace Structure.Sketching.Procedural
             float Frequency, float Amplitude, float Persistance, int Octaves, int Seed)
         {
             var ReturnValue = new Image(Width, Height, new byte[Width * Height * 4]);
-            float[,] Noise = GenerateNoise(Seed, Width, Height);
+            var Noise = GenerateNoise(Seed, Width, Height);
             for (int x = 0; x < Width; ++x)
             {
                 for (int y = 0; y < Height; ++y)
                 {
-                    float Value = GetValue(x, y, Width, Height, Frequency, Amplitude, Persistance, Octaves, Noise);
+                    var Value = GetValue(x, y, Width, Height, Frequency, Amplitude, Persistance, Octaves, Noise);
                     Value = (Value * 0.5f) + 0.5f;
                     Value *= 255;
-                    byte RGBValue = (byte)Value.Clamp(MinRGBValue, MaxRGBValue);
+                    var RGBValue = (byte)Value.Clamp(MinRGBValue, MaxRGBValue);
                     ReturnValue.Pixels[((y * Width) + x) * 4] = RGBValue;
                     ReturnValue.Pixels[(((y * Width) + x) * 4) + 1] = RGBValue;
                     ReturnValue.Pixels[(((y * Width) + x) * 4) + 2] = RGBValue;

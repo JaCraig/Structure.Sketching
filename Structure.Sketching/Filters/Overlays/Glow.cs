@@ -80,7 +80,7 @@ namespace Structure.Sketching.Filters.Overlays
                     byte* Pointer2 = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        float Distance = Vector2.Distance(image.Center, new Vector2(x, y));
+                        var Distance = Vector2.Distance(image.Center, new Vector2(x, y));
                         var SourceColor = new Vector4(*Pointer2 / 255f, *(Pointer2 + 1) / 255f, *(Pointer2 + 2) / 255f, *(Pointer2 + 3) / 255f);
                         var Result = Vector4.Lerp(Color, SourceColor, .5f * (Distance / MaxDistance));
                         var TempAlpha = Result.W;

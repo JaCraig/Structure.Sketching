@@ -99,7 +99,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
         /// <returns>The segment</returns>
         public static SegmentBase Read(ByteBuffer stream, List<SegmentBase> segmentsSeen)
         {
-            int SegmentMarker = GetSegmentMarker(stream);
+            var SegmentMarker = GetSegmentMarker(stream);
             if (!SegmentActions.ContainsKey((SegmentTypes)SegmentMarker))
             {
                 var Length = GetLength(stream);

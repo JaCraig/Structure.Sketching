@@ -95,7 +95,7 @@ namespace Structure.Sketching.Formats.Png.Format.Helpers
         /// <returns>The chunk information</returns>
         public static Chunk Read(Stream stream)
         {
-            int Length = ReadLength(stream);
+            var Length = ReadLength(stream);
             if (Length == 0)
                 return null;
             var TypeBuffer = new byte[4];
@@ -128,7 +128,7 @@ namespace Structure.Sketching.Formats.Png.Format.Helpers
         private static uint ReadCRC(Stream stream, byte[] data, byte[] type)
         {
             byte[] TempBuffer = new byte[4];
-            int NumberOfBytes = stream.Read(TempBuffer, 0, 4);
+            var NumberOfBytes = stream.Read(TempBuffer, 0, 4);
             if (NumberOfBytes != 4)
                 return 0;
             Array.Reverse(TempBuffer);
@@ -163,7 +163,7 @@ namespace Structure.Sketching.Formats.Png.Format.Helpers
         private static int ReadLength(Stream stream)
         {
             byte[] TempBuffer = new byte[4];
-            int NumberOfBytes = stream.Read(TempBuffer, 0, 4);
+            var NumberOfBytes = stream.Read(TempBuffer, 0, 4);
             if (NumberOfBytes != 4)
                 return 0;
             Array.Reverse(TempBuffer);
@@ -180,7 +180,7 @@ namespace Structure.Sketching.Formats.Png.Format.Helpers
         /// </returns>
         private static string ReadType(Stream stream, byte[] typeBuffer)
         {
-            int NumberOfBytes = stream.Read(typeBuffer, 0, 4);
+            var NumberOfBytes = stream.Read(typeBuffer, 0, 4);
             if (NumberOfBytes != 4)
                 return string.Empty;
             return new string(new char[] { (char)typeBuffer[0], (char)typeBuffer[1], (char)typeBuffer[2], (char)typeBuffer[3] });

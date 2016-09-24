@@ -158,7 +158,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
             }
 
             // Fill in the rest of the buffer.
-            int n = Stream.Read(Buffer, j, Buffer.Length - j);
+            var n = Stream.Read(Buffer, j, Buffer.Length - j);
             if (n == 0)
                 throw new EOF();
             j += n;

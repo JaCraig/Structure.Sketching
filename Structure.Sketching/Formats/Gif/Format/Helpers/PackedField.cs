@@ -69,6 +69,32 @@ namespace Structure.Sketching.Helpers
             return packed;
         }
 
+        /// <summary>
+        /// Implements the operator !=.
+        /// </summary>
+        /// <param name="field1">The field1.</param>
+        /// <param name="field2">The field2.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
+        public static bool operator !=(PackedField field1, PackedField field2)
+        {
+            return !(field1 == field2);
+        }
+
+        /// <summary>
+        /// Implements the operator ==.
+        /// </summary>
+        /// <param name="field1">The field1.</param>
+        /// <param name="field2">The field2.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
+        public static bool operator ==(PackedField field1, PackedField field2)
+        {
+            return field1.Byte == field2.Byte;
+        }
+
         /// <inheritdoc/>
         public override bool Equals(object obj)
         {

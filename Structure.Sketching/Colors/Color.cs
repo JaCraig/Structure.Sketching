@@ -187,7 +187,7 @@ namespace Structure.Sketching.Colors
         }
 
         /// <summary>
-        /// Performs an implicit conversion from <see cref="Bgra"/> to <see cref="int"/>.
+        /// Performs an implicit conversion from <see cref="ColorSpaces.Bgra"/> to <see cref="int"/>.
         /// </summary>
         /// <param name="color">The color.</param>
         /// <returns>The result of the conversion.</returns>
@@ -197,7 +197,7 @@ namespace Structure.Sketching.Colors
         }
 
         /// <summary>
-        /// Performs an implicit conversion from <see cref="Bgra"/> to <see cref="int"/>.
+        /// Performs an implicit conversion from <see cref="ColorSpaces.Bgra"/> to <see cref="int"/>.
         /// </summary>
         /// <param name="color">The color.</param>
         /// <returns>The result of the conversion.</returns>
@@ -207,7 +207,7 @@ namespace Structure.Sketching.Colors
         }
 
         /// <summary>
-        /// Performs an implicit conversion from <see cref="Bgra"/> to <see cref="int"/>.
+        /// Performs an implicit conversion from <see cref="ColorSpaces.Bgra"/> to <see cref="int"/>.
         /// </summary>
         /// <param name="color">The color.</param>
         /// <returns>The result of the conversion.</returns>
@@ -509,7 +509,7 @@ namespace Structure.Sketching.Colors
         /// </returns>
         public override int GetHashCode()
         {
-            int hash = r.GetHashCode();
+            var hash = r.GetHashCode();
             hash = ComputeHash(hash, g);
             hash = ComputeHash(hash, b);
             return ComputeHash(hash, a);

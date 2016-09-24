@@ -193,7 +193,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// </returns>
         public override int GetHashCode()
         {
-            int hash = b.GetHashCode();
+            var hash = b.GetHashCode();
             hash = ComputeHash(hash, g);
             hash = ComputeHash(hash, r);
             return ComputeHash(hash, a);

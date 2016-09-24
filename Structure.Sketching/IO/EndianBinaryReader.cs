@@ -125,7 +125,7 @@ namespace Structure.Sketching.IO
         /// <returns>The resulting int.</returns>
         public int Read()
         {
-            int charsRead = Read(charBuffer, 0, 1);
+            var charsRead = Read(charBuffer, 0, 1);
             return charsRead == 0 ? -1 : charBuffer[0];
         }
 
@@ -175,13 +175,13 @@ namespace Structure.Sketching.IO
                     amountToRead = byteBuffer.Length;
                 }
 
-                int bytesRead = TryReadInternal(byteBuffer, amountToRead);
+                var bytesRead = TryReadInternal(byteBuffer, amountToRead);
                 if (bytesRead == 0)
                 {
                     return read;
                 }
 
-                int decoded = decoder.GetChars(byteBuffer, 0, bytesRead, data, index);
+                var decoded = decoder.GetChars(byteBuffer, 0, bytesRead, data, index);
                 read += decoded;
                 index += decoded;
             }
@@ -211,7 +211,7 @@ namespace Structure.Sketching.IO
             int read = 0;
             while (count > 0)
             {
-                int block = BaseStream.Read(buffer, index, count);
+                var block = BaseStream.Read(buffer, index, count);
                 if (block == 0)
                 {
                     return read;
@@ -240,7 +240,7 @@ namespace Structure.Sketching.IO
             int ret = 0;
             for (int shift = 0; shift < 35; shift += 7)
             {
-                int b = BaseStream.ReadByte();
+                var b = BaseStream.ReadByte();
                 if (b == -1)
                 {
                     throw new EndOfStreamException();
@@ -270,7 +270,7 @@ namespace Structure.Sketching.IO
             int ret = 0;
             for (int i = 0; i < 5; i++)
             {
-                int b = BaseStream.ReadByte();
+                var b = BaseStream.ReadByte();
                 if (b == -1)
                 {
                     throw new EndOfStreamException();
@@ -321,7 +321,7 @@ namespace Structure.Sketching.IO
             int index = 0;
             while (index < count)
             {
-                int read = BaseStream.Read(ret, index, count - index);
+                var read = BaseStream.Read(ret, index, count - index);
                 if (read == 0)
                 {
                     byte[] copy = new byte[index];
@@ -434,7 +434,7 @@ namespace Structure.Sketching.IO
         /// <returns>The string read from the stream.</returns>
         public string ReadString()
         {
-            int bytesToRead = Read7BitEncodedInt();
+            var bytesToRead = Read7BitEncodedInt();
 
             byte[] data = new byte[bytesToRead];
             ReadInternal(data, bytesToRead);
@@ -499,7 +499,7 @@ namespace Structure.Sketching.IO
             int index = 0;
             while (index < size)
             {
-                int read = BaseStream.Read(data, index, size - index);
+                var read = BaseStream.Read(data, index, size - index);
                 if (read == 0)
                 {
                     throw new EndOfStreamException
@@ -529,7 +529,7 @@ namespace Structure.Sketching.IO
             int index = 0;
             while (index < size)
             {
-                int read = BaseStream.Read(data, index, size - index);
+                var read = BaseStream.Read(data, index, size - index);
                 if (read == 0)
                 {
                     return index;

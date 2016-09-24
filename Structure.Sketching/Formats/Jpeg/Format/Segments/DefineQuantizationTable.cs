@@ -131,7 +131,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
                 bool done = false;
 
                 n--;
-                byte x = Bytes.ReadByte();
+                var x = Bytes.ReadByte();
                 var tq = (byte)(x & 0x0f);
                 if (tq > MAXIMUM_TQ)
                     throw new Exception("bad Tq value");

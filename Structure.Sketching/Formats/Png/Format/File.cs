@@ -119,7 +119,7 @@ namespace Structure.Sketching.Formats.Png.Format
         public override FileBase Decode(Stream stream)
         {
             FileHeader = FileHeader.Read(stream);
-            List<Chunk> Chunks = ReadChunks(stream);
+            var Chunks = ReadChunks(stream);
             ParseChunks(Chunks);
             return this;
         }
@@ -221,7 +221,7 @@ namespace Structure.Sketching.Formats.Png.Format
             var Results = new List<Chunk>();
             while (true)
             {
-                Chunk TempChunk = Chunk.Read(stream);
+                var TempChunk = Chunk.Read(stream);
                 if (TempChunk == null)
                     break;
                 Results.Add(TempChunk);

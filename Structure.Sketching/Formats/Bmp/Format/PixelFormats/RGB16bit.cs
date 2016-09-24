@@ -72,7 +72,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
                 for (int x = 0; x < width; ++x)
                 {
                     int Offset = RowOffset + (x * BPP);
-                    short TempValue = BitConverter.ToInt16(data, Offset);
+                    var TempValue = BitConverter.ToInt16(data, Offset);
                     int r = ((TempValue & RGB16BitRMask) >> 11) << 3;
                     int g = ((TempValue & RGB16BitGMask) >> 5) << 2;
                     int b = (TempValue & RGB16BitBMask) << 3;
@@ -121,7 +121,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
                     int g = data[SourceOffset + 1] >> 2;
                     int b = data[SourceOffset] >> 3;
                     var TempValue = (short)((r << 11) | (g << 5) | b);
-                    byte[] Values = BitConverter.GetBytes(TempValue);
+                    var Values = BitConverter.GetBytes(TempValue);
 
                     ReturnValue[DestinationOffset] = Values[0];
                     ReturnValue[DestinationOffset + 1] = Values[1];

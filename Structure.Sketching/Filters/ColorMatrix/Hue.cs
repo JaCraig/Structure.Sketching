@@ -34,8 +34,8 @@ namespace Structure.Sketching.Filters.ColorMatrix
         {
             value = value * (float)(Math.PI / 180f);
             Value = value;
-            double cosradians = Math.Cos(value);
-            double sinradians = Math.Sin(value);
+            var cosradians = Math.Cos(value);
+            var sinradians = Math.Sin(value);
 
             float lumR = .213f;
             float lumG = .715f;

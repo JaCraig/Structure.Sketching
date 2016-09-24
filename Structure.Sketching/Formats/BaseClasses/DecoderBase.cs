@@ -59,7 +59,7 @@ namespace Structure.Sketching.Formats.BaseClasses
             byte[] TempBuffer = new byte[HeaderSize];
             stream.Seek(0, SeekOrigin.Begin);
             stream.Read(TempBuffer, 0, HeaderSize);
-            bool value = CanDecode(TempBuffer);
+            var value = CanDecode(TempBuffer);
             stream.Seek(0, SeekOrigin.Begin);
             return value;
         }

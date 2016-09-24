@@ -116,7 +116,7 @@ namespace Structure.Sketching.Formats.Gif.Format
             {
                 ColorTable = ColorTable.Read(stream, ScreenDescriptor.GlobalColorTableSize);
             }
-            int Flag = stream.ReadByte();
+            var Flag = stream.ReadByte();
             while (Flag != SectionTypes.Terminator)
             {
                 if (Flag == SectionTypes.ImageLabel)
@@ -161,7 +161,7 @@ namespace Structure.Sketching.Formats.Gif.Format
         /// <returns>True if it writes successfully, false otherwise.</returns>
         public override bool Write(BinaryWriter writer, Animation animation)
         {
-            QuantizedImage Quantized = Quantizer.Quantize(animation[0], Quality);
+            var Quantized = Quantizer.Quantize(animation[0], Quality);
             LoadAnimation(animation, Quantized);
             WriteToFile(writer);
             return true;
@@ -175,7 +175,7 @@ namespace Structure.Sketching.Formats.Gif.Format
         /// <returns>True if it writes successfully, false otherwise.</returns>
         public override bool Write(BinaryWriter stream, Image image)
         {
-            QuantizedImage Quantized = Quantizer.Quantize(image, Quality);
+            var Quantized = Quantizer.Quantize(image, Quality);
             LoadImage(image, Quantized);
             WriteToFile(stream);
             return true;
