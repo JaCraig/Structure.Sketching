@@ -4,7 +4,7 @@ branches:
   only:
     - master
 install:
-  - nuget restore Structure.Sketching.sln
+  - dotnet restore Structure.Sketching.sln
   
 matrix:
   include:
