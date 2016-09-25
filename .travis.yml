@@ -1,5 +1,7 @@
 language: csharp
 solution: Structure.Sketching.sln
+install:
+  - nuget restore Structure.Sketching.sln
 
 matrix:
   include:
