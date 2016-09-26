@@ -171,7 +171,7 @@ namespace Structure.Sketching.Filters.Resampling
                         if (Weight > 0)
                         {
                             Values /= Weight;
-                            Vector4.Clamp(Values, Vector4.Zero, new Vector4(255, 255, 255, 255));
+                            Values = Vector4.Clamp(Values, Vector4.Zero, new Vector4(255, 255, 255, 255));
                             *OutputPointer2 = (byte)Values.X;
                             ++OutputPointer2;
                             *OutputPointer2 = (byte)Values.Y;

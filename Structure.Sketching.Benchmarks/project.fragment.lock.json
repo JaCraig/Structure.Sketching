@@ -5,13 +5,13 @@
       "type": "project",
       "framework": ".NETStandard,Version=v1.3",
       "compile": {
-        "bin/Release/netstandard1.3/Structure.Sketching.dll": {}
+        "bin/Debug/netstandard1.3/Structure.Sketching.dll": {}
       },
       "runtime": {
-        "bin/Release/netstandard1.3/Structure.Sketching.dll": {}
+        "bin/Debug/netstandard1.3/Structure.Sketching.dll": {}
       },
       "contentFiles": {
-        "bin/Release/netstandard1.3/Structure.Sketching.pdb": {
+        "bin/Debug/netstandard1.3/Structure.Sketching.pdb": {
           "buildAction": "None",
           "codeLanguage": "any",
           "copyToOutput": true

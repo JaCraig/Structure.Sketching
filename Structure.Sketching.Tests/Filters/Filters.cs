@@ -44,7 +44,6 @@ namespace Structure.Sketching.Tests.Filters.ColorMatrix
             { "Flip-Both", new Flip(FlipDirection.Horizontal|FlipDirection.Vertical),default(Rectangle) },
             { "Rotate-45", new Rotate(45f),default(Rectangle) },
             { "Fill-Purple", new Fill(new Color(127,0,127,255)),new Rectangle(100,100,500,500) },
-            //{ "Noise-20", new Noise(.2f),default(Rectangle) },                    //Will never be correct as final result contains random noise
             { "AdaptiveThreshold", new AdaptiveThreshold(10,Color.White,Color.Black,.5f),default(Rectangle) },
             { "Threshold", new Threshold(Color.White,Color.Black,.5f),default(Rectangle) },
             { "BlackWhite", new BlackWhite(),default(Rectangle) },
@@ -63,8 +62,6 @@ namespace Structure.Sketching.Tests.Filters.ColorMatrix
             { "Median-5", new Median(5),default(Rectangle) },
             { "NormalMap", new NormalMap(XDirection.LeftToRight,YDirection.BottomToTop),default(Rectangle) },
             { "Dilate", new Dilate(1),default(Rectangle) },
-            //{ "Jitter-5", new Jitter(5),default(Rectangle) },                       //Will never be correct as final result contains random noise
-            //{ "Jitter-10", new Jitter(10),default(Rectangle) },                     //Will never be correct as final result contains random noise
             { "Equalize", new Equalize(),default(Rectangle) },
             { "Constrict", new Constrict(1),default(Rectangle) },
             { "Brightness-50", new Brightness(.5f),default(Rectangle) },
@@ -199,6 +196,9 @@ namespace Structure.Sketching.Tests.Filters.ColorMatrix
             { "Multiplication", new Multiplication(new Image("./TestImages/Formats/Bmp/Car.bmp")),new Rectangle(100,100,500,500)},
             { "Modulo", new Modulo(new Image("./TestImages/Formats/Bmp/Car.bmp")),new Rectangle(100,100,500,500)},
 
+            //{ "Noise-20", new Noise(20),default(Rectangle) },                    //Will never be correct as final result contains random noise
+            //{ "Jitter-5", new Jitter(5),default(Rectangle) },                       //Will never be correct as final result contains random noise
+            //{ "Jitter-10", new Jitter(10),default(Rectangle) },                     //Will never be correct as final result contains random noise
             //{"Resize-Bilinear-100x100",new Resize(100,100,ResamplingFiltersAvailable.Bilinear),default(Rectangle) },
             //{"Resize-Bilinear-2000x2000",new Resize(2000,2000,ResamplingFiltersAvailable.Bilinear),default(Rectangle) },
             //{"Resize-NearestNeighbor-2000x2000",new Resize(2000,2000,ResamplingFiltersAvailable.NearestNeighbor),default(Rectangle) },
