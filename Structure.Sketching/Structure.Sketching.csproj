@@ -49,6 +49,7 @@
     <Compile Include="Colors\ColorDefinitions.cs" />
     <Compile Include="Colors\ColorSpaces\Bgra.cs" />
     <Compile Include="Colors\ColorSpaces\CIELab.cs" />
+    <Compile Include="Colors\ColorSpaces\HSV.cs" />
     <Compile Include="Colors\ColorSpaces\Interfaces\IColorSpace.cs" />
     <Compile Include="Colors\ColorSpaces\YCbCr.cs" />
     <Compile Include="Exceptions\ImageException.cs" />
@@ -284,6 +285,8 @@
     <Compile Include="IO\EndianBinaryReader.cs" />
     <Compile Include="IO\EndianBinaryWriter.cs" />
     <Compile Include="Numerics\Distance.cs" />
+    <Compile Include="Numerics\HSVHistogram.cs" />
+    <Compile Include="Numerics\Interfaces\IHistogram.cs" />
     <Compile Include="Numerics\Matrix5x5.cs" />
     <Compile Include="Numerics\Random.cs" />
     <Compile Include="Numerics\Rectangle.cs" />

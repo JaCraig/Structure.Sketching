@@ -19,3 +19,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Scope = "member", Target = "Structure.Sketching.IO.EndianBinaryReader.#Dispose()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Scope = "type", Target = "Structure.Sketching.IO.EndianBinaryReader")]
 
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Potential Code Quality Issues", "RECS0025:Non-readonly field referenced in 'GetHashCode()'", Justification = "<Pending>", Scope = "member", Target = "~M:Structure.Sketching.Colors.ColorSpaces.Bgra.GetHashCode~System.Int32")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Potential Code Quality Issues", "RECS0025:Non-readonly field referenced in 'GetHashCode()'", Justification = "<Pending>", Scope = "member", Target = "~M:Structure.Sketching.Colors.ColorSpaces.CIELab.GetHashCode~System.Int32")]

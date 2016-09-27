@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Structure.Sketching.Colors;
+using Structure.Sketching.Numerics.Interfaces;
+using System;
 
 namespace Structure.Sketching.Numerics
 {
     /// <summary>
     /// Class used to create an RGB Histogram
     /// </summary>
-    public class RGBHistogram
+    public class RGBHistogram : IHistogram
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RGBHistogram"/> class.
@@ -43,7 +45,7 @@ namespace Structure.Sketching.Numerics
         /// Equalizes the histogram
         /// </summary>
         /// <returns>this</returns>
-        public virtual RGBHistogram Equalize()
+        public IHistogram Equalize()
         {
             float TotalPixels = Width * Height;
             int RMax = int.MinValue;
@@ -98,11 +100,21 @@ namespace Structure.Sketching.Numerics
         }
 
         /// <summary>
+        /// Equalizes the color.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        /// <returns>The resulting color</returns>
+        public Color EqualizeColor(Color color)
+        {
+            return new Color((byte)R[color.Red], (byte)G[color.Green], (byte)B[color.Blue]);
+        }
+
+        /// <summary>
         /// Loads an image
         /// </summary>
         /// <param name="image">Image to load</param>
         /// <returns>this</returns>
-        public unsafe RGBHistogram LoadImage(Image image)
+        public unsafe IHistogram LoadImage(Image image)
         {
             Width = image.Width;
             Height = image.Height;
@@ -132,7 +144,7 @@ namespace Structure.Sketching.Numerics
         /// Normalizes the histogram
         /// </summary>
         /// <returns>this</returns>
-        public RGBHistogram Normalize()
+        public IHistogram Normalize()
         {
             float TotalPixels = Width * Height;
             if (TotalPixels <= 0)

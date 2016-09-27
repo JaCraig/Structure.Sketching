@@ -62,6 +62,7 @@ namespace Structure.Sketching.Tests.Filters.ColorMatrix
             { "Median-5", new Median(5),default(Rectangle) },
             { "NormalMap", new NormalMap(XDirection.LeftToRight,YDirection.BottomToTop),default(Rectangle) },
             { "Dilate", new Dilate(1),default(Rectangle) },
+            { "HSVEqualize", new Equalize(new HSVHistogram()),default(Rectangle) },
             { "Equalize", new Equalize(),default(Rectangle) },
             { "Constrict", new Constrict(1),default(Rectangle) },
             { "Brightness-50", new Brightness(.5f),default(Rectangle) },
@@ -140,6 +141,7 @@ namespace Structure.Sketching.Tests.Filters.ColorMatrix
             { "Median-5-Partial", new Median(5),new Rectangle(100,100,500,500) },
             { "NormalMap-Partial", new NormalMap(XDirection.LeftToRight,YDirection.BottomToTop),new Rectangle(100,100,500,500) },
             { "Dilate-Partial", new Dilate(1),new Rectangle(100,100,500,500) },
+            { "HSVEqualize-Partial", new Equalize(new HSVHistogram()),new Rectangle(100,100,500,500) },
             { "Equalize-Partial", new Equalize(),new Rectangle(100,100,500,500) },
             { "Constrict-Partial", new Constrict(1),new Rectangle(100,100,500,500) },
             { "Brightness-50-Partial", new Brightness(.5f),new Rectangle(100,100,500,500) },
@@ -244,9 +246,9 @@ namespace Structure.Sketching.Tests.Filters.ColorMatrix
             foreach (var file in Files)
             {
                 string outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
-                var TestImage = new Image(file);
-                filter.Apply(TestImage, target);
-                TestImage.Save(OutputDirectory + outputFileName);
+                new Image(file)
+                    .Apply(filter, target)
+                    .Save(OutputDirectory + outputFileName);
             }
             foreach (string file in Files)
             {
