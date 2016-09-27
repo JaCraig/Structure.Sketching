@@ -732,7 +732,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
             {
                 for (int i = 0; i < 8; i++)
                 {
-                    var Offset = Math.Min(x + i, xmax) + (Math.Min(y + j, ymax) * Image.Width) * 4;
+                    var Offset = (Math.Min(x + i, xmax) + (Math.Min(y + j, ymax) * Image.Width)) * 4;
                     YCbCr color = new Color(Image.Pixels[Offset], Image.Pixels[Offset + 1], Image.Pixels[Offset + 2], Image.Pixels[Offset + 3]);
                     int index = (8 * j) + i;
                     yBlock[index] = (int)color.YLuminance;

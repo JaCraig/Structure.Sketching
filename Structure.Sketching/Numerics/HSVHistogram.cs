@@ -16,22 +16,10 @@ namespace Structure.Sketching.Numerics
         /// <param name="image">The image to load.</param>
         public HSVHistogram(Image image = null)
         {
-            H = new double[361];
             V = new double[101];
-            S = new double[101];
             if (image != null)
                 LoadImage(image);
         }
-
-        /// <summary>
-        /// Blue values
-        /// </summary>
-        public double[] H { get; set; }
-
-        /// <summary>
-        /// Green values
-        /// </summary>
-        public double[] S { get; set; }
 
         /// <summary>
         /// Red values
@@ -49,31 +37,10 @@ namespace Structure.Sketching.Numerics
         public IHistogram Equalize()
         {
             double TotalPixels = Width * Height;
-            int HMax = int.MinValue;
-            int HMin = int.MaxValue;
-            int SMax = int.MinValue;
-            int SMin = int.MaxValue;
             int VMax = int.MinValue;
             int VMin = int.MaxValue;
-            for (int x = 0; x < 361; ++x)
-            {
-                if (H[x] > 0f)
-                {
-                    if (HMax < x)
-                        HMax = x;
-                    if (HMin > x)
-                        HMin = x;
-                }
-            }
             for (int x = 0; x < 101; ++x)
             {
-                if (S[x] > 0f)
-                {
-                    if (SMax < x)
-                        SMax = x;
-                    if (SMin > x)
-                        SMin = x;
-                }
                 if (V[x] > 0f)
                 {
                     if (VMax < x)
@@ -82,23 +49,11 @@ namespace Structure.Sketching.Numerics
                         VMin = x;
                 }
             }
-
-            double PreviousH = H[0];
-            H[0] = H[0] * 360 / TotalPixels;
-            double PreviousS = S[0];
-            S[0] = S[0] * 100 / TotalPixels;
             double PreviousV = V[0];
-            V[0] = V[0] * 100 / TotalPixels;
-            for (int x = 1; x < 361; ++x)
-            {
-                PreviousH += H[x];
-                H[x] = ((PreviousH - H[HMin]) / (TotalPixels - H[HMin])) * 360;
-            }
+            V[0] = (V[0] / TotalPixels);
             for (int x = 1; x < 101; ++x)
             {
-                PreviousS += S[x];
                 PreviousV += V[x];
-                S[x] = ((PreviousS - S[SMin]) / (TotalPixels - S[SMin]));
                 V[x] = ((PreviousV - V[VMin]) / (TotalPixels - V[VMin]));
             }
             Width = 256;
@@ -114,7 +69,7 @@ namespace Structure.Sketching.Numerics
         public Color EqualizeColor(Color color)
         {
             var TempHSV = (HSV)color;
-            return new HSV(H[(int)TempHSV.Hue], S[(int)(TempHSV.Saturation * 100)], V[(int)TempHSV.Value * 100]);
+            return new HSV(TempHSV.Hue, TempHSV.Saturation, V[(int)Math.Round(TempHSV.Value * 100, MidpointRounding.AwayFromZero)]);
         }
 
         /// <summary>
@@ -126,8 +81,6 @@ namespace Structure.Sketching.Numerics
         {
             Width = image.Width;
             Height = image.Height;
-            Array.Clear(H, 0, H.Length);
-            Array.Clear(S, 0, S.Length);
             Array.Clear(V, 0, V.Length);
             fixed (byte* TargetPointer = &image.Pixels[0])
             {
@@ -143,8 +96,6 @@ namespace Structure.Sketching.Numerics
                         var TempB = *TargetPointer2;
                         TargetPointer2 += 2;
                         var TempHSV = (HSV)new Color(TempR, TempG, TempB);
-                        ++H[(int)TempHSV.Hue];
-                        ++S[(int)(TempHSV.Saturation * 100)];
                         ++V[(int)(TempHSV.Value * 100)];
                     }
                 }
@@ -161,13 +112,8 @@ namespace Structure.Sketching.Numerics
             double TotalPixels = Width * Height;
             if (TotalPixels <= 0)
                 return this;
-            for (int x = 0; x < 361; ++x)
-            {
-                H[x] /= TotalPixels;
-            }
             for (int x = 0; x < 101; ++x)
             {
-                S[x] /= TotalPixels;
                 V[x] /= TotalPixels;
             }
             return this;

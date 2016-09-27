@@ -11,7 +11,7 @@ namespace Structure.Sketching
         /// <param name="filter">The filter.</param>
         /// <param name="targetLocation">The target location.</param>
         /// <returns>The resulting image (this)</returns>
-        public Image Apply(IFilter filter, Rectangle targetLocation)
+        public Image Apply(IFilter filter, Rectangle targetLocation = default(Rectangle))
         {
             return filter.Apply(this, targetLocation);
         }
@@ -22,7 +22,7 @@ namespace Structure.Sketching
         /// <typeparam name="TFilter">The type of the filter.</typeparam>
         /// <param name="targetLocation">The target location.</param>
         /// <returns>The resulting image (this)</returns>
-        public Image Apply<TFilter>(Rectangle targetLocation)
+        public Image Apply<TFilter>(Rectangle targetLocation = default(Rectangle))
             where TFilter : IFilter, new()
         {
             return Apply(new TFilter(), targetLocation);
