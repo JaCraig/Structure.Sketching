@@ -21,6 +21,13 @@ namespace Structure.Sketching.Numerics.Interfaces
         Color EqualizeColor(Color color);
 
         /// <summary>
+        /// Loads the specified colors.
+        /// </summary>
+        /// <param name="colors">The colors.</param>
+        /// <returns>This</returns>
+        IHistogram Load(params Color[] colors);
+
+        /// <summary>
         /// Loads an image
         /// </summary>
         /// <param name="image">Image to load</param>

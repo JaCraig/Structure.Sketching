@@ -110,6 +110,29 @@ namespace Structure.Sketching.Numerics
         }
 
         /// <summary>
+        /// Loads the specified colors.
+        /// </summary>
+        /// <param name="colors">The colors.</param>
+        /// <returns>
+        /// This
+        /// </returns>
+        public IHistogram Load(params Color[] colors)
+        {
+            Width = colors.Length;
+            Height = 1;
+            Array.Clear(R, 0, R.Length);
+            Array.Clear(G, 0, G.Length);
+            Array.Clear(B, 0, B.Length);
+            for (int x = 0; x < colors.Length; ++x)
+            {
+                ++R[colors[x].Red];
+                ++G[colors[x].Green];
+                ++B[colors[x].Blue];
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Loads an image
         /// </summary>
         /// <param name="image">Image to load</param>

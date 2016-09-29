@@ -73,6 +73,26 @@ namespace Structure.Sketching.Numerics
         }
 
         /// <summary>
+        /// Loads the specified colors.
+        /// </summary>
+        /// <param name="colors">The colors.</param>
+        /// <returns>
+        /// This
+        /// </returns>
+        public IHistogram Load(params Color[] colors)
+        {
+            Width = colors.Length;
+            Height = 1;
+            Array.Clear(V, 0, V.Length);
+            for (int x = 0; x < colors.Length; ++x)
+            {
+                var TempHSV = (HSV)colors[x];
+                ++V[(int)(TempHSV.Value * 100)];
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Loads an image
         /// </summary>
         /// <param name="image">Image to load</param>
