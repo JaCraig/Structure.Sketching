@@ -15,17 +15,18 @@ limitations under the License.
 */
 
 using Structure.Sketching.Filters.Interfaces;
+using Structure.Sketching.Filters.Resampling.BaseClasses;
 using Structure.Sketching.Numerics;
-using System;
-using System.Threading.Tasks;
+using System.Numerics;
 
 namespace Structure.Sketching.Filters
 {
     /// <summary>
     /// Translate the image
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class Translate : IFilter
+    /// <seealso cref="AffineBaseClass" />
+    /// <seealso cref="IFilter" />
+    public class Translate : AffineBaseClass
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Translate"/> class.
@@ -34,8 +35,8 @@ namespace Structure.Sketching.Filters
         /// <param name="yDelta">The y delta.</param>
         public Translate(int xDelta, int yDelta)
         {
-            YDelta = yDelta;
-            XDelta = xDelta;
+            YDelta = -yDelta;
+            XDelta = -xDelta;
         }
 
         /// <summary>
@@ -51,45 +52,16 @@ namespace Structure.Sketching.Filters
         public int YDelta { get; set; }
 
         /// <summary>
-        /// Applies the filter to the specified image.
+        /// Gets the matrix.
         /// </summary>
         /// <param name="image">The image.</param>
         /// <param name="targetLocation">The target location.</param>
-        /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
+        /// <returns>
+        /// The matrix used for the transformation
+        /// </returns>
+        protected override Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
         {
-            targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var Result = new byte[image.Pixels.Length];
-            Array.Copy(image.Pixels, Result, Result.Length);
-            Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-            {
-                fixed (byte* SourcePointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
-                {
-                    byte* SourcePointer2 = SourcePointer;
-                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
-                    {
-                        var TargetY = y + YDelta;
-                        var TargetX = x + XDelta;
-                        if (TargetY >= 0 && TargetY < image.Height && TargetX >= 0 && TargetX < image.Width)
-                        {
-                            var TargetStart = ((TargetY * image.Width) + TargetX) * 4;
-                            Result[TargetStart] = *SourcePointer2;
-                            ++SourcePointer2;
-                            Result[TargetStart + 1] = *SourcePointer2;
-                            ++SourcePointer2;
-                            Result[TargetStart + 2] = *SourcePointer2;
-                            ++SourcePointer2;
-                            Result[TargetStart + 3] = *SourcePointer2;
-                            ++SourcePointer2;
-                        }
-                        else
-                        {
-                            SourcePointer2 += 4;
-                        }
-                    }
-                }
-            });
-            return image.ReCreate(image.Width, image.Height, Result);
+            return Matrix3x2.CreateTranslation(XDelta, YDelta);
         }
     }
 }

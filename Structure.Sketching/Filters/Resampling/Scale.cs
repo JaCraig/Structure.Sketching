@@ -14,47 +14,56 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Filters.Resampling.BaseClasses;
 using Structure.Sketching.Numerics;
-using System;
 using System.Numerics;
 
 namespace Structure.Sketching.Filters.Resampling
 {
     /// <summary>
-    /// Rotates an image
+    /// Scales an image to the specified width/height
     /// </summary>
     /// <seealso cref="AffineBaseClass" />
-    /// <seealso cref="IFilter" />
-    public class Rotate : AffineBaseClass
+    public class Scale : AffineBaseClass
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Rotate"/> class.
+        /// Initializes a new instance of the <see cref="Scale"/> class.
         /// </summary>
-        /// <param name="angle">The angle.</param>
-        public Rotate(float angle)
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        public Scale(int width, int height)
         {
-            Angle = -angle * (float)(Math.PI / 180f);
+            Width = width;
+            Height = height;
         }
 
         /// <summary>
-        /// Gets or sets the angle.
+        /// Gets or sets the height.
         /// </summary>
-        /// <value>The angle.</value>
-        public float Angle { get; private set; }
+        /// <value>
+        /// The height.
+        /// </value>
+        public int Height { get; set; }
+
+        /// <summary>
+        /// Gets or sets the width.
+        /// </summary>
+        /// <value>
+        /// The width.
+        /// </value>
+        public int Width { get; set; }
 
         /// <summary>
         /// Gets the matrix.
         /// </summary>
         /// <param name="image">The image.</param>
         /// <param name="targetLocation">The target location.</param>
-        /// <returns>
-        /// The matrix used for the transformation
-        /// </returns>
+        /// <returns>The transformation matrix</returns>
         protected override Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
         {
-            return Matrix3x2.CreateRotation(Angle, targetLocation.Center);
+            float XScale = (float)image.Width / Width;
+            float YScale = (float)image.Height / Height;
+            return Matrix3x2.CreateScale(XScale, YScale, targetLocation.Center);
         }
     }
 }
