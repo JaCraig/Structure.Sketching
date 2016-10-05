@@ -134,10 +134,12 @@
     <Compile Include="Filters\Pixellate.cs" />
     <Compile Include="Filters\Posterize.cs" />
     <Compile Include="Filters\Replace.cs" />
+    <Compile Include="Filters\Resampling\AffineTransformation.cs" />
     <Compile Include="Filters\Resampling\BaseClasses\AffineBaseClass.cs" />
     <Compile Include="Filters\Resampling\Crop.cs" />
     <Compile Include="Filters\Resampling\Enums\FlipDirection.cs" />
     <Compile Include="Filters\Resampling\Enums\ResamplingFilters.cs" />
+    <Compile Include="Filters\Resampling\Enums\ResizeOptions.cs" />
     <Compile Include="Filters\Resampling\Flip.cs" />
     <Compile Include="Filters\Resampling\ResamplingFilters\BellFilter.cs" />
     <Compile Include="Filters\Resampling\ResamplingFilters\BicubicFilter.cs" />
@@ -159,8 +161,10 @@
     <Compile Include="Filters\Resampling\ResamplingFilters\RobidouxSoftFilter.cs" />
     <Compile Include="Filters\Resampling\ResamplingFilters\TriangleFilter.cs" />
     <Compile Include="Filters\Resampling\Resize.cs" />
+    <Compile Include="Filters\Resampling\ResizeCanvas.cs" />
     <Compile Include="Filters\Resampling\Rotate.cs" />
     <Compile Include="Filters\Resampling\Scale.cs" />
+    <Compile Include="Filters\Resampling\Skew.cs" />
     <Compile Include="Filters\Resampling\Translate.cs" />
     <Compile Include="Filters\SinWave.cs" />
     <Compile Include="Filters\Smoothing\Kuwahara.cs" />

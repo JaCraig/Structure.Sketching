@@ -24,8 +24,8 @@ namespace Structure.Sketching.Filters
     /// <summary>
     /// Translate the image
     /// </summary>
-    /// <seealso cref="AffineBaseClass" />
-    /// <seealso cref="IFilter" />
+    /// <seealso cref="AffineBaseClass"/>
+    /// <seealso cref="IFilter"/>
     public class Translate : AffineBaseClass
     {
         /// <summary>
@@ -56,9 +56,7 @@ namespace Structure.Sketching.Filters
         /// </summary>
         /// <param name="image">The image.</param>
         /// <param name="targetLocation">The target location.</param>
-        /// <returns>
-        /// The matrix used for the transformation
-        /// </returns>
+        /// <returns>The matrix used for the transformation</returns>
         protected override Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
         {
             return Matrix3x2.CreateTranslation(XDelta, YDelta);

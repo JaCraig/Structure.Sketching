@@ -144,6 +144,22 @@ namespace Structure.Sketching
         }
 
         /// <summary>
+        /// Recreates the image object using the new width and height.
+        /// </summary>
+        /// <param name="width">The new width.</param>
+        /// <param name="height">The new height.</param>
+        /// <returns>this</returns>
+        public Image ReCreate(int width, int height)
+        {
+            Width = width < 1 ? 1 : width;
+            Height = height < 1 ? 1 : height;
+            PixelRatio = (double)Width / Height;
+            Center = new Vector2(Width >> 1, Height >> 1);
+            Pixels = new byte[width * height * 4];
+            return this;
+        }
+
+        /// <summary>
         /// Saves the image to the specified file name.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>

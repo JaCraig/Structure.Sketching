@@ -14,40 +14,55 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Filters.Resampling.BaseClasses;
 using Structure.Sketching.Filters.Resampling.Enums;
 using Structure.Sketching.Numerics;
+using System;
 using System.Numerics;
 
 namespace Structure.Sketching.Filters.Resampling
 {
     /// <summary>
-    /// Scales an image to the specified width/height
+    /// Skews an image
     /// </summary>
     /// <seealso cref="AffineBaseClass"/>
-    public class Scale : AffineBaseClass
+    /// <seealso cref="IFilter"/>
+    public class Skew : AffineBaseClass
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Scale"/> class.
+        /// Initializes a new instance of the <see cref="Skew"/> class.
         /// </summary>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
-        public Scale(int width, int height, ResamplingFiltersAvailable filter = ResamplingFiltersAvailable.NearestNeighbor)
-            : base(width, height, filter)
+        /// <param name="xAngle">The x angle.</param>
+        /// <param name="yAngle">The y angle.</param>
+        public Skew(float xAngle, float yAngle, ResamplingFiltersAvailable filter = ResamplingFiltersAvailable.NearestNeighbor)
+            : base(filter: filter)
         {
+            XAngle = -xAngle * (float)(Math.PI / 180f);
+            YAngle = -yAngle * (float)(Math.PI / 180f);
         }
+
+        /// <summary>
+        /// Gets or sets the x angle.
+        /// </summary>
+        /// <value>The x angle.</value>
+        public float XAngle { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the y angle.
+        /// </summary>
+        /// <value>The y angle.</value>
+        public float YAngle { get; private set; }
 
         /// <summary>
         /// Gets the matrix.
         /// </summary>
         /// <param name="image">The image.</param>
         /// <param name="targetLocation">The target location.</param>
-        /// <returns>The transformation matrix</returns>
+        /// <returns>The matrix used for the transformation</returns>
         protected override Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
         {
-            float XScale = (float)image.Width / Width;
-            float YScale = (float)image.Height / Height;
-            return Matrix3x2.CreateScale(XScale, YScale, targetLocation.Center);
+            return Matrix3x2.CreateSkew(XAngle, YAngle, targetLocation.Center);
         }
     }
 }

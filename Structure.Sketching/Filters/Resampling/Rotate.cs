@@ -25,8 +25,8 @@ namespace Structure.Sketching.Filters.Resampling
     /// <summary>
     /// Rotates an image
     /// </summary>
-    /// <seealso cref="AffineBaseClass" />
-    /// <seealso cref="IFilter" />
+    /// <seealso cref="AffineBaseClass"/>
+    /// <seealso cref="IFilter"/>
     public class Rotate : AffineBaseClass
     {
         /// <summary>
@@ -49,9 +49,7 @@ namespace Structure.Sketching.Filters.Resampling
         /// </summary>
         /// <param name="image">The image.</param>
         /// <param name="targetLocation">The target location.</param>
-        /// <returns>
-        /// The matrix used for the transformation
-        /// </returns>
+        /// <returns>The matrix used for the transformation</returns>
         protected override Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
         {
             return Matrix3x2.CreateRotation(Angle, targetLocation.Center);
