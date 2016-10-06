@@ -71,32 +71,46 @@ namespace Structure.Sketching.Filters.Resampling
             var YOffset = 0;
             if (Options == ResizeOptions.Center)
             {
-                XOffset = (Width - image.Width) / 2;
-                YOffset = (Height - image.Height) / 2;
+                XOffset = (image.Width - Width) / 2;
+                YOffset = (image.Height - Height) / 2;
             }
-            Parallel.For(0, image.Height, y =>
-              {
-                  if (y >= Height || y - YOffset < 0)
-                      return;
-                  fixed (byte* InputPointer = &image.Pixels[y * image.Width * 4])
-                  {
-                      fixed (byte* OutputPointer = &Final[(y + YOffset) * Width * 4])
-                      {
-                          byte* OutputPointer2 = OutputPointer;
-                          byte* InputPointer2 = InputPointer;
-                          for (int x = 0; x < image.Width; ++x)
-                          {
-                              if (x >= Width)
-                                  return;
-                              (*OutputPointer2++) = (*InputPointer2++);
-                              (*OutputPointer2++) = (*InputPointer2++);
-                              (*OutputPointer2++) = (*InputPointer2++);
-                              (*OutputPointer2++) = (*InputPointer2++);
-                          }
-                      }
-                  }
-              });
-
+            Parallel.For(0, Height, y =>
+            {
+                if (y + YOffset >= image.Height || y + YOffset < 0)
+                    return;
+                fixed (byte* InputPointer = &image.Pixels[(y + YOffset) * image.Width * 4])
+                {
+                    fixed (byte* OutputPointer = &Final[y * Width * 4])
+                    {
+                        byte* OutputPointer2 = OutputPointer;
+                        byte* InputPointer2 = InputPointer;
+                        for (int x = 0; x < Width; ++x)
+                        {
+                            if ((x + XOffset) >= image.Width)
+                                break;
+                            if ((x + XOffset) < 0)
+                            {
+                                OutputPointer2 += 4;
+                            }
+                            else
+                            {
+                                *OutputPointer2 = *(InputPointer2 + (XOffset * 4));
+                                ++OutputPointer2;
+                                ++InputPointer2;
+                                *OutputPointer2 = *(InputPointer2 + (XOffset * 4));
+                                ++OutputPointer2;
+                                ++InputPointer2;
+                                *OutputPointer2 = *(InputPointer2 + (XOffset * 4));
+                                ++OutputPointer2;
+                                ++InputPointer2;
+                                *OutputPointer2 = *(InputPointer2 + (XOffset * 4));
+                                ++OutputPointer2;
+                                ++InputPointer2;
+                            }
+                        }
+                    }
+                }
+            });
             return image.ReCreate(Width, Height, Final);
         }
     }
