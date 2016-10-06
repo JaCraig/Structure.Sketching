@@ -52,6 +52,10 @@
     <Compile Include="Colors\ColorSpaces\HSV.cs" />
     <Compile Include="Colors\ColorSpaces\Interfaces\IColorSpace.cs" />
     <Compile Include="Colors\ColorSpaces\YCbCr.cs" />
+    <Compile Include="Filters\Drawing\Ellipse.cs" />
+    <Compile Include="Filters\Drawing\Interfaces\IShape.cs" />
+    <Compile Include="Filters\Drawing\Line.cs" />
+    <Compile Include="Filters\Drawing\Rectangle.cs" />
     <Compile Include="Exceptions\ImageException.cs" />
     <Compile Include="ExtensionMethods\ByteExtensions.cs" />
     <Compile Include="ExtensionMethods\FloatExtensions.cs" />
@@ -161,7 +165,7 @@
     <Compile Include="Filters\Resampling\ResamplingFilters\RobidouxSoftFilter.cs" />
     <Compile Include="Filters\Resampling\ResamplingFilters\TriangleFilter.cs" />
     <Compile Include="Filters\Resampling\Resize.cs" />
-    <Compile Include="Filters\Resampling\ResizeCanvas.cs" />
+    <Compile Include="Filters\ResizeCanvas.cs" />
     <Compile Include="Filters\Resampling\Rotate.cs" />
     <Compile Include="Filters\Resampling\Scale.cs" />
     <Compile Include="Filters\Resampling\Skew.cs" />
@@ -308,6 +312,7 @@
     <Compile Include="Quantizers\Octree\OctreeQuantizer.cs" />
     <Compile Include="Quantizers\QuantizedImage.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

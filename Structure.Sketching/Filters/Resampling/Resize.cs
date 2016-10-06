@@ -63,6 +63,7 @@ namespace Structure.Sketching.Filters.Resampling
                 { ResamplingFiltersAvailable.Bicubic, new BicubicFilter() }
             };
             Filter = ResamplingFilter[filter];
+            FilterKey = filter;
         }
 
         /// <summary>
@@ -82,6 +83,12 @@ namespace Structure.Sketching.Filters.Resampling
         /// </summary>
         /// <value>The width.</value>
         public int Width { get; set; }
+
+        /// <summary>
+        /// Gets or sets the filter key.
+        /// </summary>
+        /// <value>The filter key.</value>
+        private ResamplingFiltersAvailable FilterKey { get; set; }
 
         /// <summary>
         /// Gets or sets the resampling filter dictionary.

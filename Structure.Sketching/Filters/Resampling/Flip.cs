@@ -14,24 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Filters.Interfaces;
+using Structure.Sketching.Filters.Resampling.BaseClasses;
 using Structure.Sketching.Filters.Resampling.Enums;
 using Structure.Sketching.Numerics;
-using System.Threading.Tasks;
+using System.Numerics;
 
-namespace Structure.Sketching.Filters
+namespace Structure.Sketching.Filters.Resampling
 {
     /// <summary>
     /// Flips the image
     /// </summary>
     /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class Flip : IFilter
+    public class Flip : AffineBaseClass
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Flip"/> class.
         /// </summary>
         /// <param name="direction">The direction.</param>
-        public Flip(FlipDirection direction)
+        /// <param name="filter">The filter.</param>
+        public Flip(FlipDirection direction, ResamplingFiltersAvailable filter = ResamplingFiltersAvailable.NearestNeighbor)
+            : base(filter: filter)
         {
             Direction = direction;
         }
@@ -42,82 +44,13 @@ namespace Structure.Sketching.Filters
         /// <value>The direction.</value>
         public FlipDirection Direction { get; set; }
 
-        /// <summary>
-        /// Applies the filter to the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
+        protected override Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
         {
-            targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            int StartX = targetLocation.Left;
-            int StartY = targetLocation.Bottom;
-            int EndX = (FlipDirection.Horizontal & Direction) == FlipDirection.Horizontal ? (int)targetLocation.Center.X : targetLocation.Right;
-            int EndY = (FlipDirection.Vertical & Direction) == FlipDirection.Vertical ? (int)targetLocation.Center.Y : targetLocation.Top;
-            if ((FlipDirection.Vertical & Direction) == FlipDirection.Vertical && (FlipDirection.Horizontal & Direction) == FlipDirection.Horizontal)
-            {
-                EndY = targetLocation.Top;
-            }
-            Parallel.For(StartY, EndY, y =>
-            {
-                fixed (byte* TargetPointer = &image.Pixels[GetPointer(y, targetLocation, image)])
-                {
-                    byte* TargetPointer2 = TargetPointer;
-                    fixed (byte* SourcePointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
-                    {
-                        byte* SourcePointer2 = SourcePointer;
-                        for (int x = StartX; x < EndX; ++x)
-                        {
-                            byte value = *SourcePointer2;
-                            *SourcePointer2 = *TargetPointer2;
-                            *TargetPointer2 = value;
-                            ++SourcePointer2;
-                            ++TargetPointer2;
-                            value = *SourcePointer2;
-                            *SourcePointer2 = *TargetPointer2;
-                            *TargetPointer2 = value;
-                            ++SourcePointer2;
-                            ++TargetPointer2;
-                            value = *SourcePointer2;
-                            *SourcePointer2 = *TargetPointer2;
-                            *TargetPointer2 = value;
-                            ++SourcePointer2;
-                            ++TargetPointer2;
-                            value = *SourcePointer2;
-                            *SourcePointer2 = *TargetPointer2;
-                            *TargetPointer2 = value;
-                            ++SourcePointer2;
-                            ++TargetPointer2;
-                            if ((FlipDirection.Horizontal & Direction) == FlipDirection.Horizontal)
-                                TargetPointer2 -= 8;
-                        }
-                    }
-                }
-            });
-            return image;
-        }
-
-        private int GetPointer(int y, Rectangle targetLocation, Image image)
-        {
-            int Value = 0;
-            if ((FlipDirection.Vertical & Direction) == FlipDirection.Vertical)
-            {
-                Value = (targetLocation.Top - (y + 1)) * image.Width;
-            }
-            else
-            {
-                Value = y * image.Width;
-            }
-            if ((FlipDirection.Horizontal & Direction) == FlipDirection.Horizontal)
-            {
-                Value += targetLocation.Right - 1;
-            }
-            else
-            {
-                Value += targetLocation.Left;
-            }
-            return Value * 4;
+            float XScale = 1f;
+            float YScale = 1f;
+            XScale = (FlipDirection.Horizontal & Direction) == FlipDirection.Horizontal ? -XScale : XScale;
+            YScale = (FlipDirection.Vertical & Direction) == FlipDirection.Vertical ? -YScale : YScale;
+            return Matrix3x2.CreateScale(XScale, YScale, targetLocation.Center);
         }
     }
 }
