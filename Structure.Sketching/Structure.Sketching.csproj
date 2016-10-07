@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Animation.cs" />
+    <Compile Include="Brushes\Brush.cs" />
+    <Compile Include="Brushes\Interfaces\IBrush.cs" />
     <Compile Include="Colors\Color.cs" />
     <Compile Include="Colors\ColorDefinitions.cs" />
     <Compile Include="Colors\ColorSpaces\Bgra.cs" />
@@ -52,6 +54,7 @@
     <Compile Include="Colors\ColorSpaces\HSV.cs" />
     <Compile Include="Colors\ColorSpaces\Interfaces\IColorSpace.cs" />
     <Compile Include="Colors\ColorSpaces\YCbCr.cs" />
+    <Compile Include="Filters\Drawing\BaseClasses\ShapeBaseClass.cs" />
     <Compile Include="Filters\Drawing\Ellipse.cs" />
     <Compile Include="Filters\Drawing\Interfaces\IShape.cs" />
     <Compile Include="Filters\Drawing\Line.cs" />

@@ -14,11 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Filters.Interfaces;
+using Structure.Sketching.Colors;
 
-namespace Structure.Sketching.Filters.Drawing.Interfaces
+namespace Structure.Sketching.Brushes
 {
-    public interface IShape : IFilter
+    /// <summary>
+    /// Brush class
+    /// </summary>
+    public class Brush
     {
+        /// <summary>
+        /// Gets the color.
+        /// </summary>
+        /// <value>The color.</value>
+        public Color Color { get; }
     }
 }

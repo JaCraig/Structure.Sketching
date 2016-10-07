@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Filters.Interfaces;
-
-namespace Structure.Sketching.Filters.Drawing.Interfaces
+namespace Structure.Sketching.Brushes.Interfaces
 {
-    public interface IShape : IFilter
+    /// <summary>
+    /// Brush interface
+    /// </summary>
+    public interface IBrush
     {
     }
 }
