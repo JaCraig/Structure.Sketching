@@ -45,8 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Animation.cs" />
-    <Compile Include="Brushes\Brush.cs" />
-    <Compile Include="Brushes\Interfaces\IBrush.cs" />
     <Compile Include="Colors\Color.cs" />
     <Compile Include="Colors\ColorDefinitions.cs" />
     <Compile Include="Colors\ColorSpaces\Bgra.cs" />
@@ -139,6 +137,7 @@
     <Compile Include="Filters\Pipelines\NormalMap.cs" />
     <Compile Include="Filters\Pipelines\Polaroid.cs" />
     <Compile Include="Filters\Pixellate.cs" />
+    <Compile Include="Filters\Pointillism.cs" />
     <Compile Include="Filters\Posterize.cs" />
     <Compile Include="Filters\Replace.cs" />
     <Compile Include="Filters\Resampling\AffineTransformation.cs" />

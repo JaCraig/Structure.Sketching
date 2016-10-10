@@ -103,7 +103,7 @@ namespace Structure.Sketching.Numerics
         }
 
         /// <summary>
-        /// Clamps the specified image.
+        /// Clamps based on the specified image.
         /// </summary>
         /// <param name="image">The image.</param>
         /// <returns>The resulting clamped rectangle</returns>
@@ -114,6 +114,21 @@ namespace Structure.Sketching.Numerics
                 Data.Y < 0 ? 0 : Data.Y,
                 Data.Z > image.Width ? image.Width : Data.Z,
                 Data.W > image.Height ? image.Height : Data.W);
+            return this;
+        }
+
+        /// <summary>
+        /// Clamps based on the specified Rectangle.
+        /// </summary>
+        /// <param name="image">The image.</param>
+        /// <returns>The resulting clamped rectangle</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Rectangle Clamp(Rectangle image)
+        {
+            Data = new Vector4(Data.X < image.Left ? image.Left : Data.X,
+                Data.Y < image.Bottom ? image.Bottom : Data.Y,
+                Data.Z > image.Right ? image.Right : Data.Z,
+                Data.W > image.Top ? image.Top : Data.W);
             return this;
         }
 
@@ -150,8 +165,7 @@ namespace Structure.Sketching.Numerics
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with this instance.</param>
         /// <returns>
-        /// <c>true</c> if the specified <see cref="object"/> is equal to this instance;
-        /// otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
