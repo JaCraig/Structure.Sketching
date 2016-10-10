@@ -2545,9 +2545,6 @@
           "lib/netstandard1.0/xunit.execution.dotnet.dll": {}
         }
       },
-      "xunit.runner.console/2.2.0-beta3-build3402": {
-        "type": "package"
-      },
       "xunit.runner.reporters/2.2.0-beta2-build3300": {
         "type": "package",
         "dependencies": {
@@ -5349,9 +5346,6 @@
         "runtime": {
           "lib/netstandard1.0/xunit.execution.dotnet.dll": {}
         }
-      },
-      "xunit.runner.console/2.2.0-beta3-build3402": {
-        "type": "package"
       },
       "xunit.runner.reporters/2.2.0-beta2-build3300": {
         "type": "package",
@@ -8156,9 +8150,6 @@
         "runtime": {
           "lib/netstandard1.0/xunit.execution.dotnet.dll": {}
         }
-      },
-      "xunit.runner.console/2.2.0-beta3-build3402": {
-        "type": "package"
       },
       "xunit.runner.reporters/2.2.0-beta2-build3300": {
         "type": "package",
@@ -11053,9 +11044,6 @@
         "runtime": {
           "lib/netstandard1.0/xunit.execution.dotnet.dll": {}
         }
-      },
-      "xunit.runner.console/2.2.0-beta3-build3402": {
-        "type": "package"
       },
       "xunit.runner.reporters/2.2.0-beta2-build3300": {
         "type": "package",
@@ -17286,25 +17274,6 @@
         "xunit.extensibility.execution.nuspec"
       ]
     },
-    "xunit.runner.console/2.2.0-beta3-build3402": {
-      "sha512": "fIsvZcIMcM9v8XXbbBbl2mca7f4jiq+RCiXa7sCtsrKuI11s9Mk/Ogo5ngqPm3uHsW2czbF427h+59jDtfADZQ==",
-      "type": "package",
-      "path": "xunit.runner.console/2.2.0-beta3-build3402",
-      "files": [
-        "tools/HTML.xslt",
-        "tools/NUnitXml.xslt",
-        "tools/xUnit1.xslt",
-        "tools/xunit.abstractions.dll",
-        "tools/xunit.console.exe",
-        "tools/xunit.console.exe.config",
-        "tools/xunit.console.x86.exe",
-        "tools/xunit.console.x86.exe.config",
-        "tools/xunit.runner.reporters.desktop.dll",
-        "tools/xunit.runner.utility.desktop.dll",
-        "xunit.runner.console.2.2.0-beta3-build3402.nupkg.sha512",
-        "xunit.runner.console.nuspec"
-      ]
-    },
     "xunit.runner.reporters/2.2.0-beta2-build3300": {
       "sha512": "1NqeT2IWfqk9/zBkHbf6SS1bokwu0Mvt70lQp8bJZpvQgi+SDAzuhEwWTcsjMblY2FK8BHDbjauu+IO2GhbhAA==",
       "type": "package",
@@ -17343,8 +17312,7 @@
   "projectFileDependencyGroups": {
     "": [
       "dotnet-test-xunit >= 2.2.0-*",
-      "xunit >= 2.2.0-*",
-      "xunit.runner.console >= 2.2.0-*"
+      "xunit >= 2.2.0-*"
     ],
     ".NETCoreApp,Version=v1.1": [
       "Microsoft.NETCore.App >= 1.0.0-*",
