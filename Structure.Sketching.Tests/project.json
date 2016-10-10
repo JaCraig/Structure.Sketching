@@ -16,6 +16,7 @@
   "dependencies": {
     "xunit": "2.2.0-*",
     "dotnet-test-xunit": "2.2.0-*",
+    "xunit.runner.console": "2.2.0-*"
   },
   "runtimes": {
     "win7-x64": {},
