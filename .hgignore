@@ -4,3 +4,4 @@ Structure.Sketching.Tests/TestOutput/*
 */obj/*
 .vs/*
 Structure.Sketching.Benchmarks/BenchmarkDotNet.Artifacts/*
+*.nupkg
