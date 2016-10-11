@@ -15,101 +15,101 @@ Currently the library supports the following file types:
 
 There are also a number of filters within the library for a number of different purposes:
 
-* Contrast stretching
-* Gamma correction
-* HSV and RGB equalization
-* Adaptive HSV and RGB equalization
-* Kuwahara smoothing
-* Median smoothing
-* SNN Blur
-* Image resizing
-* Image cropping
-* Canvas resizing
-* Image flipping
-* Affine transformations including:
-** Rotatation
-** Scaling
-** Skewing
-** Translatation
-* Image resizing and affine transformations can use the following resampling filters:
-** Bell
-** Bicubic
-** Bilinear
-** Catmull Rom
-** Cosine
-** Cubic B Spline
-** Cubic Convolution
-** Hermite
-** Lanczos3
-** Lanczos8
-** Mitchell
-** Nearest Neighbor
-** Quadratic B Spline
-** Quadratic
-** Robidoux
-** Robidoux Sharp
-** Robidoux Soft
-** Triangle
-* Bump map generation
-* Canny Edge Detection
-* Gaussian Blur
-* Lomograph
-* Normal map generation
-* Polaroid
-* Image blending
-* Glow
-* Vignette
-* Constrict
-* Dilate
-* Unsharp
-* Box Blur
-* Embossing
-* Edge detection techniques including:
-** Kayyali
-** Kirsh
-** Laplace Edge Detection
-** Laplacian of Gaussian Edge Detection
-** Prewitt
-** Roberts Cross
-** Robinson
-** Scharr
-* Sharpen
-* Sharpen Less
-* Sobel Embossing
-* Alpha manipulation
-* Black and White
-* Blue, green, and red filters
-* Brigtness manipulation
-* Contrast manipulation
-* Greyscale 601 and 709
-* Hue manipulation
-* Kodachrome
-* Saturation
-* Sepia Tone
-* Color blindness filters including: Achromatomaly, Achromatopsia, Deuteranomaly, Deuteranopia, Protanomaly, Protanopia, Tritanomaly, and Tritanopia
-* Adaptive Threshold
-* Non Maximal Suppression
-* Threshold
-* Image addition, subtraction, division, multiplication, modulo, and, or, and xor functions.
-* Turbulence
-* Solarize
-* Sin Wave
-* Posterize
-* Pointillism
-* Pixellate
-* Noise
-* Logarithm
-* Jitter
-* Color replacement
-* Color inversion
-* There are also generic classes for color matrix (using a 5x5 matrix), affine transformations, and convolution filters.
+- Contrast stretching
+- Gamma correction
+- HSV and RGB equalization
+- Adaptive HSV and RGB equalization
+- Kuwahara smoothing
+- Median smoothing
+- SNN Blur
+- Image resizing
+- Image cropping
+- Canvas resizing
+- Image flipping
+- Affine transformations including:
+  - Rotatation
+  - Scaling
+  - Skewing
+  - Translatation
+- Image resizing and affine transformations can use the following resampling filters:
+  - Bell
+  - Bicubic
+  - Bilinear
+  - Catmull Rom
+  - Cosine
+  - Cubic B Spline
+  - Cubic Convolution
+  - Hermite
+  - Lanczos3
+  - Lanczos8
+  - Mitchell
+  - Nearest Neighbor
+  - Quadratic B Spline
+  - Quadratic
+  - Robidoux
+  - Robidoux Sharp
+  - Robidoux Soft
+  - Triangle
+- Bump map generation
+- Canny Edge Detection
+- Gaussian Blur
+- Lomograph
+- Normal map generation
+- Polaroid
+- Image blending
+- Glow
+- Vignette
+- Constrict
+- Dilate
+- Unsharp
+- Box Blur
+- Embossing
+- Edge detection techniques including:
+  - Kayyali
+  - Kirsh
+  - Laplace Edge Detection
+  - Laplacian of Gaussian Edge Detection
+  - Prewitt
+  - Roberts Cross
+  - Robinson
+  - Scharr
+- Sharpen
+- Sharpen Less
+- Sobel Embossing
+- Alpha manipulation
+- Black and White
+- Blue, green, and red filters
+- Brigtness manipulation
+- Contrast manipulation
+- Greyscale 601 and 709
+- Hue manipulation
+- Kodachrome
+- Saturation
+- Sepia Tone
+- Color blindness filters including: Achromatomaly, Achromatopsia, Deuteranomaly, Deuteranopia, Protanomaly, Protanopia, Tritanomaly, and Tritanopia
+- Adaptive Threshold
+- Non Maximal Suppression
+- Threshold
+- Image addition, subtraction, division, multiplication, modulo, and, or, and xor functions.
+- Turbulence
+- Solarize
+- Sin Wave
+- Posterize
+- Pointillism
+- Pixellate
+- Noise
+- Logarithm
+- Jitter
+- Color replacement
+- Color inversion
+- There are also generic classes for color matrix (using a 5x5 matrix), affine transformations, and convolution filters.
 
 There are also a couple of other items in here including:
 
-* Perlin Noise generation
-* The library also includes the ability to draw lines, rectangles, and ellipses, both filled and the outline.
-* Image to ASCII art
-* Image to Base64 string
+- Perlin Noise generation
+- The library also includes the ability to draw lines, rectangles, and ellipses, both filled and the outline.
+- Image to ASCII art
+- Image to Base64 string
 
 That said hopefully the list will grow with time.
 
