@@ -35,6 +35,7 @@ namespace Structure.Sketching.Filters.Resampling
         /// </summary>
         /// <param name="xAngle">The x angle.</param>
         /// <param name="yAngle">The y angle.</param>
+        /// <param name="filter">The filter.</param>
         public Skew(float xAngle, float yAngle, ResamplingFiltersAvailable filter = ResamplingFiltersAvailable.NearestNeighbor)
             : base(filter: filter)
         {

@@ -27,11 +27,11 @@ namespace Structure.Sketching.Filters.Binary
     /// <summary>
     /// Non-maximal suppression filter
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter" />
+    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
     public class NonMaximalSuppression : IFilter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="NonMaximalSuppression" /> class.
+        /// Initializes a new instance of the <see cref="NonMaximalSuppression"/> class.
         /// </summary>
         /// <param name="color1">The first color.</param>
         /// <param name="color2">The second color.</param>
@@ -60,17 +60,13 @@ namespace Structure.Sketching.Filters.Binary
         /// <summary>
         /// Gets or sets the threshold1.
         /// </summary>
-        /// <value>
-        /// The threshold1.
-        /// </value>
+        /// <value>The threshold1.</value>
         public float Threshold1 { get; set; }
 
         /// <summary>
         /// Gets or sets the threshold2.
         /// </summary>
-        /// <value>
-        /// The threshold2.
-        /// </value>
+        /// <value>The threshold2.</value>
         public float Threshold2 { get; set; }
 
         /// <summary>
@@ -85,7 +81,7 @@ namespace Structure.Sketching.Filters.Binary
             new Greyscale709().Apply(image, targetLocation);
             var Result = new Image(image.Width, image.Height, new byte[image.Pixels.Length]);
             Array.Copy(image.Pixels, Result.Pixels, Result.Pixels.Length);
-            new Fill(Color2).Apply(Result, targetLocation);
+            new Drawing.Rectangle(Color2, true, targetLocation).Apply(Result);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
                 for (int x = targetLocation.Left; x < targetLocation.Right; ++x)

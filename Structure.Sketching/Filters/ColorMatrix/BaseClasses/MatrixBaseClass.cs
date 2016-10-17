@@ -52,7 +52,7 @@ namespace Structure.Sketching.Filters.ColorMatrix.BaseClasses
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
+            Parallel.For(targetLocation.Bottom, targetLocation.Top, (y, _) =>
             {
                 fixed (byte* pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {

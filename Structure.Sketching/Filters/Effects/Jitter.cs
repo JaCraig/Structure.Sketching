@@ -18,19 +18,19 @@ using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters
+namespace Structure.Sketching.Filters.Effects
 {
     /// <summary>
-    /// Adds randomization to an image
+    /// Adds randomization to each pixel in an image
     /// </summary>
     /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class Noise : IFilter
+    public class Jitter : IFilter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Noise"/> class.
+        /// Initializes a new instance of the <see cref="Jitter"/> class.
         /// </summary>
-        /// <param name="amount">The amount of potential randomization (0 to 1).</param>
-        public Noise(byte amount)
+        /// <param name="amount">The amount of potential randomization.</param>
+        public Jitter(int amount)
         {
             Amount = amount;
         }
@@ -39,7 +39,7 @@ namespace Structure.Sketching.Filters
         /// Gets or sets the amount.
         /// </summary>
         /// <value>The amount.</value>
-        public byte Amount { get; set; }
+        public int Amount { get; set; }
 
         /// <summary>
         /// Applies the filter to the specified image.
@@ -54,21 +54,23 @@ namespace Structure.Sketching.Filters
             {
                 fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    byte* OutputPointer = Pointer;
-                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                    byte* SourcePointer = Pointer;
+                    for (int x = 0; x < image.Width; ++x)
                     {
-                        int R = (*OutputPointer) + Random.ThreadSafeNext(-Amount, Amount);
-                        int G = *(OutputPointer + 1) + Random.ThreadSafeNext(-Amount, Amount);
-                        int B = *(OutputPointer + 2) + Random.ThreadSafeNext(-Amount, Amount);
-                        R = R < 0 ? 0 : R > 255 ? 255 : R;
-                        G = G < 0 ? 0 : G > 255 ? 255 : G;
-                        B = B < 0 ? 0 : B > 255 ? 255 : B;
-                        (*OutputPointer) = (byte)R;
-                        ++OutputPointer;
-                        (*OutputPointer) = (byte)G;
-                        ++OutputPointer;
-                        (*OutputPointer) = (byte)B;
-                        OutputPointer += 2;
+                        var NewX = Random.ThreadSafeNext(-Amount, Amount);
+                        var NewY = Random.ThreadSafeNext(-Amount, Amount);
+                        NewX += x;
+                        NewY += y;
+                        NewX = NewX < targetLocation.Left ? targetLocation.Left : NewX >= targetLocation.Right ? targetLocation.Right - 1 : NewX;
+                        NewY = NewY < targetLocation.Bottom ? targetLocation.Bottom : NewY >= targetLocation.Top ? targetLocation.Top - 1 : NewY;
+                        image.Pixels[((NewY * image.Width) + NewX) * 4] = *SourcePointer;
+                        ++SourcePointer;
+                        image.Pixels[(((NewY * image.Width) + NewX) * 4) + 1] = *SourcePointer;
+                        ++SourcePointer;
+                        image.Pixels[(((NewY * image.Width) + NewX) * 4) + 2] = *SourcePointer;
+                        ++SourcePointer;
+                        image.Pixels[(((NewY * image.Width) + NewX) * 4) + 3] = *SourcePointer;
+                        ++SourcePointer;
                     }
                 }
             });

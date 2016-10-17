@@ -171,6 +171,7 @@ namespace Structure.Sketching.Filters.Drawing
         /// <param name="image">The image.</param>
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
+        /// <param name="targetLocation">The target location.</param>
         private void Plot4EllipsePoints(Image image, int x, int y, Numerics.Rectangle targetLocation)
         {
             Plot(image, (int)(Center.X + x), (int)(Center.Y + y), 1, targetLocation);

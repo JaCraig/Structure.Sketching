@@ -19,7 +19,7 @@ using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters
+namespace Structure.Sketching.Filters.Effects
 {
     /// <summary>
     /// Replaces a color with another color in the image

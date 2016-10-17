@@ -1,6 +1,6 @@
-﻿using Structure.Sketching.Filters;
-using Structure.Sketching.Filters.Arithmetic;
+﻿using Structure.Sketching.Filters.Arithmetic;
 using Structure.Sketching.Filters.ColorMatrix;
+using Structure.Sketching.Filters.Effects;
 using System;
 
 namespace Structure.Sketching

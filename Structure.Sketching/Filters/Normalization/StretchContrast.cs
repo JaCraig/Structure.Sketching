@@ -20,7 +20,7 @@ using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters
+namespace Structure.Sketching.Filters.Normalization
 {
     /// <summary>
     /// Stretches the contrast of a specific image

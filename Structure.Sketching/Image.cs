@@ -54,7 +54,7 @@ namespace Structure.Sketching
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         public Image(string fileName)
-            : this(File.Open(fileName, FileMode.Open, FileAccess.Read))
+            : this(File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
         {
         }
 

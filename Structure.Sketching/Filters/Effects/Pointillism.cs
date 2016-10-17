@@ -21,7 +21,7 @@ using Structure.Sketching.Filters.Interfaces;
 using System;
 using System.Numerics;
 
-namespace Structure.Sketching.Filters
+namespace Structure.Sketching.Filters.Effects
 {
     /// <summary>
     /// Pointillism filter

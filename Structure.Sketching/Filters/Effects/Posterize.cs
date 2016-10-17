@@ -18,28 +18,37 @@ using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters
+namespace Structure.Sketching.Filters.Effects
 {
     /// <summary>
-    /// Adds randomization to each pixel in an image
+    /// Posterizes an image
     /// </summary>
     /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class Jitter : IFilter
+    public class Posterize : IFilter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Jitter"/> class.
+        /// Initializes a new instance of the <see cref="Posterize"/> class.
         /// </summary>
-        /// <param name="amount">The amount of potential randomization.</param>
-        public Jitter(int amount)
+        /// <param name="divisions">The number of divisions for each channel.</param>
+        public Posterize(int divisions)
         {
-            Amount = amount;
+            if (divisions < 1)
+                divisions = 1;
+            var Step = 255 / divisions;
+            Divisions = new byte[divisions + 1];
+            Divisions[0] = 0;
+            for (int x = 1; x < divisions; ++x)
+            {
+                Divisions[x] = (byte)(Divisions[x - 1] + Step);
+            }
+            Divisions[divisions] = 255;
         }
 
         /// <summary>
-        /// Gets or sets the amount.
+        /// Gets or sets the divisions.
         /// </summary>
-        /// <value>The amount.</value>
-        public int Amount { get; set; }
+        /// <value>The divisions.</value>
+        public byte[] Divisions { get; set; }
 
         /// <summary>
         /// Applies the filter to the specified image.
@@ -54,27 +63,31 @@ namespace Structure.Sketching.Filters
             {
                 fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    byte* SourcePointer = Pointer;
-                    for (int x = 0; x < image.Width; ++x)
+                    byte* OutputPointer = Pointer;
+                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        var NewX = Random.ThreadSafeNext(-Amount, Amount);
-                        var NewY = Random.ThreadSafeNext(-Amount, Amount);
-                        NewX += x;
-                        NewY += y;
-                        NewX = NewX < targetLocation.Left ? targetLocation.Left : NewX >= targetLocation.Right ? targetLocation.Right - 1 : NewX;
-                        NewY = NewY < targetLocation.Bottom ? targetLocation.Bottom : NewY >= targetLocation.Top ? targetLocation.Top - 1 : NewY;
-                        image.Pixels[((NewY * image.Width) + NewX) * 4] = *SourcePointer;
-                        ++SourcePointer;
-                        image.Pixels[(((NewY * image.Width) + NewX) * 4) + 1] = *SourcePointer;
-                        ++SourcePointer;
-                        image.Pixels[(((NewY * image.Width) + NewX) * 4) + 2] = *SourcePointer;
-                        ++SourcePointer;
-                        image.Pixels[(((NewY * image.Width) + NewX) * 4) + 3] = *SourcePointer;
-                        ++SourcePointer;
+                        (*OutputPointer) = FindValue(*OutputPointer);
+                        ++OutputPointer;
+                        (*OutputPointer) = FindValue(*OutputPointer);
+                        ++OutputPointer;
+                        (*OutputPointer) = FindValue(*OutputPointer);
+                        OutputPointer += 2;
                     }
                 }
             });
             return image;
+        }
+
+        private byte FindValue(byte x)
+        {
+            if (Divisions.Length == 1)
+                return Divisions[0];
+            for (int z = 1; z < Divisions.Length; ++z)
+            {
+                if (Divisions[z] > x)
+                    return Divisions[z - 1];
+            }
+            return Divisions[Divisions.Length - 1];
         }
     }
 }

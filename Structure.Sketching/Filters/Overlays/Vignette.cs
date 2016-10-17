@@ -21,7 +21,7 @@ using System;
 using System.Numerics;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters
+namespace Structure.Sketching.Filters.Overlays
 {
     /// <summary>
     /// Adds a vignette effect to an image

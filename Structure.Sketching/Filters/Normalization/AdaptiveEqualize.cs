@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters
+namespace Structure.Sketching.Filters.Normalization
 {
     /// <summary>
     /// Adaptive equalization of an image
@@ -31,7 +31,7 @@ namespace Structure.Sketching.Filters
     public class AdaptiveEqualize : IFilter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdaptiveEqualize" /> class.
+        /// Initializes a new instance of the <see cref="AdaptiveEqualize"/> class.
         /// </summary>
         /// <param name="radius">The radius.</param>
         /// <param name="histogram">The histogram.</param>
@@ -44,17 +44,13 @@ namespace Structure.Sketching.Filters
         /// <summary>
         /// Gets or sets the radius.
         /// </summary>
-        /// <value>
-        /// The radius.
-        /// </value>
+        /// <value>The radius.</value>
         public int Radius { get; set; }
 
         /// <summary>
         /// Gets or sets the histogram.
         /// </summary>
-        /// <value>
-        /// The histogram.
-        /// </value>
+        /// <value>The histogram.</value>
         private Func<IHistogram> Histogram { get; set; }
 
         /// <summary>
@@ -77,7 +73,7 @@ namespace Structure.Sketching.Filters
                     byte* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        List<Color> ColorList = new List<Color>();
+                        var ColorList = new List<Color>();
                         for (int y2 = ApetureMin; y2 < ApetureMax; ++y2)
                         {
                             int TempY = y + y2;

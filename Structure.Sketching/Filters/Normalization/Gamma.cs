@@ -14,33 +14,40 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters
+namespace Structure.Sketching.Filters.Normalization
 {
     /// <summary>
-    /// Solarizes an image
+    /// Adjusts gamma of an image
     /// </summary>
     /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class Solarize : IFilter
+    public class Gamma : IFilter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Solarize"/> class.
+        /// Initializes a new instance of the <see cref="Gamma"/> class.
         /// </summary>
-        /// <param name="threshold">The threshold (between 0 and 3).</param>
-        public Solarize(float threshold)
+        /// <param name="value">The value.</param>
+        public Gamma(float value)
         {
-            Threshold = threshold * 255;
+            Value = value;
+            Ramp = new int[256];
+            Parallel.For(0, 256, x =>
+            {
+                Ramp[x] = (int)((255.0 * System.Math.Pow(x / 255.0, 1.0 / Value)) + 0.5);
+                Ramp[x] = Ramp[x] < 0 ? 0 : Ramp[x] > 255 ? 255 : Ramp[x];
+            });
         }
 
         /// <summary>
-        /// Gets or sets the threshold.
+        /// Gets or sets the value.
         /// </summary>
-        /// <value>The threshold.</value>
-        public float Threshold { get; set; }
+        /// <value>The value.</value>
+        public float Value { get; set; }
+
+        private int[] Ramp { get; set; }
 
         /// <summary>
         /// Applies the filter to the specified image.
@@ -53,24 +60,17 @@ namespace Structure.Sketching.Filters
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    byte* OutputPointer = Pointer;
+                    byte* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        if (Distance.Euclidean(new Color(*OutputPointer, *(OutputPointer + 1), *(OutputPointer + 2)), Color.Black) < Threshold)
-                        {
-                            (*OutputPointer) = (byte)(255 - (*OutputPointer));
-                            ++OutputPointer;
-                            (*OutputPointer) = (byte)(255 - (*OutputPointer));
-                            ++OutputPointer;
-                            (*OutputPointer) = (byte)(255 - (*OutputPointer));
-                            OutputPointer += 2;
-                        }
-                        else
-                        {
-                            OutputPointer += 4;
-                        }
+                        *TargetPointer2 = (byte)Ramp[*TargetPointer2];
+                        ++TargetPointer2;
+                        *TargetPointer2 = (byte)Ramp[*TargetPointer2];
+                        ++TargetPointer2;
+                        *TargetPointer2 = (byte)Ramp[*TargetPointer2];
+                        TargetPointer2 += 2;
                     }
                 }
             });

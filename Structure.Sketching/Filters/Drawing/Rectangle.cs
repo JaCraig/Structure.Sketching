@@ -16,6 +16,7 @@ limitations under the License.
 
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Drawing.BaseClasses;
+using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Drawing
 {
@@ -56,14 +57,51 @@ namespace Structure.Sketching.Filters.Drawing
         /// <param name="image">The image.</param>
         /// <param name="targetLocation">The target location.</param>
         /// <returns></returns>
-        public override Image Apply(Image image, Numerics.Rectangle targetLocation = default(Numerics.Rectangle))
+        public override unsafe Image Apply(Image image, Numerics.Rectangle targetLocation = default(Numerics.Rectangle))
         {
             targetLocation = targetLocation == default(Numerics.Rectangle) ? new Numerics.Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Bounds = Bounds.Clamp(targetLocation);
-            if (Fill)
+            return Fill ? DrawFilledRectangle(image, Bounds)
+                        : DrawRectangleOutline(image, targetLocation);
+        }
+
+        /// <summary>
+        /// Draws the filled rectangle.
+        /// </summary>
+        /// <param name="image">The image.</param>
+        /// <param name="targetLocation">The target location.</param>
+        /// <returns>The resulting image</returns>
+        private unsafe Image DrawFilledRectangle(Image image, Numerics.Rectangle targetLocation)
+        {
+            Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                return new Fill(Color).Apply(image, Bounds);
-            }
+                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
+                {
+                    byte* TargetPointer2 = TargetPointer;
+                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                    {
+                        *TargetPointer2 = Color.Red;
+                        ++TargetPointer2;
+                        *TargetPointer2 = Color.Green;
+                        ++TargetPointer2;
+                        *TargetPointer2 = Color.Blue;
+                        ++TargetPointer2;
+                        *TargetPointer2 = Color.Alpha;
+                        ++TargetPointer2;
+                    }
+                }
+            });
+            return image;
+        }
+
+        /// <summary>
+        /// Draws the rectangle outline.
+        /// </summary>
+        /// <param name="image">The image.</param>
+        /// <param name="targetLocation">The target location.</param>
+        /// <returns>The resulting image</returns>
+        private Image DrawRectangleOutline(Image image, Numerics.Rectangle targetLocation)
+        {
             new Line(Color, Bounds.Left, Bounds.Bottom, Bounds.Right, Bounds.Bottom).Apply(image, targetLocation);
             new Line(Color, Bounds.Left, Bounds.Top, Bounds.Right, Bounds.Top).Apply(image, targetLocation);
             new Line(Color, Bounds.Left, Bounds.Bottom, Bounds.Left, Bounds.Top).Apply(image, targetLocation);

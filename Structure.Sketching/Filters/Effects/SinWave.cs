@@ -20,7 +20,7 @@ using Structure.Sketching.Numerics;
 using System;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters
+namespace Structure.Sketching.Filters.Effects
 {
     /// <summary>
     /// Does a sin wave on an image

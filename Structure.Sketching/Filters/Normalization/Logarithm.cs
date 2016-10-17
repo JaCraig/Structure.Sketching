@@ -17,31 +17,17 @@ limitations under the License.
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
+using System;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters
+namespace Structure.Sketching.Filters.Normalization
 {
     /// <summary>
-    /// Fills in a section of an image with a specific color
+    /// Does a Logarithm function to the image.
     /// </summary>
     /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class Fill : IFilter
+    public class Logarithm : IFilter
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Fill"/> class.
-        /// </summary>
-        /// <param name="color">The color.</param>
-        public Fill(Color color)
-        {
-            Color = color;
-        }
-
-        /// <summary>
-        /// Gets or sets the color.
-        /// </summary>
-        /// <value>The color.</value>
-        public Color Color { get; set; }
-
         /// <summary>
         /// Applies the filter to the specified image.
         /// </summary>
@@ -51,6 +37,11 @@ namespace Structure.Sketching.Filters
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+            var MaxValue = GetMaxValue(image, targetLocation);
+            MaxValue = new Color((byte)((255 / Math.Log(1f + MaxValue.Red))),
+                (byte)((255 / Math.Log(1f + MaxValue.Green))),
+                (byte)((255 / Math.Log(1f + MaxValue.Blue))),
+                MaxValue.Alpha);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
                 fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
@@ -58,18 +49,39 @@ namespace Structure.Sketching.Filters
                     byte* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        *TargetPointer2 = Color.Red;
+                        *TargetPointer2 = (byte)(MaxValue.Red * Math.Log(1f + (*TargetPointer2)));
                         ++TargetPointer2;
-                        *TargetPointer2 = Color.Green;
+                        *TargetPointer2 = (byte)(MaxValue.Green * Math.Log(1f + (*TargetPointer2)));
                         ++TargetPointer2;
-                        *TargetPointer2 = Color.Blue;
-                        ++TargetPointer2;
-                        *TargetPointer2 = Color.Alpha;
-                        ++TargetPointer2;
+                        *TargetPointer2 = (byte)(MaxValue.Blue * Math.Log(1f + (*TargetPointer2)));
+                        TargetPointer2 += 2;
                     }
                 }
             });
             return image;
+        }
+
+        private Color GetMaxValue(Image image, Rectangle targetLocation)
+        {
+            var ReturnValue = new Color(0, 0, 0, 255);
+            for (int y = targetLocation.Bottom; y < targetLocation.Top; ++y)
+            {
+                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                {
+                    byte Red = image.Pixels[((y * image.Width) + x) * 4];
+                    if (ReturnValue.Red < Red)
+                        ReturnValue.Red = Red;
+                    byte Green = image.Pixels[(((y * image.Width) + x) * 4) + 1];
+                    if (ReturnValue.Green < Green)
+                        ReturnValue.Green = Green;
+                    byte Blue = image.Pixels[(((y * image.Width) + x) * 4) + 2];
+                    if (ReturnValue.Blue < Blue)
+                        ReturnValue.Blue = Blue;
+                    if (ReturnValue == Color.White)
+                        return ReturnValue;
+                }
+            }
+            return ReturnValue;
         }
     }
 }

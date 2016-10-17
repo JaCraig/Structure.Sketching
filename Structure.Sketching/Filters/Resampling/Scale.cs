@@ -32,6 +32,7 @@ namespace Structure.Sketching.Filters.Resampling
         /// </summary>
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
+        /// <param name="filter">The filter to use (defaults to nearest neighbor).</param>
         public Scale(int width, int height, ResamplingFiltersAvailable filter = ResamplingFiltersAvailable.NearestNeighbor)
             : base(width, height, filter)
         {

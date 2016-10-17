@@ -20,7 +20,7 @@ using Structure.Sketching.Numerics;
 using System;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters.Morphology
+namespace Structure.Sketching.Filters.Smoothing
 {
     /// <summary>
     /// SNN Blur on an image

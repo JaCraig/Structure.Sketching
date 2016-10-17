@@ -19,7 +19,7 @@ using Structure.Sketching.Filters.Resampling.BaseClasses;
 using Structure.Sketching.Numerics;
 using System.Numerics;
 
-namespace Structure.Sketching.Filters
+namespace Structure.Sketching.Filters.Resampling
 {
     /// <summary>
     /// Translate the image

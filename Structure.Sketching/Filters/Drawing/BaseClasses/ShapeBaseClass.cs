@@ -24,6 +24,12 @@ namespace Structure.Sketching.Filters.Drawing.BaseClasses
         /// <value>The color.</value>
         public Color Color { get; set; }
 
+        /// <summary>
+        /// Applies the shape to the specified image.
+        /// </summary>
+        /// <param name="image">The image.</param>
+        /// <param name="targetLocation">The target location.</param>
+        /// <returns>The resulting image</returns>
         public abstract Image Apply(Image image, Numerics.Rectangle targetLocation = default(Numerics.Rectangle));
 
         /// <summary>

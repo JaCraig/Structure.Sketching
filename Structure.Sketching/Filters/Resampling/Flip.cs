@@ -44,6 +44,12 @@ namespace Structure.Sketching.Filters.Resampling
         /// <value>The direction.</value>
         public FlipDirection Direction { get; set; }
 
+        /// <summary>
+        /// Gets the matrix.
+        /// </summary>
+        /// <param name="image">The image.</param>
+        /// <param name="targetLocation">The target location.</param>
+        /// <returns>The matrix used for the transformation</returns>
         protected override Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
         {
             float XScale = 1f;

@@ -14,36 +14,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using Structure.Sketching.Numerics.Interfaces;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters
+namespace Structure.Sketching.Filters.Effects
 {
     /// <summary>
-    /// Equalizes of an image
+    /// Adds randomization to an image
     /// </summary>
     /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class Equalize : IFilter
+    public class Noise : IFilter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Equalize"/> class.
+        /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
-        /// <param name="histogram">The histogram.</param>
-        public Equalize(IHistogram histogram = null)
+        /// <param name="amount">The amount of potential randomization (0 to 1).</param>
+        public Noise(byte amount)
         {
-            Histogram = histogram ?? new RGBHistogram();
+            Amount = amount;
         }
 
         /// <summary>
-        /// Gets or sets the histogram.
+        /// Gets or sets the amount.
         /// </summary>
-        /// <value>
-        /// The histogram.
-        /// </value>
-        private IHistogram Histogram { get; set; }
+        /// <value>The amount.</value>
+        public byte Amount { get; set; }
 
         /// <summary>
         /// Applies the filter to the specified image.
@@ -54,25 +50,25 @@ namespace Structure.Sketching.Filters
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            Histogram.LoadImage(image)
-                     .Equalize();
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
                 {
-                    byte* TargetPointer2 = TargetPointer;
+                    byte* OutputPointer = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        var TempR = *TargetPointer2;
-                        var TempG = *(TargetPointer2 + 1);
-                        var TempB = *(TargetPointer2 + 2);
-                        var ResultColor = Histogram.EqualizeColor(new Color(TempR, TempG, TempB));
-                        (*TargetPointer2) = ResultColor.Red;
-                        ++TargetPointer2;
-                        (*TargetPointer2) = ResultColor.Green;
-                        ++TargetPointer2;
-                        (*TargetPointer2) = ResultColor.Blue;
-                        TargetPointer2 += 2;
+                        int R = (*OutputPointer) + Random.ThreadSafeNext(-Amount, Amount);
+                        int G = *(OutputPointer + 1) + Random.ThreadSafeNext(-Amount, Amount);
+                        int B = *(OutputPointer + 2) + Random.ThreadSafeNext(-Amount, Amount);
+                        R = R < 0 ? 0 : R > 255 ? 255 : R;
+                        G = G < 0 ? 0 : G > 255 ? 255 : G;
+                        B = B < 0 ? 0 : B > 255 ? 255 : B;
+                        (*OutputPointer) = (byte)R;
+                        ++OutputPointer;
+                        (*OutputPointer) = (byte)G;
+                        ++OutputPointer;
+                        (*OutputPointer) = (byte)B;
+                        OutputPointer += 2;
                     }
                 }
             });

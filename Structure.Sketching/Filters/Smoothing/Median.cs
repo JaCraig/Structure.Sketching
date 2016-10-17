@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters.Morphology
+namespace Structure.Sketching.Filters.Smoothing
 {
     /// <summary>
     /// Medians an image

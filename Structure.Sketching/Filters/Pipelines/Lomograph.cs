@@ -16,6 +16,7 @@ limitations under the License.
 
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.ColorMatrix;
+using Structure.Sketching.Filters.Overlays;
 using Structure.Sketching.Filters.Pipelines.BaseClasses;
 
 namespace Structure.Sketching.Filters.Pipelines

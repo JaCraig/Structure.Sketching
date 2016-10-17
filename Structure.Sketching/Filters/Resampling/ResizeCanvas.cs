@@ -19,7 +19,7 @@ using Structure.Sketching.Filters.Resampling.Enums;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters
+namespace Structure.Sketching.Filters.Resampling
 {
     /// <summary>
     /// Resizes the canvas

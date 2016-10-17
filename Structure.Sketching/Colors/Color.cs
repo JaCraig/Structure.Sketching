@@ -163,7 +163,7 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color Average(Color color1, Color color2)
         {
-            return (color1 + color2) / 2;
+            return (color1 + color2) / (byte)2;
         }
 
         /// <summary>
@@ -220,9 +220,7 @@ namespace Structure.Sketching.Colors
         /// Performs an implicit conversion from <see cref="Color"/> to <see cref="Vector4"/>.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Vector4(Color color)
         {
             return new Vector4(color.r / 255f, color.g / 255f, color.b / 255f, color.a / 255f);
@@ -272,7 +270,7 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color operator !(Color color)
         {
-            return 255 - color;
+            return (byte)255 - color;
         }
 
         /// <summary>

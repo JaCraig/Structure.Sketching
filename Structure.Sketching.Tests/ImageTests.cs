@@ -14,18 +14,6 @@ namespace Structure.Sketching.Tests
 
         public string SecondImage => "./TestImages/Formats/Bmp/Car.bmp";
 
-        public static readonly TheoryData<string, Func<Image, Image, Image>> ArithmaticOperations = new TheoryData<string, Func<Image, Image, Image>>
-        {
-            {"Add",(x,y)=>x+y },
-            {"And",(x,y)=>x&y },
-            {"Division",(x,y)=>x/y },
-            {"Modulo",(x,y)=>x%y },
-            {"Multiplication",(x,y)=>x*y },
-            {"OR",(x,y)=>x|y },
-            {"Subtract",(x,y)=>x-y },
-            {"XOR",(x,y)=>x^y }
-        };
-
         public static readonly TheoryData<string, Func<Image, int, Image>, int> ShiftOperations = new TheoryData<string, Func<Image, int, Image>, int>
         {
             {"ShiftLeft",(x,y)=>x<<y,128 },
@@ -45,25 +33,6 @@ namespace Structure.Sketching.Tests
             Assert.Equal(1, TempImage.Height);
             Assert.Equal(1, TempImage.PixelRatio);
             Assert.Null(TempImage.Pixels);
-        }
-
-        [Theory]
-        [MemberData("ArithmaticOperations")]
-        public void CheckOperators(string name, Func<Image, Image, Image> operation)
-        {
-            foreach (var file in Files)
-            {
-                string outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
-                var TestImage = new Image(file);
-                var TestImage2 = new Image(SecondImage);
-                var ResultImage = operation(TestImage, TestImage2);
-                ResultImage.Save(OutputDirectory + outputFileName);
-            }
-            foreach (string file in Files)
-            {
-                string outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
-                Assert.True(CheckFileCorrect(ExpectedDirectory + Path.GetFileName(outputFileName), OutputDirectory + Path.GetFileName(outputFileName)), outputFileName);
-            }
         }
 
         [Theory]

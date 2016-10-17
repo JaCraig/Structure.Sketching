@@ -19,7 +19,7 @@ using Structure.Sketching.Filters.Convolution;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 
-namespace Structure.Sketching.Filters.Morphology
+namespace Structure.Sketching.Filters.Sharpening
 {
     /// <summary>
     /// Does an unsharp filter on an image
@@ -28,7 +28,7 @@ namespace Structure.Sketching.Filters.Morphology
     public class Unsharp : IFilter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Unsharp" /> class.
+        /// Initializes a new instance of the <see cref="Unsharp"/> class.
         /// </summary>
         /// <param name="size">The size.</param>
         /// <param name="constant">The constant to scale by (usually 0.2 to 0.7).</param>
@@ -41,17 +41,13 @@ namespace Structure.Sketching.Filters.Morphology
         /// <summary>
         /// Gets or sets the constant.
         /// </summary>
-        /// <value>
-        /// The constant.
-        /// </value>
+        /// <value>The constant.</value>
         public float Constant { get; set; }
 
         /// <summary>
         /// Gets or sets the size.
         /// </summary>
-        /// <value>
-        /// The size.
-        /// </value>
+        /// <value>The size.</value>
         public int Size { get; set; }
 
         /// <summary>
