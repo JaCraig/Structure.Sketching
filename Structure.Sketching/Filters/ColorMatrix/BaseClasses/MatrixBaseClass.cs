@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Numerics;
@@ -59,7 +60,7 @@ namespace Structure.Sketching.Filters.ColorMatrix.BaseClasses
                     byte* pointer2 = pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        var TempVector = Matrix * pointer2;
+                        var TempVector = Matrix * new Color(*pointer2, *(pointer2 + 1), *(pointer2 + 2), *(pointer2 + 3));
                         TempVector = Vector4.Clamp(TempVector, Vector4.Zero, Vector4.One) * 255f;
                         *pointer2 = (byte)TempVector.X;
                         ++pointer2;

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using System;
 using System.Globalization;
 using System.Numerics;
@@ -488,12 +489,12 @@ namespace Structure.Sketching.Numerics
         /// <param name="value2">The vector</param>
         /// <returns>The resulting vector</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe Vector4 operator *(Matrix5x5 value1, byte* value2)
+        public static unsafe Vector4 operator *(Matrix5x5 value1, Color value2)
         {
-            float r = *value2 / 255f;
-            float g = *(value2 + 1) / 255f;
-            float b = *(value2 + 2) / 255f;
-            float a = *(value2 + 3) / 255f;
+            float r = value2.Red / 255f;
+            float g = value2.Green / 255f;
+            float b = value2.Blue / 255f;
+            float a = value2.Alpha / 255f;
             return new Vector4(r * value1.M11 + g * value1.M21 + b * value1.M31 + a * value1.M41 + value1.M51,
                                 r * value1.M12 + g * value1.M22 + b * value1.M32 + a * value1.M42 + value1.M52,
                                 r * value1.M13 + g * value1.M23 + b * value1.M33 + a * value1.M43 + value1.M53,
