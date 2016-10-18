@@ -10,7 +10,7 @@ namespace Structure.Sketching.Benchmarks.Filters
         [Benchmark(Description = "Structure.Sketching Resize")]
         public void CropStructureSketching()
         {
-            var TestImage = new Image(2000, 2000);
+            var TestImage = new Sketching.Image(2000, 2000);
             var Filter = new Sketching.Filters.Resampling.Resize(400, 400, Sketching.Filters.Resampling.Enums.ResamplingFiltersAvailable.NearestNeighbor);
             Filter.Apply(TestImage);
         }

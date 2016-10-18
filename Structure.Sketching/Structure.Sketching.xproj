@@ -6,7 +6,7 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>7ff04d8b-840d-4115-b9c8-ca98103bee69</ProjectGuid>
+    <ProjectGuid>0b0d6ec2-348d-4173-9715-8a293e0d49ac</ProjectGuid>
     <RootNamespace>Structure.Sketching</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>

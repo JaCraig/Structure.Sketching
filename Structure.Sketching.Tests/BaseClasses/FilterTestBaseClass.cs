@@ -1,11 +1,10 @@
-﻿using Structure.Sketching.Filters.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Xunit;
 
 namespace Structure.Sketching.Tests.BaseClasses
 {
-    [Collection("FilterCollection")]
+    //[Collection("FilterCollection")]
     public abstract class FilterTestBaseClass : TestBaseClass
     {
         public static readonly List<string> Files = new List<string>
@@ -17,7 +16,7 @@ namespace Structure.Sketching.Tests.BaseClasses
             //"./TestImages/Formats/Png/blur.png",
         };
 
-        protected void CheckCorrect(string name, IFilter filter, Sketching.Numerics.Rectangle target)
+        protected void CheckCorrect(string name, Structure.Sketching.Filters.Interfaces.IFilter filter, Sketching.Numerics.Rectangle target)
         {
             foreach (var file in Files)
             {

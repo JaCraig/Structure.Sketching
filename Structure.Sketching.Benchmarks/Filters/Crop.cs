@@ -16,7 +16,7 @@ namespace Structure.Sketching.Benchmarks.Filters
         public void CropStructureSketching()
         {
             var TestImage = new Image(Width, Height, new byte[Width * Height * 4]);
-            var CropFilter = new Sketching.Filters.Crop();
+            var CropFilter = new Sketching.Filters.Resampling.Crop();
             CropFilter.Apply(TestImage, new Numerics.Rectangle(0, 0, Count, Count));
         }
 
