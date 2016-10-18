@@ -1,6 +1,8 @@
 # Structure.Sketching
 
-[![Build status](https://ci.appveyor.com/api/projects/status/2v806lb18724mr1t?svg=true)](https://ci.appveyor.com/project/JaCraig/structure-sketching)
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/2v806lb18724mr1t?svg=true)](https://ci.appveyor.com/project/JaCraig/structure-sketching)
+
+[![Linux Build Status](https://travis-ci.org/JaCraig/Structure.Sketching.svg?branch=master)](https://travis-ci.org/JaCraig/Structure.Sketching)
 
 Structure.Sketching is an image processing library for use with .Net Core and .Net 4.6. Since System.Drawing is not really a thing in .Net Core there was a need for a very simple image processing library. This library is in response to that fact and supports .Net Core, .Net 4.6, Mono, and UWP. While currently in beta, the library is fairly usable at this stage. The namespaces may change for individual classes as it is cleaned up for production but otherwise it should be fairly safe to use.
 
