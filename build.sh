@@ -11,9 +11,13 @@ fi
 
 dotnet restore
 
-dotnet test ./Structure.Sketching.Tests/Structure.Sketching.Tests.xproj -c Release -f netcoreapp1.1
+cd ./Structure.Sketching.Tests
+
+dotnet test -c Release -f netcoreapp1.1
+
+cd ..
 
 revision=${TRAVIS_JOB_ID:=1}  
 revision=$(printf "%04d" $revision) 
 
-dotnet pack ./Structure.Sketching/Structure.Sketching.csproj -c Release -o ./artifacts --version-suffix=$revision  
+dotnet pack ./Structure.Sketching -c Release -o ./artifacts --version-suffix=$revision  

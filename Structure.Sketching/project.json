@@ -9,6 +9,9 @@
       "Image Picture Gif Jpg Jpeg Bitmap Png Processing"
     ]
   },
+  "buildOptions": {
+    "allowUnsafe": true
+  },
   "supports": {
   },
   "dependencies": {
