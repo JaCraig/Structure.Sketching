@@ -35,22 +35,49 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
         public unsafe void ReadScanline(byte[] scanline, byte[] pixels, Header header, int row)
         {
             scanline = scanline.ExpandArray(header.BitDepth);
-            fixed (byte* ScanlinePointer = &scanline[0])
+            int BytesPerPixel = (header.BitDepth * 4) / 8;
+            int BytesPerChannel = header.BitDepth / 8;
+
+            fixed (byte* PixelPointer = &pixels[row * header.Width * 4])
             {
-                byte* ScanlinePointer2 = ScanlinePointer;
-                for (int x = 0; x < scanline.Length; x += 4)
+                byte* PixelPointer2 = PixelPointer;
+                fixed (byte* ScanlinePointer = &scanline[0])
                 {
-                    int Offset = ((row * header.Width) + (x >> 2)) * 4;
-                    pixels[Offset] = *ScanlinePointer2;
-                    ++ScanlinePointer2;
-                    pixels[Offset + 1] = *ScanlinePointer2;
-                    ++ScanlinePointer2;
-                    pixels[Offset + 2] = *ScanlinePointer2;
-                    ++ScanlinePointer2;
-                    pixels[Offset + 3] = *ScanlinePointer2;
-                    ++ScanlinePointer2;
+                    byte* ScanlinePointer2 = ScanlinePointer;
+                    for (int x = 0; x < scanline.Length; x += BytesPerPixel)
+                    {
+                        *PixelPointer2 = *ScanlinePointer2;
+                        ++PixelPointer2;
+                        ScanlinePointer2 += BytesPerChannel;
+                        *PixelPointer2 = *ScanlinePointer2;
+                        ++PixelPointer2;
+                        ScanlinePointer2 += BytesPerChannel;
+                        *PixelPointer2 = *ScanlinePointer2;
+                        ++PixelPointer2;
+                        ScanlinePointer2 += BytesPerChannel;
+                        *PixelPointer2 = *ScanlinePointer2;
+                        ++PixelPointer2;
+                        ScanlinePointer2 += BytesPerChannel;
+                    }
                 }
             }
+
+            //fixed (byte* ScanlinePointer = &scanline[0])
+            //{
+            //    byte* ScanlinePointer2 = ScanlinePointer;
+            //    for (int x = 0; x < scanline.Length; x += BytesPerPixel)
+            //    {
+            //        int Offset = ((row * header.Width) + (x >> 2)) * 4;
+            //        pixels[Offset] = *ScanlinePointer2;
+            //        ++ScanlinePointer2;
+            //        pixels[Offset + 1] = *ScanlinePointer2;
+            //        ++ScanlinePointer2;
+            //        pixels[Offset + 2] = *ScanlinePointer2;
+            //        ++ScanlinePointer2;
+            //        pixels[Offset + 3] = *ScanlinePointer2;
+            //        ++ScanlinePointer2;
+            //    }
+            //}
         }
     }
 }

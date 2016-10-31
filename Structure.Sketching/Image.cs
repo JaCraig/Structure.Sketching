@@ -57,7 +57,8 @@ namespace Structure.Sketching
         {
             using (var Stream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                new Manager().Decode(Stream);
+                var TempImage = new Manager().Decode(Stream);
+                ReCreate(TempImage.Width, TempImage.Height, TempImage.Pixels);
             }
         }
 
