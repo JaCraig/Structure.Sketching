@@ -14,7 +14,6 @@
 		<copyright>Copyright 2016</copyright>
 		<tags>Image Picture Gif Jpg Jpeg Bitmap Png Processing System.Drawing</tags>
 		<dependencies>
-			<dependency id="Microsoft.NETCore.Portable.Compatibility" version="1.0.1" />
 			<dependency id="NETStandard.Library" version="1.6.0" />
 			<dependency id="System.Numerics.Vectors" version="4.1.1" />
 			<dependency id="System.Threading.Tasks.Parallel" version="4.0.1" />
