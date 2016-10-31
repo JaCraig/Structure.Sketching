@@ -54,8 +54,11 @@ namespace Structure.Sketching
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         public Image(string fileName)
-            : this(File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
         {
+            using (var Stream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                new Manager().Decode(Stream);
+            }
         }
 
         /// <summary>
@@ -65,7 +68,6 @@ namespace Structure.Sketching
         public Image(Stream stream)
             : this(new Manager().Decode(stream))
         {
-            stream.Dispose();
         }
 
         /// <summary>

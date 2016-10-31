@@ -7,3 +7,4 @@ Structure.Sketching.Benchmarks/BenchmarkDotNet.Artifacts/*
 *.nupkg
 */project.lock.json
 */project.fragment.lock.json
+packages/*
