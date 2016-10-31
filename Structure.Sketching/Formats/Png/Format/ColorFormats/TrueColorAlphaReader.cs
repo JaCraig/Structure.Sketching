@@ -61,23 +61,6 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
                     }
                 }
             }
-
-            //fixed (byte* ScanlinePointer = &scanline[0])
-            //{
-            //    byte* ScanlinePointer2 = ScanlinePointer;
-            //    for (int x = 0; x < scanline.Length; x += BytesPerPixel)
-            //    {
-            //        int Offset = ((row * header.Width) + (x >> 2)) * 4;
-            //        pixels[Offset] = *ScanlinePointer2;
-            //        ++ScanlinePointer2;
-            //        pixels[Offset + 1] = *ScanlinePointer2;
-            //        ++ScanlinePointer2;
-            //        pixels[Offset + 2] = *ScanlinePointer2;
-            //        ++ScanlinePointer2;
-            //        pixels[Offset + 3] = *ScanlinePointer2;
-            //        ++ScanlinePointer2;
-            //    }
-            //}
         }
     }
 }

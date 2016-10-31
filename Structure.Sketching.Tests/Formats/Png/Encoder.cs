@@ -23,6 +23,7 @@ namespace Structure.Sketching.Tests.Formats.Png
         [Fact]
         public void Encode()
         {
+            new DirectoryInfo("./TestOutput/Formats/Png/").Create();
             using (var TempFile = File.OpenRead(InputFileName))
             {
                 var TempDecoder = new Structure.Sketching.Formats.Png.Decoder();
