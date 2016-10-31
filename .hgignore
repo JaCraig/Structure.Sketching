@@ -10,3 +10,5 @@ Structure.Sketching.Benchmarks/BenchmarkDotNet.Artifacts/*
 packages/*
 NetCoreTest/result.jpg
 NetCoreTest/result.gif
+NetCoreTest/result.png
+NetCoreTest/result.bmp
