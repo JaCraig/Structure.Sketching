@@ -8,3 +8,5 @@ Structure.Sketching.Benchmarks/BenchmarkDotNet.Artifacts/*
 */project.lock.json
 */project.fragment.lock.json
 packages/*
+NetCoreTest/result.jpg
+NetCoreTest/result.gif

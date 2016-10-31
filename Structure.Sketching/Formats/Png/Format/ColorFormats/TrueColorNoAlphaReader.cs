@@ -36,23 +36,26 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
         {
             scanline = scanline.ExpandArray(header.BitDepth);
 
+            int BytesPerPixel = (header.BitDepth * 3) / 8;
+            int BytesPerChannel = header.BitDepth / 8;
+
             fixed (byte* PixelPointer = &pixels[row * header.Width * 4])
             {
                 byte* PixelPointer2 = PixelPointer;
                 fixed (byte* ScanlinePointer = &scanline[0])
                 {
                     byte* ScanlinePointer2 = ScanlinePointer;
-                    for (int x = 0; x < scanline.Length; x += 3)
+                    for (int x = 0; x < scanline.Length; x += BytesPerPixel)
                     {
                         *PixelPointer2 = *ScanlinePointer2;
                         ++PixelPointer2;
-                        ++ScanlinePointer2;
+                        ScanlinePointer2 += BytesPerChannel;
                         *PixelPointer2 = *ScanlinePointer2;
                         ++PixelPointer2;
-                        ++ScanlinePointer2;
+                        ScanlinePointer2 += BytesPerChannel;
                         *PixelPointer2 = *ScanlinePointer2;
                         ++PixelPointer2;
-                        ++ScanlinePointer2;
+                        ScanlinePointer2 += BytesPerChannel;
                         *PixelPointer2 = 255;
                         ++PixelPointer2;
                     }
