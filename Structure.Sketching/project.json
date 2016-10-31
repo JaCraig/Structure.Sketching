@@ -15,7 +15,6 @@
   "supports": {
   },
   "dependencies": {
-    "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
     "NETStandard.Library": "1.6.0",
     "System.Numerics.Vectors": "4.1.1",
     "System.Threading.Tasks.Parallel": "4.0.1"
