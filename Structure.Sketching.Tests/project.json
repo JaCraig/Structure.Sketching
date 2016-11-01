@@ -31,8 +31,7 @@
         },
         "Structure.Sketching": {
           "target": "project"
-        }
-      },
+        }      },
       "imports": [
         "dnxcore50",
         "portable-net45+win8"

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Formats.Png.Format.Enums;
 using Structure.Sketching.Formats.Png.Format.Helpers;
 using System;
 
@@ -48,75 +49,66 @@ namespace Structure.Sketching.Formats.Png.Format
             Width = width;
             Height = height;
             BitDepth = bitDepth;
-            ColorType = colorType;
+            ColorType = (ColorType)colorType;
             CompressionMethod = compressionMethod;
             FilterMethod = filterMethod;
             InterlaceMethod = interlaceMethod;
+            BytesPerPixel = CalculateBytesPerPixel();
         }
 
         /// <summary>
         /// Gets or sets the bit depth.
         /// </summary>
-        /// <value>
-        /// The bit depth.
-        /// </value>
+        /// <value>The bit depth.</value>
         public byte BitDepth { get; set; }
+
+        /// <summary>
+        /// Gets or sets the bytes per pixel.
+        /// </summary>
+        /// <value>The bytes per pixel.</value>
+        public int BytesPerPixel { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the color.
         /// </summary>
-        /// <value>
-        /// The type of the color.
-        /// </value>
-        public byte ColorType { get; set; }
+        /// <value>The type of the color.</value>
+        public ColorType ColorType { get; set; }
 
         /// <summary>
         /// Gets or sets the compression method.
         /// </summary>
-        /// <value>
-        /// The compression method.
-        /// </value>
+        /// <value>The compression method.</value>
         public byte CompressionMethod { get; set; }
 
         /// <summary>
         /// Gets or sets the filter method.
         /// </summary>
-        /// <value>
-        /// The filter method.
-        /// </value>
+        /// <value>The filter method.</value>
         public byte FilterMethod { get; set; }
 
         /// <summary>
         /// Gets or sets the height.
         /// </summary>
-        /// <value>
-        /// The height.
-        /// </value>
+        /// <value>The height.</value>
         public int Height { get; set; }
 
         /// <summary>
         /// Gets or sets the interlace method.
         /// </summary>
-        /// <value>
-        /// The interlace method.
-        /// </value>
+        /// <value>The interlace method.</value>
         public byte InterlaceMethod { get; set; }
 
         /// <summary>
         /// Gets or sets the width.
         /// </summary>
-        /// <value>
-        /// The width.
-        /// </value>
+        /// <value>The width.</value>
         public int Width { get; set; }
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="Header"/> to <see cref="Chunk"/>.
         /// </summary>
         /// <param name="header">The header.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Chunk(Header header)
         {
             var TempData = new byte[13];
@@ -127,7 +119,7 @@ namespace Structure.Sketching.Formats.Png.Format
             Array.Copy(WidthBytes, TempData, WidthBytes.Length);
             Array.Copy(HeightBytes, 0, TempData, WidthBytes.Length, HeightBytes.Length);
             TempData[8] = header.BitDepth;
-            TempData[9] = header.ColorType;
+            TempData[9] = (byte)header.ColorType;
             TempData[10] = header.CompressionMethod;
             TempData[11] = header.FilterMethod;
             TempData[12] = header.InterlaceMethod;
@@ -138,9 +130,7 @@ namespace Structure.Sketching.Formats.Png.Format
         /// Performs an implicit conversion from <see cref="Chunk"/> to <see cref="Header"/>.
         /// </summary>
         /// <param name="chunk">The chunk.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Header(Chunk chunk)
         {
             Array.Reverse(chunk.Data, 0, 4);
@@ -152,6 +142,27 @@ namespace Structure.Sketching.Formats.Png.Format
                 chunk.Data[10],
                 chunk.Data[11],
                 chunk.Data[12]);
+        }
+
+        /// <summary>
+        /// Calculates the bytes per pixel.
+        /// </summary>
+        /// <returns>The bytes per pixel</returns>
+        private int CalculateBytesPerPixel()
+        {
+            switch (ColorType)
+            {
+                case ColorType.Greyscale:
+                case ColorType.Palette:
+                    return 1;
+
+                case ColorType.GreyscaleWithAlpha:
+                    return 2;
+
+                case ColorType.TrueColor:
+                    return 3;
+            }
+            return 4;
         }
     }
 }

@@ -16,6 +16,9 @@ limitations under the License.
 
 using Structure.Sketching.Formats.Png.Format.ColorFormats;
 using Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces;
+using Structure.Sketching.Formats.Png.Format.Enums;
+using Structure.Sketching.Formats.Png.Format.Filters;
+using Structure.Sketching.Formats.Png.Format.Filters.Interfaces;
 using Structure.Sketching.Formats.Png.Format.Helpers;
 using Structure.Sketching.Formats.Png.Format.Helpers.ZLib;
 using System;
@@ -46,13 +49,21 @@ namespace Structure.Sketching.Formats.Png.Format
         public Data(byte[] imageData)
         {
             ImageData = imageData;
-            ColorTypes = new Dictionary<int, ColorTypeInformation>
+            ColorTypes = new Dictionary<ColorType, ColorTypeInformation>
             {
-                [0] = new ColorTypeInformation(1, new[] { 1, 2, 4, 8 }, (x, y) => new GreyscaleNoAlphaReader()),
-                [2] = new ColorTypeInformation(3, new[] { 8 }, (x, y) => new TrueColorNoAlphaReader()),
-                [3] = new ColorTypeInformation(1, new[] { 1, 2, 4, 8 }, (x, y) => new PaletteReader(x, y)),
-                [4] = new ColorTypeInformation(2, new[] { 8 }, (x, y) => new GreyscaleAlphaReader()),
-                [6] = new ColorTypeInformation(4, new[] { 8 }, (x, y) => new TrueColorAlphaReader())
+                [ColorType.Greyscale] = new ColorTypeInformation(1, new[] { 1, 2, 4, 8 }, (x, y) => new GreyscaleNoAlphaReader()),
+                [ColorType.TrueColor] = new ColorTypeInformation(3, new[] { 8 }, (x, y) => new TrueColorNoAlphaReader()),
+                [ColorType.Palette] = new ColorTypeInformation(1, new[] { 1, 2, 4, 8 }, (x, y) => new PaletteReader(x, y)),
+                [ColorType.GreyscaleWithAlpha] = new ColorTypeInformation(2, new[] { 8 }, (x, y) => new GreyscaleAlphaReader()),
+                [ColorType.TrueColorWithAlpha] = new ColorTypeInformation(4, new[] { 8 }, (x, y) => new TrueColorAlphaReader())
+            };
+            Filters = new Dictionary<FilterType, IScanFilter>
+            {
+                [FilterType.Average] = new AverageFilter(),
+                [FilterType.None] = new NoFilter(),
+                [FilterType.Paeth] = new PaethFilter(),
+                [FilterType.Sub] = new SubFilter(),
+                [FilterType.Up] = new UpFilter()
             };
         }
 
@@ -66,7 +77,13 @@ namespace Structure.Sketching.Formats.Png.Format
         /// Gets or sets the color types.
         /// </summary>
         /// <value>The color types.</value>
-        private Dictionary<int, ColorTypeInformation> ColorTypes { get; set; }
+        private Dictionary<ColorType, ColorTypeInformation> ColorTypes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the filters.
+        /// </summary>
+        /// <value>The filters.</value>
+        private Dictionary<FilterType, IScanFilter> Filters { get; set; }
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="Data"/> to <see cref="Chunk"/>.
@@ -162,79 +179,41 @@ namespace Structure.Sketching.Formats.Png.Format
             return header.BitDepth >= 8 ? (colorTypeInformation.ScanlineFactor * header.BitDepth) / 8 : 1;
         }
 
-        /// <summary>
-        /// Paethes the predicator.
-        /// </summary>
-        /// <param name="left">The left.</param>
-        /// <param name="above">The above.</param>
-        /// <param name="upperLeft">The upper left.</param>
-        /// <returns>The predicted paeth...</returns>
-        private static byte PaethPredicator(byte left, byte above, byte upperLeft)
-        {
-            int p = left + above - upperLeft;
-            var pa = Math.Abs(p - left);
-            var pb = Math.Abs(p - above);
-            var pc = Math.Abs(p - upperLeft);
-            if (pa <= pb && pa <= pc)
-            {
-                return left;
-            }
-            if (pb <= pc)
-            {
-                return above;
-            }
-            return upperLeft;
-        }
-
         private static byte[] ToScanlines(Image image)
         {
             byte[] data = new byte[(image.Width * image.Height * 4) + image.Height];
             int RowLength = (image.Width * 4) + 1;
 
-            for (int y = 0; y < image.Height; ++y)
+            Parallel.For(0, image.Width, x =>
+              {
+                  int dataOffset = (x * 4) + 1;
+                  int PixelOffset = x * 4;
+                  data[dataOffset] = image.Pixels[PixelOffset];
+                  data[dataOffset + 1] = image.Pixels[PixelOffset + 1];
+                  data[dataOffset + 2] = image.Pixels[PixelOffset + 2];
+                  data[dataOffset + 3] = image.Pixels[PixelOffset + 3];
+                  data[0] = 0;
+                  for (int y = 1; y < image.Height; ++y)
+                  {
+                      dataOffset = (y * RowLength) + (x * 4) + 1;
+                      PixelOffset = ((image.Width * y) + x) * 4;
+                      int AbovePixelOffset = ((image.Width * (y - 1)) + x) * 4;
+                      data[dataOffset] = (byte)(image.Pixels[PixelOffset] - image.Pixels[AbovePixelOffset]);
+                      data[dataOffset + 1] = (byte)(image.Pixels[PixelOffset + 1] - image.Pixels[AbovePixelOffset + 1]);
+                      data[dataOffset + 2] = (byte)(image.Pixels[PixelOffset + 2] - image.Pixels[AbovePixelOffset + 2]);
+                      data[dataOffset + 3] = (byte)(image.Pixels[PixelOffset + 3] - image.Pixels[AbovePixelOffset + 3]);
+                      data[y * RowLength] = 2;
+                  }
+              });
+
+            using (MemoryStream TempMemoryStream = new MemoryStream())
             {
-                var Compression = (byte)(y > 0 ? 2 : 0);
-                data[y * RowLength] = Compression;
-                Parallel.For(0, image.Width, x =>
-                {
-                    int dataOffset = (y * RowLength) + (x * 4) + 1;
-                    data[dataOffset] = image.Pixels[((image.Width * y) + x) * 4];
-                    data[dataOffset + 1] = image.Pixels[(((image.Width * y) + x) * 4) + 1];
-                    data[dataOffset + 2] = image.Pixels[(((image.Width * y) + x) * 4) + 2];
-                    data[dataOffset + 3] = image.Pixels[(((image.Width * y) + x) * 4) + 3];
-
-                    if (y > 0)
-                    {
-                        data[dataOffset] -= image.Pixels[((image.Width * (y - 1)) + x) * 4];
-                        data[dataOffset + 1] -= image.Pixels[(((image.Width * (y - 1)) + x) * 4) + 1];
-                        data[dataOffset + 2] -= image.Pixels[(((image.Width * (y - 1)) + x) * 4) + 2];
-                        data[dataOffset + 3] -= image.Pixels[(((image.Width * (y - 1)) + x) * 4) + 3];
-                    }
-                });
-            }
-
-            byte[] buffer;
-            int BufferLength;
-
-            MemoryStream TempMemoryStream = null;
-            try
-            {
-                TempMemoryStream = new MemoryStream();
-
                 using (ZlibDeflateStream TempDeflateStream = new ZlibDeflateStream(TempMemoryStream, 6))
                 {
                     TempDeflateStream.Write(data, 0, data.Length);
                 }
-
-                BufferLength = (int)TempMemoryStream.Length;
-                buffer = TempMemoryStream.ToArray();
+                return TempMemoryStream.ToArray();
             }
-            finally
-            {
-                TempMemoryStream?.Dispose();
-            }
-
-            return buffer;
         }
 
         /// <summary>
@@ -254,66 +233,23 @@ namespace Structure.Sketching.Formats.Png.Format
 
             byte[] LastScanline = new byte[ScanlineLength];
             byte[] CurrentScanline = new byte[ScanlineLength];
-            int Filter = 0, Column = -1, Row = 0;
+            byte[] Result = null;
 
             using (InflateStream CompressedStream = new InflateStream(dataStream))
             {
-                int ReadByte;
-                while ((ReadByte = CompressedStream.ReadByte()) >= 0)
+                using (MemoryStream DecompressedStream = new MemoryStream())
                 {
-                    if (Column == -1)
+                    CompressedStream.CopyTo(DecompressedStream);
+                    DecompressedStream.Flush();
+                    byte[] DecompressedArray = DecompressedStream.ToArray();
+                    for (int y = 0, Column = 0; y < header.Height; ++y, Column += (ScanlineLength + 1))
                     {
-                        Filter = ReadByte;
-                        ++Column;
-                    }
-                    else
-                    {
-                        CurrentScanline[Column] = (byte)ReadByte;
-                        byte a;
-                        byte b;
-                        byte c;
-                        if (Column >= ScanlineStep)
-                        {
-                            a = CurrentScanline[Column - ScanlineStep];
-                            c = LastScanline[Column - ScanlineStep];
-                        }
-                        else
-                        {
-                            a = 0;
-                            c = 0;
-                        }
-
-                        b = LastScanline[Column];
-                        switch (Filter)
-                        {
-                            case 1:
-                                CurrentScanline[Column] = (byte)(CurrentScanline[Column] + a);
-                                break;
-
-                            case 2:
-                                CurrentScanline[Column] = (byte)(CurrentScanline[Column] + b);
-                                break;
-
-                            case 3:
-                                CurrentScanline[Column] = (byte)(CurrentScanline[Column] + (byte)((a + b) / 2));
-                                break;
-
-                            case 4:
-                                CurrentScanline[Column] = (byte)(CurrentScanline[Column] + PaethPredicator(a, b, c));
-                                break;
-                        }
-
-                        ++Column;
-
-                        if (Column == ScanlineLength)
-                        {
-                            colorReader.ReadScanline(CurrentScanline, pixels, header, Row);
-                            ++Row;
-                            Column = -1;
-                            var Holder = CurrentScanline;
-                            CurrentScanline = LastScanline;
-                            LastScanline = Holder;
-                        }
+                        Array.Copy(DecompressedArray, Column + 1, CurrentScanline, 0, ScanlineLength);
+                        if (DecompressedArray[Column] < 0)
+                            break;
+                        Result = Filters[(FilterType)DecompressedArray[Column]].Decode(CurrentScanline, LastScanline, ScanlineStep);
+                        colorReader.ReadScanline(Result, pixels, header, y);
+                        Array.Copy(CurrentScanline, LastScanline, ScanlineLength);
                     }
                 }
             }

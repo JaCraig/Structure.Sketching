@@ -272,10 +272,19 @@
     <Compile Include="Formats\Png\Format\ColorFormats\TrueColorAlphaReader.cs" />
     <Compile Include="Formats\Png\Format\ColorFormats\TrueColorNoAlphaReader.cs" />
     <Compile Include="Formats\Png\Format\Data.cs" />
+    <Compile Include="Formats\Png\Format\Enums\ColorType.cs" />
+    <Compile Include="Formats\Png\Format\Enums\FilterType.cs" />
     <Compile Include="Formats\Png\Format\Enums\PaletteType.cs" />
     <Compile Include="Formats\Png\Format\File.cs" />
     <Compile Include="Formats\Png\Format\FileEnd.cs" />
     <Compile Include="Formats\Png\Format\FileHeader.cs" />
+    <Compile Include="Formats\Png\Format\Filters\AverageFilter.cs" />
+    <Compile Include="Formats\Png\Format\Filters\BaseClasses\FilterBaseClass.cs" />
+    <Compile Include="Formats\Png\Format\Filters\Interfaces\IScanFilter.cs" />
+    <Compile Include="Formats\Png\Format\Filters\NoFilter.cs" />
+    <Compile Include="Formats\Png\Format\Filters\PaethFilter.cs" />
+    <Compile Include="Formats\Png\Format\Filters\SubFilter.cs" />
+    <Compile Include="Formats\Png\Format\Filters\UpFilter.cs" />
     <Compile Include="Formats\Png\Format\Header.cs" />
     <Compile Include="Formats\Png\Format\Helpers\Chunk.cs" />
     <Compile Include="Formats\Png\Format\Helpers\ChunkTypes.cs" />
@@ -313,7 +322,6 @@
     <Compile Include="Quantizers\Octree\OctreeQuantizer.cs" />
     <Compile Include="Quantizers\QuantizedImage.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
