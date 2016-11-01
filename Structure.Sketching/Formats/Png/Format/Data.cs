@@ -233,7 +233,6 @@ namespace Structure.Sketching.Formats.Png.Format
 
             byte[] LastScanline = new byte[ScanlineLength];
             byte[] CurrentScanline = new byte[ScanlineLength];
-            byte[] Result = null;
 
             using (InflateStream CompressedStream = new InflateStream(dataStream))
             {
@@ -247,7 +246,7 @@ namespace Structure.Sketching.Formats.Png.Format
                         Array.Copy(DecompressedArray, Column + 1, CurrentScanline, 0, ScanlineLength);
                         if (DecompressedArray[Column] < 0)
                             break;
-                        Result = Filters[(FilterType)DecompressedArray[Column]].Decode(CurrentScanline, LastScanline, ScanlineStep);
+                        byte[] Result = Filters[(FilterType)DecompressedArray[Column]].Decode(CurrentScanline, LastScanline, ScanlineStep);
                         colorReader.ReadScanline(Result, pixels, header, y);
                         Array.Copy(CurrentScanline, LastScanline, ScanlineLength);
                     }
