@@ -58,7 +58,8 @@ namespace Structure.Sketching.Formats.Bmp.Format
             [32] = new RGB32bit(),
             [24] = new RGB24bit(),
             [16] = new RGB16bit(),
-            [8] = new RGB8bit()
+            [8] = new RGB8bit(),
+            [4] = new RGB4bit()
         };
 
         /// <summary>

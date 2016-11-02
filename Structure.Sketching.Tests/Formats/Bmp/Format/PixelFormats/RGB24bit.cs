@@ -7,7 +7,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format.PixelFormats
 {
     public class RGB24bit : FormatBaseFixture
     {
-        public override string FileName => "./TestImages/Test24.bmp";
+        public override string FileName => "./TestImages/Format/Bmp/Test24.bmp";
         public override IPixelFormat Format => new Sketching.Formats.Bmp.Format.PixelFormats.RGB24bit();
 
         [Fact]

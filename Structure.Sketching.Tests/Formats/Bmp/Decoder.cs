@@ -7,10 +7,19 @@ namespace Structure.Sketching.Tests.Formats.Bmp
 {
     public class Decoder : FormatTestBase
     {
-        public override string ExpectedOutputFileName => "./ExpectedResults/EncodingTest.bmp";
-        public override string InputFileName => "./TestImages/EncodingTest.bmp";
+        public override string ExpectedDirectory => "./ExpectedResults/Formats/Bmp/Decoder/";
 
-        public override string OutputFileName => "./TestOutput/DecoderTest.bmp";
+        public override string InputDirectory => "./TestImages/Formats/Bmp/Decoder/";
+
+        public override string OutputDirectory => "./TestOutput/Formats/Bmp/Decoder/";
+
+        public static readonly TheoryData<string> InputFileNames = new TheoryData<string> {
+            {"Car.bmp"},
+            {"Test24.bmp"},
+            {"EncodingTest.bmp"},
+            {"Test8.bmp" },
+            {"Test4.bmp" }
+        };
 
         [Fact]
         public void CanDecodeByteArray()
@@ -42,7 +51,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp
         [Fact]
         public void Decode()
         {
-            using (var TempFile = File.OpenRead(InputFileName))
+            using (var TempFile = File.OpenRead("./TestImages/Formats/Bmp/EncodingTest.bmp"))
             {
                 var TempDecoder = new Structure.Sketching.Formats.Bmp.Decoder();
                 var TempImage = TempDecoder.Decode(TempFile);

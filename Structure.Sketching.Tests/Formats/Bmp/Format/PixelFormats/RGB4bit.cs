@@ -5,10 +5,10 @@ using Xunit;
 
 namespace Structure.Sketching.Tests.Formats.Bmp.Format.PixelFormats
 {
-    public class RGB16bit : FormatBaseFixture
+    public class RGB4bit : FormatBaseFixture
     {
-        public override string FileName => "./TestImages/Test16.bmp";
-        public override IPixelFormat Format => new Sketching.Formats.Bmp.Format.PixelFormats.RGB16bit();
+        public override string FileName => "./TestImages/Formats/Bmp/Test4.bmp";
+        public override IPixelFormat Format => new Sketching.Formats.Bmp.Format.PixelFormats.RGB4bit();
 
         [Fact]
         public void Decode()

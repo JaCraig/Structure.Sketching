@@ -1,23 +1,36 @@
 ﻿using Structure.Sketching.Tests.Formats.BaseClasses;
+using System.IO;
 using Xunit;
 
 namespace Structure.Sketching.Tests.Formats.Gif
 {
     public class GifFormat : FormatTestBase
     {
-        public override string ExpectedOutputFileName => "./ExpectedResults/Formats/Jpg/EncodingTest.bmp";
-        public override string InputFileName => "./TestImages/Formats/Gif/giphy.gif";
+        public override string ExpectedDirectory => "./ExpectedResults/Formats/Gif/";
 
-        public override string OutputFileName => "./TestOutput/Formats/Gif/BMPFormatTest.jpg";
+        public override string InputDirectory => "./TestImages/Formats/Gif/";
 
-        [Fact]
-        public void Test()
+        public override string OutputDirectory => "./TestOutput/Formats/Gif/";
+
+        public static readonly TheoryData<string> InputFileNames = new TheoryData<string> {
+            {"giphy.gif"},
+            {"rings.gif"}
+        };
+
+        [Theory]
+        [MemberData("InputFileNames")]
+        public void Encode(string fileName)
         {
-            new Image(InputFileName).Save(OutputFileName);
-            new Image("./TestImages/Formats/Gif/rings.gif").Save("./TestOutput/Formats/Gif/BMPFormatTest2.jpg");
-            new Animation("./TestImages/Formats/Gif/giphy.gif").Save("./TestOutput/Formats/Gif/BMPFormatTest2.jpg");
-            new Image("./TestImages/Formats/Gif/rings.gif").Save("./TestOutput/Formats/Gif/rings.gif");
-            new Animation("./TestImages/Formats/Gif/giphy.gif").Save("./TestOutput/Formats/Gif/giphy.gif");
+            using (var TempFile = File.OpenRead(InputDirectory + fileName))
+            {
+                var ImageFormat = new Sketching.Formats.Gif.GifFormat();
+                var TempImage = ImageFormat.DecodeAnimation(TempFile);
+                using (var TempFile2 = File.OpenWrite(OutputDirectory + fileName))
+                {
+                    Assert.True(ImageFormat.Encode(new BinaryWriter(TempFile2), TempImage));
+                }
+            }
+            Assert.True(CheckFileCorrect(fileName));
         }
     }
 }

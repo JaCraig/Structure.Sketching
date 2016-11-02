@@ -197,6 +197,7 @@
     <Compile Include="Formats\Bmp\Format\PixelFormats\RGB16bit.cs" />
     <Compile Include="Formats\Bmp\Format\PixelFormats\RGB24bit.cs" />
     <Compile Include="Formats\Bmp\Format\PixelFormats\RGB32bit.cs" />
+    <Compile Include="Formats\Bmp\Format\PixelFormats\RGB4bit.cs" />
     <Compile Include="Formats\Bmp\Format\PixelFormats\RGB8bit.cs" />
     <Compile Include="Formats\Enums\FileFormat.cs" />
     <Compile Include="Formats\Gif\Decoder.cs" />

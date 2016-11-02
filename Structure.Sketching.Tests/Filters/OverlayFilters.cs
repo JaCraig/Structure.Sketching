@@ -17,7 +17,7 @@ namespace Structure.Sketching.Tests.Filters
 
         public static readonly TheoryData<string, IFilter, Rectangle> Filters = new TheoryData<string, IFilter, Rectangle>
         {
-            { "Blend-50", new Blend(new Resize(500,500,ResamplingFiltersAvailable.Bilinear).Apply(new Image("./TestImages/EncodingTest.bmp")),0.5f),new Rectangle(100,100,500,500) },
+            { "Blend-50", new Blend(new Resize(500,500,ResamplingFiltersAvailable.Bilinear).Apply(new Image("./TestImages/Formats/Bmp/EncodingTest.bmp")),0.5f),new Rectangle(100,100,500,500) },
             { "Glow",new Glow(Color.Aqua,0.4f,0.4f),default(Rectangle) },
             { "Vignette",new Vignette(Color.Aqua,0.4f,0.4f),default(Rectangle) }
         };

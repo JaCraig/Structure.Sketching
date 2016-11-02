@@ -6,10 +6,19 @@ namespace Structure.Sketching.Tests.Formats.Png
 {
     public class Encoder : FormatTestBase
     {
-        public override string ExpectedOutputFileName => "./ExpectedResults/Formats/Png/Encoder-splash.png";
-        public override string InputFileName => "./TestImages/Formats/Png/splash.png";
+        public override string ExpectedDirectory => "./ExpectedResults/Formats/Png/Encoder/";
 
-        public override string OutputFileName => "./TestOutput/Formats/Png/Encoder-splash.png";
+        public override string InputDirectory => "./TestImages/Formats/Png/";
+
+        public override string OutputDirectory => "./TestOutput/Formats/Png/Encoder/";
+
+        public static readonly TheoryData<string> InputFileNames = new TheoryData<string> {
+            {"splash.png"},
+            {"48bit.png"},
+            {"blur.png"},
+            {"indexed.png"},
+            {"splashbw.png"}
+        };
 
         [Fact]
         public void CanEncode()
@@ -20,21 +29,21 @@ namespace Structure.Sketching.Tests.Formats.Png
             Assert.False(new Structure.Sketching.Formats.Png.Encoder().CanEncode("bmp.gif"));
         }
 
-        [Fact]
-        public void Encode()
+        [Theory]
+        [MemberData("InputFileNames")]
+        public void Encode(string fileName)
         {
-            new DirectoryInfo("./TestOutput/Formats/Png/").Create();
-            using (var TempFile = File.OpenRead(InputFileName))
+            using (var TempFile = File.OpenRead(InputDirectory + fileName))
             {
                 var TempDecoder = new Structure.Sketching.Formats.Png.Decoder();
                 var TempImage = TempDecoder.Decode(TempFile);
                 var TempEncoder = new Structure.Sketching.Formats.Png.Encoder();
-                using (var TempFile2 = File.OpenWrite(OutputFileName))
+                using (var TempFile2 = File.OpenWrite(OutputDirectory + fileName))
                 {
                     TempEncoder.Encode(new BinaryWriter(TempFile2), TempImage);
                 }
             }
-            Assert.True(CheckFileCorrect());
+            Assert.True(CheckFileCorrect(fileName));
         }
     }
 }

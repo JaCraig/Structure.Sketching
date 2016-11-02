@@ -7,10 +7,19 @@ namespace Structure.Sketching.Tests.Formats.Png
 {
     public class PngFormat : FormatTestBase
     {
-        public override string ExpectedOutputFileName => "./ExpectedResults/Formats/Png/splash.png";
-        public override string InputFileName => "./TestImages/Formats/Png/splash.png";
+        public override string ExpectedDirectory => "./ExpectedResults/Formats/Png/";
 
-        public override string OutputFileName => "./TestOutput/Formats/Png/splash.png";
+        public override string InputDirectory => "./TestImages/Formats/Png/";
+
+        public override string OutputDirectory => "./TestOutput/Formats/Png/";
+
+        public static readonly TheoryData<string> InputFileNames = new TheoryData<string> {
+            {"splash.png"},
+            {"48bit.png"},
+            {"blur.png"},
+            {"indexed.png"},
+            {"splashbw.png"}
+        };
 
         [Fact]
         public void CanDecodeByteArray()
@@ -71,7 +80,7 @@ namespace Structure.Sketching.Tests.Formats.Png
         [Fact]
         public void Decode()
         {
-            using (var TempFile = File.OpenRead(InputFileName))
+            using (var TempFile = File.OpenRead("./TestImages/Formats/Png/splash.png"))
             {
                 var ImageFormat = new Structure.Sketching.Formats.Png.PngFormat();
                 var TempImage = ImageFormat.Decode(TempFile);
@@ -82,20 +91,20 @@ namespace Structure.Sketching.Tests.Formats.Png
             }
         }
 
-        [Fact]
-        public void Encode()
+        [Theory]
+        [MemberData("InputFileNames")]
+        public void Encode(string fileName)
         {
-            new DirectoryInfo("./TestOutput/Formats/Png/").Create();
-            using (var TempFile = File.OpenRead(InputFileName))
+            using (var TempFile = File.OpenRead(InputDirectory + fileName))
             {
                 var ImageFormat = new Sketching.Formats.Png.PngFormat();
                 var TempImage = ImageFormat.Decode(TempFile);
-                using (var TempFile2 = File.OpenWrite(OutputFileName))
+                using (var TempFile2 = File.OpenWrite(OutputDirectory + fileName))
                 {
                     Assert.True(ImageFormat.Encode(new BinaryWriter(TempFile2), TempImage));
                 }
             }
-            Assert.True(CheckFileCorrect());
+            Assert.True(CheckFileCorrect(fileName));
         }
     }
 }

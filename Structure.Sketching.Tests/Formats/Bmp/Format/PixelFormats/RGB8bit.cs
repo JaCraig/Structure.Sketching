@@ -7,7 +7,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format.PixelFormats
 {
     public class RGB8bit : FormatBaseFixture
     {
-        public override string FileName => "./TestImages/Test8.bmp";
+        public override string FileName => "./TestImages/Format/Bmp/Test8.bmp";
         public override IPixelFormat Format => new Sketching.Formats.Bmp.Format.PixelFormats.RGB8bit();
 
         [Fact]

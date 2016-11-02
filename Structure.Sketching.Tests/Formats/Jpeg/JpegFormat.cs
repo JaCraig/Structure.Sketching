@@ -1,22 +1,38 @@
 ﻿using Structure.Sketching.Tests.Formats.BaseClasses;
+using System.IO;
 using Xunit;
 
 namespace Structure.Sketching.Tests.Formats.Jpeg
 {
     public class JpegFormat : FormatTestBase
     {
-        public override string ExpectedOutputFileName => "./ExpectedResults/Formats/Jpg/EncodingTest.bmp";
-        public override string InputFileName => "./TestImages/Formats/Jpg/Calliphora.jpg";
+        public override string ExpectedDirectory => "./ExpectedResults/Formats/Jpg/";
 
-        public override string OutputFileName => "./TestOutput/Formats/Jpg/BMPFormatTest.jpg";
+        public override string InputDirectory => "./TestImages/Formats/Jpg/";
 
-        [Fact]
-        public void Test()
+        public override string OutputDirectory => "./TestOutput/Formats/Jpg/";
+
+        public static readonly TheoryData<string> InputFileNames = new TheoryData<string> {
+            {"Calliphora.jpg"},
+            {"Floorplan.jpeg"},
+            {"gamma_dalai_lama_gray.jpg"},
+            {"rgb.jpg"}
+        };
+
+        [Theory]
+        [MemberData("InputFileNames")]
+        public void Encode(string fileName)
         {
-            new Image(InputFileName).Save(OutputFileName);
-            new Image("./TestImages/Formats/Jpg/Floorplan.jpeg").Save("./TestOutput/Formats/Jpg/BMPFormatTest2.jpg");
-            new Image("./TestImages/Formats/Jpg/gamma_dalai_lama_gray.jpg").Save("./TestOutput/Formats/Jpg/BMPFormatTest3.jpg");
-            new Image("./TestImages/Formats/Jpg/rgb.jpg").Save("./TestOutput/Formats/Jpg/BMPFormatTest4.jpg");
+            using (var TempFile = File.OpenRead(InputDirectory + fileName))
+            {
+                var ImageFormat = new Sketching.Formats.Jpeg.JpegFormat();
+                var TempImage = ImageFormat.Decode(TempFile);
+                using (var TempFile2 = File.OpenWrite(OutputDirectory + fileName))
+                {
+                    Assert.True(ImageFormat.Encode(new BinaryWriter(TempFile2), TempImage));
+                }
+            }
+            Assert.True(CheckFileCorrect(fileName));
         }
     }
 }

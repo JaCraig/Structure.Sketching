@@ -7,10 +7,19 @@ namespace Structure.Sketching.Tests.Formats.Png
 {
     public class Decoder : FormatTestBase
     {
-        public override string ExpectedOutputFileName => "./ExpectedResults/Formats/Png/Decoder-splash.png";
-        public override string InputFileName => "./TestImages/Formats/Png/splash.png";
+        public override string ExpectedDirectory => "./ExpectedResults/Formats/Png/Decoder/";
 
-        public override string OutputFileName => "./TestOutput/Formats/Png/Decoder-splash.png";
+        public override string InputDirectory => "./TestImages/Formats/Png/";
+
+        public override string OutputDirectory => "./TestOutput/Formats/Png/Decoder/";
+
+        public static readonly TheoryData<string> InputFileNames = new TheoryData<string> {
+            {"splash.png"},
+            {"48bit.png"},
+            {"blur.png"},
+            {"indexed.png"},
+            {"splashbw.png"}
+        };
 
         [Fact]
         public void CanDecodeByteArray()
@@ -62,7 +71,7 @@ namespace Structure.Sketching.Tests.Formats.Png
         [Fact]
         public void Decode()
         {
-            using (var TempFile = File.OpenRead(InputFileName))
+            using (var TempFile = File.OpenRead("./TestImages/Formats/Png/splash.png"))
             {
                 var TempDecoder = new Structure.Sketching.Formats.Png.Decoder();
                 var TempImage = TempDecoder.Decode(TempFile);

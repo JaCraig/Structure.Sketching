@@ -5,16 +5,21 @@ namespace Structure.Sketching.Tests.Formats.BaseClasses
 {
     public abstract class FormatTestBase
     {
-        public abstract string ExpectedOutputFileName { get; }
-        public abstract string InputFileName { get; }
-
-        public abstract string OutputFileName { get; }
-
-        protected bool CheckFileCorrect()
+        protected FormatTestBase()
         {
-            using (FileStream OutputStream = File.OpenRead(OutputFileName))
+            new DirectoryInfo(OutputDirectory).Create();
+        }
+
+        public abstract string ExpectedDirectory { get; }
+
+        public abstract string InputDirectory { get; }
+        public abstract string OutputDirectory { get; }
+
+        protected bool CheckFileCorrect(string fileName)
+        {
+            using (FileStream OutputStream = File.OpenRead(OutputDirectory + fileName))
             {
-                using (FileStream ExpectedStream = File.OpenRead(ExpectedOutputFileName))
+                using (FileStream ExpectedStream = File.OpenRead(ExpectedDirectory + fileName))
                 {
                     return ReadBinary(OutputStream).SequenceEqual(ReadBinary(ExpectedStream));
                 }
