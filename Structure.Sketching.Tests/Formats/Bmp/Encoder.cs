@@ -6,9 +6,9 @@ namespace Structure.Sketching.Tests.Formats.Bmp
 {
     public class Encoder : FormatTestBase
     {
-        public override string ExpectedDirectory => "./ExpectedResults/Formats/Bmp/Encoder/";
+        public override string ExpectedDirectory => "./ExpectedResults/Formats/Bmp/";
 
-        public override string InputDirectory => "./TestImages/Formats/Bmp/Encoder/";
+        public override string InputDirectory => "./TestImages/Formats/Bmp/";
 
         public override string OutputDirectory => "./TestOutput/Formats/Bmp/Encoder/";
 

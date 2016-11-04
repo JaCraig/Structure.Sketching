@@ -16,7 +16,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format.PixelFormats
             using (var TempFile = File.Open(FileName, FileMode.Open, FileAccess.Read))
             {
                 byte[] Data = Format.Read(44, 40, TempFile);
-                Data = Format.Decode(44, 40, Data, null);
+                Data = Format.Decode(44, 40, Data, new Sketching.Formats.Bmp.Format.Palette(16, new byte[64]));
                 Assert.Equal(7040, Data.Length);
             }
         }
@@ -27,9 +27,9 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format.PixelFormats
             using (var TempFile = File.Open(FileName, FileMode.Open, FileAccess.Read))
             {
                 byte[] Data = Format.Read(44, 40, TempFile);
-                Data = Format.Decode(44, 40, Data, null);
-                Data = Format.Encode(44, 40, Data, null);
-                Assert.Equal(3520, Data.Length);
+                Data = Format.Decode(44, 40, Data, new Sketching.Formats.Bmp.Format.Palette(16, new byte[64]));
+                Data = Format.Encode(44, 40, Data, new Sketching.Formats.Bmp.Format.Palette(16, new byte[64]));
+                Assert.Equal(7040, Data.Length);
             }
         }
 
@@ -39,7 +39,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format.PixelFormats
             using (var TempFile = File.Open(FileName, FileMode.Open, FileAccess.Read))
             {
                 byte[] Data = Format.Read(44, 40, TempFile);
-                Assert.Equal(3520, Data.Length);
+                Assert.Equal(1760, Data.Length);
             }
         }
     }

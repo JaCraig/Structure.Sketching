@@ -42,31 +42,22 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         public override byte[] Decode(int width, int height, byte[] data, Palette palette)
         {
             int alignment = (4 - ((width * BPP) % 4)) % 4;
-            int ppb = 8 / BPP;
-            int mask = 0xFF >> (8 - BPP);
             byte[] ReturnValue = new byte[width * height * 4];
             Parallel.For(0, height, y =>
             {
-                int RowOffset = y * (width + alignment);
-                int CurrentY = height - y - 1;
-                if (CurrentY < 0)
-                    CurrentY = 0;
-                if (CurrentY >= height)
-                    CurrentY = height - 1;
+                int SourceY = y * (width + alignment);
+                int DestinationY = height - y - 1;
+                int SourceOffset = SourceY;
+                int DestinationOffset = DestinationY * width * 4;
                 for (int x = 0; x < width; ++x)
                 {
-                    int Offset = RowOffset + x;
-                    int colOffset = x * ppb;
-
-                    for (int shift = 0; shift < ppb && (colOffset + shift) < width; shift++)
-                    {
-                        int colorIndex = ((data[Offset] >> (8 - BPP - (shift * BPP))) & mask) * 4;
-                        int arrayOffset = ((CurrentY * width) + (colOffset + shift)) * 4;
-                        ReturnValue[arrayOffset] = palette.Data[colorIndex + 2];
-                        ReturnValue[arrayOffset + 1] = palette.Data[colorIndex + 1];
-                        ReturnValue[arrayOffset + 2] = palette.Data[colorIndex];
-                        ReturnValue[arrayOffset + 3] = 1;
-                    }
+                    int ColorIndex = data[SourceOffset] * 4;
+                    ReturnValue[DestinationOffset] = palette.Data[ColorIndex + 2];
+                    ReturnValue[DestinationOffset + 1] = palette.Data[ColorIndex + 1];
+                    ReturnValue[DestinationOffset + 2] = palette.Data[ColorIndex];
+                    ReturnValue[DestinationOffset + 3] = palette.Data[ColorIndex + 3];
+                    DestinationOffset += 4;
+                    ++SourceOffset;
                 }
             });
             return ReturnValue;

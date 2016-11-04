@@ -179,6 +179,30 @@ namespace Structure.Sketching.Formats.Png.Format
             return header.BitDepth >= 8 ? (colorTypeInformation.ScanlineFactor * header.BitDepth) / 8 : 1;
         }
 
+        /// <summary>
+        /// Paethes the predicator.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="above">The above.</param>
+        /// <param name="upperLeft">The upper left.</param>
+        /// <returns>The predicted paeth...</returns>
+        private static byte PaethPredicator(byte left, byte above, byte upperLeft)
+        {
+            int p = left + above - upperLeft;
+            var pa = Math.Abs(p - left);
+            var pb = Math.Abs(p - above);
+            var pc = Math.Abs(p - upperLeft);
+            if (pa <= pb && pa <= pc)
+            {
+                return left;
+            }
+            if (pb <= pc)
+            {
+                return above;
+            }
+            return upperLeft;
+        }
+
         private static byte[] ToScanlines(Image image)
         {
             byte[] data = new byte[(image.Width * image.Height * 4) + image.Height];
@@ -233,25 +257,95 @@ namespace Structure.Sketching.Formats.Png.Format
 
             byte[] LastScanline = new byte[ScanlineLength];
             byte[] CurrentScanline = new byte[ScanlineLength];
+            int Filter = 0, Column = -1, Row = 0;
 
             using (InflateStream CompressedStream = new InflateStream(dataStream))
             {
-                using (MemoryStream DecompressedStream = new MemoryStream())
+                int ReadByte;
+                while ((ReadByte = CompressedStream.ReadByte()) >= 0)
                 {
-                    CompressedStream.CopyTo(DecompressedStream);
-                    DecompressedStream.Flush();
-                    byte[] DecompressedArray = DecompressedStream.ToArray();
-                    for (int y = 0, Column = 0; y < header.Height; ++y, Column += (ScanlineLength + 1))
+                    if (Column == -1)
                     {
-                        Array.Copy(DecompressedArray, Column + 1, CurrentScanline, 0, ScanlineLength);
-                        if (DecompressedArray[Column] < 0)
-                            break;
-                        byte[] Result = Filters[(FilterType)DecompressedArray[Column]].Decode(CurrentScanline, LastScanline, ScanlineStep);
-                        colorReader.ReadScanline(Result, pixels, header, y);
-                        Array.Copy(CurrentScanline, LastScanline, ScanlineLength);
+                        Filter = ReadByte;
+                        ++Column;
+                    }
+                    else
+                    {
+                        CurrentScanline[Column] = (byte)ReadByte;
+                        byte a;
+                        byte b;
+                        byte c;
+                        if (Column >= ScanlineStep)
+                        {
+                            a = CurrentScanline[Column - ScanlineStep];
+                            c = LastScanline[Column - ScanlineStep];
+                        }
+                        else
+                        {
+                            a = 0;
+                            c = 0;
+                        }
+
+                        b = LastScanline[Column];
+                        switch (Filter)
+                        {
+                            case 1:
+                                CurrentScanline[Column] = (byte)(CurrentScanline[Column] + a);
+                                break;
+
+                            case 2:
+                                CurrentScanline[Column] = (byte)(CurrentScanline[Column] + b);
+                                break;
+
+                            case 3:
+                                CurrentScanline[Column] = (byte)(CurrentScanline[Column] + (byte)((a + b) / 2));
+                                break;
+
+                            case 4:
+                                CurrentScanline[Column] = (byte)(CurrentScanline[Column] + PaethPredicator(a, b, c));
+                                break;
+                        }
+
+                        ++Column;
+
+                        if (Column == ScanlineLength)
+                        {
+                            colorReader.ReadScanline(CurrentScanline, pixels, header, Row);
+                            ++Row;
+                            Column = -1;
+                            var Holder = CurrentScanline;
+                            CurrentScanline = LastScanline;
+                            LastScanline = Holder;
+                        }
                     }
                 }
             }
+            //dataStream.Seek(0, SeekOrigin.Begin);
+
+            //var ScanlineLength = CalculateScanlineLength(colorTypeInformation, header);
+            //var ScanlineStep = CalculateScanlineStep(colorTypeInformation, header);
+
+            //byte[] LastScanline = new byte[ScanlineLength];
+            //byte[] CurrentScanline = new byte[ScanlineLength];
+
+            //using (InflateStream CompressedStream = new InflateStream(dataStream))
+            //{
+            //    using (MemoryStream DecompressedStream = new MemoryStream())
+            //    {
+            //        CompressedStream.CopyTo(DecompressedStream);
+            //        DecompressedStream.Flush();
+            //        byte[] DecompressedArray = DecompressedStream.ToArray();
+            //        for (int y = 0, Column = 0; y < header.Height; ++y, Column += (ScanlineLength + 1))
+            //        {
+            //            Array.Copy(DecompressedArray, Column + 1, CurrentScanline, 0, ScanlineLength);
+            //            if (DecompressedArray[Column] < 0)
+            //                break;
+            //            byte[] Result = Filters[(FilterType)DecompressedArray[Column]].Decode(CurrentScanline, LastScanline, ScanlineStep);
+            //            colorReader.ReadScanline(Result, pixels, header, y);
+            //            Array.Copy(CurrentScanline, LastScanline, ScanlineLength);
+            //        }
+            //    }
+            //}
         }
     }
 }

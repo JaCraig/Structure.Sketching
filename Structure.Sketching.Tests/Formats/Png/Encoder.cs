@@ -6,7 +6,7 @@ namespace Structure.Sketching.Tests.Formats.Png
 {
     public class Encoder : FormatTestBase
     {
-        public override string ExpectedDirectory => "./ExpectedResults/Formats/Png/Encoder/";
+        public override string ExpectedDirectory => "./ExpectedResults/Formats/Png/";
 
         public override string InputDirectory => "./TestImages/Formats/Png/";
 
