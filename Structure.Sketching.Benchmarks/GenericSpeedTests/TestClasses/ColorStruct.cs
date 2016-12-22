@@ -1,88 +1,54 @@
-﻿/*
-Copyright 2016 James Craig
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
-using Structure.Sketching.ExtensionMethods;
+﻿using Structure.Sketching.ExtensionMethods;
 using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace Structure.Sketching.Colors
+namespace Structure.Sketching.Benchmarks.GenericSpeedTests.TestClasses
 {
     /// <summary>
     /// Color struct
     /// </summary>
     /// <seealso cref="IEquatable{Color}"/>
     [StructLayout(LayoutKind.Explicit)]
-    public partial struct Color : IEquatable<Color>
+    public partial struct ColorStruct : IEquatable<ColorStruct>
     {
-        /// <summary>
-        /// The int data
-        /// </summary>
         [FieldOffset(0)]
         public int IntData;
 
-        /// <summary>
-        /// The u int data
-        /// </summary>
         [FieldOffset(0)]
         public uint UIntData;
 
-        /// <summary>
-        /// The red
-        /// </summary>
         [FieldOffset(0)]
         public byte Red;
 
-        /// <summary>
-        /// The green
-        /// </summary>
         [FieldOffset(1)]
         public byte Green;
 
-        /// <summary>
-        /// The blue
-        /// </summary>
         [FieldOffset(2)]
         public byte Blue;
 
-        /// <summary>
-        /// The alpha
-        /// </summary>
         [FieldOffset(3)]
         public byte Alpha;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color"/> struct.
+        /// Initializes a new instance of the <see cref="ColorStruct"/> struct.
         /// </summary>
         /// <param name="red">The red.</param>
         /// <param name="green">The green.</param>
         /// <param name="blue">The blue.</param>
         /// <param name="alpha">The alpha.</param>
-        public Color(byte red, byte green = 0, byte blue = 0, byte alpha = 255)
+        public ColorStruct(byte red, byte green = 0, byte blue = 0, byte alpha = 255)
             : this(new byte[] { red, green, blue, alpha })
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color"/> struct.
+        /// Initializes a new instance of the <see cref="ColorStruct"/> struct.
         /// </summary>
         /// <param name="hex">The hexadecimal.</param>
         /// <exception cref="System.ArgumentException">Hex value is not convertable</exception>
-        public Color(string hex)
+        public ColorStruct(string hex)
         {
             hex = hex.StartsWith("#", StringComparison.Ordinal) ? hex.Substring(1) : hex;
             if (hex.Length == 3)
@@ -123,10 +89,10 @@ namespace Structure.Sketching.Colors
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color"/> struct.
+        /// Initializes a new instance of the <see cref="ColorStruct"/> struct.
         /// </summary>
         /// <param name="vector">The vector.</param>
-        public Color(byte[] vector)
+        public ColorStruct(byte[] vector)
         {
             IntData = 0;
             UIntData = 0;
@@ -137,10 +103,10 @@ namespace Structure.Sketching.Colors
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color"/> struct.
+        /// Initializes a new instance of the <see cref="ColorStruct"/> struct.
         /// </summary>
         /// <param name="data">The data.</param>
-        public Color(int data)
+        public ColorStruct(int data)
         {
             Red = 0;
             Green = 0;
@@ -151,10 +117,10 @@ namespace Structure.Sketching.Colors
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color"/> struct.
+        /// Initializes a new instance of the <see cref="ColorStruct"/> struct.
         /// </summary>
         /// <param name="data">The data.</param>
-        public Color(uint data)
+        public ColorStruct(uint data)
         {
             Red = 0;
             Green = 0;
@@ -171,7 +137,7 @@ namespace Structure.Sketching.Colors
         /// <param name="color2">The color2.</param>
         /// <returns>The average color</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color Average(Color color1, Color color2)
+        public static ColorStruct Average(ColorStruct color1, ColorStruct color2)
         {
             return (color1 + color2) / (byte)2;
         }
@@ -181,7 +147,7 @@ namespace Structure.Sketching.Colors
         /// </summary>
         /// <param name="color">The color.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator byte[] (Color color)
+        public static implicit operator byte[] (ColorStruct color)
         {
             return new byte[] { color.Red, color.Green, color.Blue, color.Alpha };
         }
@@ -191,9 +157,9 @@ namespace Structure.Sketching.Colors
         /// </summary>
         /// <param name="hex">The hexadecimal value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator Color(string hex)
+        public static implicit operator ColorStruct(string hex)
         {
-            return new Color(hex);
+            return new ColorStruct(hex);
         }
 
         /// <summary>
@@ -201,9 +167,9 @@ namespace Structure.Sketching.Colors
         /// </summary>
         /// <param name="color">The color.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator Color(int color)
+        public static implicit operator ColorStruct(int color)
         {
-            return new Color(color);
+            return new ColorStruct(color);
         }
 
         /// <summary>
@@ -211,9 +177,9 @@ namespace Structure.Sketching.Colors
         /// </summary>
         /// <param name="color">The color.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator Color(uint color)
+        public static implicit operator ColorStruct(uint color)
         {
-            return new Color(color);
+            return new ColorStruct(color);
         }
 
         /// <summary>
@@ -221,7 +187,7 @@ namespace Structure.Sketching.Colors
         /// </summary>
         /// <param name="color">The color.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator int(Color color)
+        public static implicit operator int(ColorStruct color)
         {
             return color.IntData;
         }
@@ -231,7 +197,7 @@ namespace Structure.Sketching.Colors
         /// </summary>
         /// <param name="color">The color.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator Vector4(Color color)
+        public static implicit operator Vector4(ColorStruct color)
         {
             return new Vector4(color.Red / 255f, color.Green / 255f, color.Blue / 255f, color.Alpha / 255f);
         }
@@ -243,9 +209,9 @@ namespace Structure.Sketching.Colors
         /// <param name="color2">The color2.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color operator -(Color color1, Color color2)
+        public static ColorStruct operator -(ColorStruct color1, ColorStruct color2)
         {
-            return new Color((byte)(color1.Red - color2.Red), (byte)(color1.Green - color2.Green), (byte)(color1.Blue - color2.Blue), (byte)(color1.Alpha - color2.Alpha));
+            return new ColorStruct((byte)(color1.Red - color2.Red), (byte)(color1.Green - color2.Green), (byte)(color1.Blue - color2.Blue), (byte)(color1.Alpha - color2.Alpha));
         }
 
         /// <summary>
@@ -255,9 +221,9 @@ namespace Structure.Sketching.Colors
         /// <param name="factor">The factor.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color operator -(Color color1, byte factor)
+        public static ColorStruct operator -(ColorStruct color1, byte factor)
         {
-            return new Color((byte)(color1.Red - factor), (byte)(color1.Green - factor), (byte)(color1.Blue - factor), (byte)(color1.Alpha - factor));
+            return new ColorStruct((byte)(color1.Red - factor), (byte)(color1.Green - factor), (byte)(color1.Blue - factor), (byte)(color1.Alpha - factor));
         }
 
         /// <summary>
@@ -267,9 +233,9 @@ namespace Structure.Sketching.Colors
         /// <param name="factor">The factor.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color operator -(byte factor, Color color1)
+        public static ColorStruct operator -(byte factor, ColorStruct color1)
         {
-            return new Color((byte)(factor - color1.Red), (byte)(factor - color1.Green), (byte)(factor - color1.Blue), (byte)(factor - color1.Alpha));
+            return new ColorStruct((byte)(factor - color1.Red), (byte)(factor - color1.Green), (byte)(factor - color1.Blue), (byte)(factor - color1.Alpha));
         }
 
         /// <summary>
@@ -278,7 +244,7 @@ namespace Structure.Sketching.Colors
         /// <param name="color">The color.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color operator !(Color color)
+        public static ColorStruct operator !(ColorStruct color)
         {
             return (byte)255 - color;
         }
@@ -290,7 +256,7 @@ namespace Structure.Sketching.Colors
         /// <param name="color2">The color2.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool operator !=(Color color1, Color color2)
+        public static bool operator !=(ColorStruct color1, ColorStruct color2)
         {
             return !(color1 == color2);
         }
@@ -302,9 +268,9 @@ namespace Structure.Sketching.Colors
         /// <param name="factor">The factor.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color operator %(Color color1, byte factor)
+        public static ColorStruct operator %(ColorStruct color1, byte factor)
         {
-            return new Color((byte)(color1.Red % factor), (byte)(color1.Green % factor), (byte)(color1.Blue % factor), (byte)(color1.Alpha % factor));
+            return new ColorStruct((byte)(color1.Red % factor), (byte)(color1.Green % factor), (byte)(color1.Blue % factor), (byte)(color1.Alpha % factor));
         }
 
         /// <summary>
@@ -314,9 +280,9 @@ namespace Structure.Sketching.Colors
         /// <param name="color2">The color2.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color operator %(Color color1, Color color2)
+        public static ColorStruct operator %(ColorStruct color1, ColorStruct color2)
         {
-            return new Color((byte)(color1.Red % color2.Red), (byte)(color1.Green % color2.Green), (byte)(color1.Blue % color2.Blue), (byte)(color1.Alpha % color2.Alpha));
+            return new ColorStruct((byte)(color1.Red % color2.Red), (byte)(color1.Green % color2.Green), (byte)(color1.Blue % color2.Blue), (byte)(color1.Alpha % color2.Alpha));
         }
 
         /// <summary>
@@ -326,9 +292,9 @@ namespace Structure.Sketching.Colors
         /// <param name="color2">The color2.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color operator *(Color color1, Color color2)
+        public static ColorStruct operator *(ColorStruct color1, ColorStruct color2)
         {
-            return new Color((byte)(color1.Red * color2.Red), (byte)(color1.Green * color2.Green), (byte)(color1.Blue * color2.Blue), (byte)(color1.Alpha * color2.Alpha));
+            return new ColorStruct((byte)(color1.Red * color2.Red), (byte)(color1.Green * color2.Green), (byte)(color1.Blue * color2.Blue), (byte)(color1.Alpha * color2.Alpha));
         }
 
         /// <summary>
@@ -338,9 +304,9 @@ namespace Structure.Sketching.Colors
         /// <param name="factor">The factor.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color operator *(Color color1, float factor)
+        public static ColorStruct operator *(ColorStruct color1, float factor)
         {
-            return new Color((byte)(color1.Red * factor), (byte)(color1.Green * factor), (byte)(color1.Blue * factor), (byte)(color1.Alpha * factor));
+            return new ColorStruct((byte)(color1.Red * factor), (byte)(color1.Green * factor), (byte)(color1.Blue * factor), (byte)(color1.Alpha * factor));
         }
 
         /// <summary>
@@ -350,7 +316,7 @@ namespace Structure.Sketching.Colors
         /// <param name="color1">The color1.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color operator *(float factor, Color color1)
+        public static ColorStruct operator *(float factor, ColorStruct color1)
         {
             return color1 * factor;
         }
@@ -362,9 +328,9 @@ namespace Structure.Sketching.Colors
         /// <param name="factor">The factor.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color operator *(Color color1, byte factor)
+        public static ColorStruct operator *(ColorStruct color1, byte factor)
         {
-            return new Color((byte)(color1.Red * factor), (byte)(color1.Green * factor), (byte)(color1.Blue * factor), (byte)(color1.Alpha * factor));
+            return new ColorStruct((byte)(color1.Red * factor), (byte)(color1.Green * factor), (byte)(color1.Blue * factor), (byte)(color1.Alpha * factor));
         }
 
         /// <summary>
@@ -374,7 +340,7 @@ namespace Structure.Sketching.Colors
         /// <param name="color1">The color1.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color operator *(byte factor, Color color1)
+        public static ColorStruct operator *(byte factor, ColorStruct color1)
         {
             return color1 * factor;
         }
@@ -386,9 +352,9 @@ namespace Structure.Sketching.Colors
         /// <param name="color2">The color2.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color operator /(Color color1, Color color2)
+        public static ColorStruct operator /(ColorStruct color1, ColorStruct color2)
         {
-            return new Color((byte)(color1.Red / color2.Red), (byte)(color1.Green / color2.Green), (byte)(color1.Blue / color2.Blue), (byte)(color1.Alpha / color2.Alpha));
+            return new ColorStruct((byte)(color1.Red / color2.Red), (byte)(color1.Green / color2.Green), (byte)(color1.Blue / color2.Blue), (byte)(color1.Alpha / color2.Alpha));
         }
 
         /// <summary>
@@ -398,9 +364,9 @@ namespace Structure.Sketching.Colors
         /// <param name="factor">The factor.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color operator /(Color color1, byte factor)
+        public static ColorStruct operator /(ColorStruct color1, byte factor)
         {
-            return new Color((byte)(color1.Red / factor), (byte)(color1.Green / factor), (byte)(color1.Blue / factor), (byte)(color1.Alpha / factor));
+            return new ColorStruct((byte)(color1.Red / factor), (byte)(color1.Green / factor), (byte)(color1.Blue / factor), (byte)(color1.Alpha / factor));
         }
 
         /// <summary>
@@ -410,9 +376,9 @@ namespace Structure.Sketching.Colors
         /// <param name="factor">The factor.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color operator /(Color color1, float factor)
+        public static ColorStruct operator /(ColorStruct color1, float factor)
         {
-            return new Color((byte)(color1.Red / factor), (byte)(color1.Green / factor), (byte)(color1.Blue / factor), (byte)(color1.Alpha / factor));
+            return new ColorStruct((byte)(color1.Red / factor), (byte)(color1.Green / factor), (byte)(color1.Blue / factor), (byte)(color1.Alpha / factor));
         }
 
         /// <summary>
@@ -422,9 +388,9 @@ namespace Structure.Sketching.Colors
         /// <param name="color2">The color2.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color operator +(Color color1, Color color2)
+        public static ColorStruct operator +(ColorStruct color1, ColorStruct color2)
         {
-            return new Color((byte)(color1.Red + color2.Red), (byte)(color1.Green + color2.Green), (byte)(color1.Blue + color2.Blue), (byte)(color1.Alpha + color2.Alpha));
+            return new ColorStruct((byte)(color1.Red + color2.Red), (byte)(color1.Green + color2.Green), (byte)(color1.Blue + color2.Blue), (byte)(color1.Alpha + color2.Alpha));
         }
 
         /// <summary>
@@ -434,9 +400,9 @@ namespace Structure.Sketching.Colors
         /// <param name="factor">The factor.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color operator +(Color color1, byte factor)
+        public static ColorStruct operator +(ColorStruct color1, byte factor)
         {
-            return new Color((byte)(color1.Red + factor), (byte)(color1.Green + factor), (byte)(color1.Blue + factor), (byte)(color1.Alpha + factor));
+            return new ColorStruct((byte)(color1.Red + factor), (byte)(color1.Green + factor), (byte)(color1.Blue + factor), (byte)(color1.Alpha + factor));
         }
 
         /// <summary>
@@ -446,7 +412,7 @@ namespace Structure.Sketching.Colors
         /// <param name="factor">The factor.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color operator +(byte factor, Color color1)
+        public static ColorStruct operator +(byte factor, ColorStruct color1)
         {
             return color1 + factor;
         }
@@ -458,7 +424,7 @@ namespace Structure.Sketching.Colors
         /// <param name="color2">The color2.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool operator ==(Color color1, Color color2)
+        public static bool operator ==(ColorStruct color1, ColorStruct color2)
         {
             return color1.Equals(color2);
         }
@@ -470,7 +436,7 @@ namespace Structure.Sketching.Colors
         /// <param name="max">The maximum.</param>
         /// <returns>This</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Color Clamp(byte min = 0, byte max = 255)
+        public ColorStruct Clamp(byte min = 0, byte max = 255)
         {
             Red = Red.Clamp(min, max);
             Green = Green.Clamp(min, max);
@@ -487,7 +453,7 @@ namespace Structure.Sketching.Colors
         /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(Color other)
+        public bool Equals(ColorStruct other)
         {
             return other.Alpha == Alpha
                 && other.Red == Red
@@ -505,7 +471,7 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
-            return obj is Color && Equals((Color)obj);
+            return obj is ColorStruct && Equals((ColorStruct)obj);
         }
 
         /// <summary>
@@ -529,9 +495,9 @@ namespace Structure.Sketching.Colors
         /// <param name="color">The color.</param>
         /// <param name="amount">The amount.</param>
         /// <returns>The resulting value</returns>
-        public Color Lerp(Color color, float amount)
+        public ColorStruct Lerp(ColorStruct color, float amount)
         {
-            return new Color(Red.Lerp(color.Red, amount),
+            return new ColorStruct(Red.Lerp(color.Red, amount),
                 Green.Lerp(color.Green, amount),
                 Blue.Lerp(color.Blue, amount),
                 Alpha.Lerp(color.Alpha, amount));

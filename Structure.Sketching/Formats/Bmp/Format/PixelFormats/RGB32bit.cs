@@ -38,9 +38,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         /// <param name="height">The height.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>
-        /// The decoded data
-        /// </returns>
+        /// <returns>The decoded data</returns>
         public override byte[] Decode(int width, int height, byte[] data, Palette palette)
         {
             int alignment = (4 - ((width * BPP) % 4)) % 4;
@@ -77,9 +75,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         /// <param name="height">The height.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>
-        /// The encoded data
-        /// </returns>
+        /// <returns>The encoded data</returns>
         public override byte[] Encode(int width, int height, byte[] data, Palette palette)
         {
             int alignment = (4 - ((width * BPP) % 4)) % 4;

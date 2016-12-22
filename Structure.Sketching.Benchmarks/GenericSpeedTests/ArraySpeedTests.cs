@@ -1,17 +1,31 @@
 ﻿using BenchmarkDotNet.Attributes;
+using Structure.Sketching.Benchmarks.GenericSpeedTests.TestClasses;
 using System.Numerics;
 
 namespace Structure.Sketching.Benchmarks.ArraySpeedTests
 {
     public class ArraySpeedTests
     {
-        [Benchmark(Description = "Byte array manipulation")]
+        [Benchmark(Baseline = true, Description = "Byte array manipulation")]
         public void ByteArray()
         {
             var TestArray = new byte[40000];
             for (int x = 0; x < TestArray.Length; ++x)
             {
                 TestArray[x] *= 3;
+            }
+        }
+
+        [Benchmark(Description = "ColorStruct array manipulation")]
+        public void ColorStructArray()
+        {
+            var TestArray = new ColorStruct[10000];
+            for (int x = 0; x < TestArray.Length; ++x)
+            {
+                TestArray[x].Red *= 3;
+                TestArray[x].Green *= 3;
+                TestArray[x].Blue *= 3;
+                TestArray[x].Alpha *= 3;
             }
         }
 
