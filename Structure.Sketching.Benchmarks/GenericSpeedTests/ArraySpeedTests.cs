@@ -29,6 +29,16 @@ namespace Structure.Sketching.Benchmarks.ArraySpeedTests
             }
         }
 
+        [Benchmark(Description = "ColorStruct array manipulation 2")]
+        public void ColorStructArray2()
+        {
+            var TestArray = new ColorStruct[10000];
+            for (int x = 0; x < TestArray.Length; ++x)
+            {
+                TestArray[x] *= 3;
+            }
+        }
+
         [Benchmark(Description = "Float array manipulation")]
         public void FloatArray()
         {

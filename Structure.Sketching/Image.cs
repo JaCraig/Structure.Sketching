@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.ColorMatrix;
 using Structure.Sketching.Formats;
 using System;
@@ -34,7 +35,7 @@ namespace Structure.Sketching
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
         public Image(int width, int height)
-            : this(width, height, new byte[width * height * 4])
+            : this(width, height, new Color[width * height])
         {
         }
 
@@ -44,7 +45,7 @@ namespace Structure.Sketching
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
         /// <param name="data">The data.</param>
-        public Image(int width, int height, byte[] data)
+        public Image(int width, int height, Color[] data)
         {
             ReCreate(width, height, data);
         }
@@ -102,7 +103,7 @@ namespace Structure.Sketching
         /// Gets or sets the pixels.
         /// </summary>
         /// <value>The pixels.</value>
-        public byte[] Pixels { get; private set; }
+        public Color[] Pixels { get; private set; }
 
         /// <summary>
         /// Gets or sets the width.
@@ -121,7 +122,7 @@ namespace Structure.Sketching
         /// <returns>A copy of this image.</returns>
         public Image Copy()
         {
-            var data = new byte[Width * Height * 4];
+            var data = new Color[Width * Height];
             Array.Copy(Pixels, data, data.Length);
             return new Image(Width, Height, data);
         }
@@ -133,7 +134,7 @@ namespace Structure.Sketching
         /// <param name="height">The new height.</param>
         /// <param name="data">The new pixel data.</param>
         /// <returns>this</returns>
-        public Image ReCreate(int width, int height, byte[] data)
+        public Image ReCreate(int width, int height, Color[] data)
         {
             Width = width < 1 ? 1 : width;
             Height = height < 1 ? 1 : height;
@@ -141,7 +142,7 @@ namespace Structure.Sketching
             Center = new Vector2(Width >> 1, Height >> 1);
             if (data == null)
                 return this;
-            Pixels = new byte[width * height * 4];
+            Pixels = new Color[width * height];
             Array.Copy(data, Pixels, Pixels.Length);
             return this;
         }
@@ -158,7 +159,7 @@ namespace Structure.Sketching
             Height = height < 1 ? 1 : height;
             PixelRatio = (double)Width / Height;
             Center = new Vector2(Width >> 1, Height >> 1);
-            Pixels = new byte[width * height * 4];
+            Pixels = new Color[width * height];
             return this;
         }
 

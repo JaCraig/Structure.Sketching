@@ -245,7 +245,10 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color operator -(Color color1, Color color2)
         {
-            return new Color((byte)(color1.Red - color2.Red), (byte)(color1.Green - color2.Green), (byte)(color1.Blue - color2.Blue), (byte)(color1.Alpha - color2.Alpha));
+            return new Color((byte)(color1.Red - color2.Red).Clamp(0, 255),
+                (byte)(color1.Green - color2.Green).Clamp(0, 255),
+                (byte)(color1.Blue - color2.Blue).Clamp(0, 255),
+                (byte)(color1.Alpha - color2.Alpha).Clamp(0, 255));
         }
 
         /// <summary>
@@ -257,7 +260,10 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color operator -(Color color1, byte factor)
         {
-            return new Color((byte)(color1.Red - factor), (byte)(color1.Green - factor), (byte)(color1.Blue - factor), (byte)(color1.Alpha - factor));
+            return new Color((byte)(color1.Red - factor).Clamp(0, 255),
+                (byte)(color1.Green - factor).Clamp(0, 255),
+                (byte)(color1.Blue - factor).Clamp(0, 255),
+                (byte)(color1.Alpha - factor).Clamp(0, 255));
         }
 
         /// <summary>
@@ -269,7 +275,10 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color operator -(byte factor, Color color1)
         {
-            return new Color((byte)(factor - color1.Red), (byte)(factor - color1.Green), (byte)(factor - color1.Blue), (byte)(factor - color1.Alpha));
+            return new Color((byte)(factor - color1.Red).Clamp(0, 255),
+                (byte)(factor - color1.Green).Clamp(0, 255),
+                (byte)(factor - color1.Blue).Clamp(0, 255),
+                (byte)(factor - color1.Alpha).Clamp(0, 255));
         }
 
         /// <summary>
@@ -304,7 +313,13 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color operator %(Color color1, byte factor)
         {
-            return new Color((byte)(color1.Red % factor), (byte)(color1.Green % factor), (byte)(color1.Blue % factor), (byte)(color1.Alpha % factor));
+            if (factor == 0)
+                return new Color(color1.Red, color1.Green, color1.Blue, color1.Alpha);
+            var ScaledFactor = (factor / 255f);
+            return new Color((byte)(((color1.Red / 255f) % ScaledFactor) * 255f),
+                (byte)(((color1.Green / 255f) % ScaledFactor) * 255f),
+                (byte)(((color1.Blue / 255f) % ScaledFactor) * 255f),
+                (byte)(((color1.Alpha / 255f) % ScaledFactor) * 255f));
         }
 
         /// <summary>
@@ -316,7 +331,10 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color operator %(Color color1, Color color2)
         {
-            return new Color((byte)(color1.Red % color2.Red), (byte)(color1.Green % color2.Green), (byte)(color1.Blue % color2.Blue), (byte)(color1.Alpha % color2.Alpha));
+            return new Color(color2.Red == 0 ? color1.Red : (byte)(((color1.Red / 255f) % (color2.Red / 255f)) * 255f),
+                color2.Green == 0 ? color1.Green : (byte)(((color1.Green / 255f) % (color2.Green / 255f)) * 255f),
+                color2.Blue == 0 ? color1.Blue : (byte)(((color1.Blue / 255f) % (color2.Blue / 255f)) * 255f),
+                color2.Alpha == 0 ? color1.Alpha : (byte)(((color1.Alpha / 255f) % (color2.Alpha / 255f)) * 255f));
         }
 
         /// <summary>
@@ -328,7 +346,10 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color operator *(Color color1, Color color2)
         {
-            return new Color((byte)(color1.Red * color2.Red), (byte)(color1.Green * color2.Green), (byte)(color1.Blue * color2.Blue), (byte)(color1.Alpha * color2.Alpha));
+            return new Color((byte)(((color1.Red / 255f) * (color2.Red / 255f)) * 255f).Clamp(0, 255),
+                (byte)(((color1.Green / 255f) * (color2.Green / 255f)) * 255f).Clamp(0, 255),
+                (byte)(((color1.Blue / 255f) * (color2.Blue / 255f)) * 255f).Clamp(0, 255),
+                (byte)(((color1.Alpha / 255f) * (color2.Alpha / 255f)) * 255f).Clamp(0, 255));
         }
 
         /// <summary>
@@ -340,7 +361,10 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color operator *(Color color1, float factor)
         {
-            return new Color((byte)(color1.Red * factor), (byte)(color1.Green * factor), (byte)(color1.Blue * factor), (byte)(color1.Alpha * factor));
+            return new Color((byte)(color1.Red * factor).Clamp(0, 255),
+                (byte)(color1.Green * factor).Clamp(0, 255),
+                (byte)(color1.Blue * factor).Clamp(0, 255),
+                (byte)(color1.Alpha * factor).Clamp(0, 255));
         }
 
         /// <summary>
@@ -364,7 +388,11 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color operator *(Color color1, byte factor)
         {
-            return new Color((byte)(color1.Red * factor), (byte)(color1.Green * factor), (byte)(color1.Blue * factor), (byte)(color1.Alpha * factor));
+            var ScaledFactor = factor / 255f;
+            return new Color((byte)(((color1.Red / 255f) * ScaledFactor) * 255f).Clamp(0, 255),
+                (byte)(((color1.Green / 255f) * ScaledFactor) * 255f).Clamp(0, 255),
+                (byte)(((color1.Blue / 255f) * ScaledFactor) * 255f).Clamp(0, 255),
+                (byte)(((color1.Alpha / 255f) * ScaledFactor) * 255f).Clamp(0, 255));
         }
 
         /// <summary>
@@ -380,6 +408,51 @@ namespace Structure.Sketching.Colors
         }
 
         /// <summary>
+        /// Implements the operator &amp;.
+        /// </summary>
+        /// <param name="color1">The color1.</param>
+        /// <param name="color2">The color2.</param>
+        /// <returns>The result of the operator.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Color operator &(Color color1, Color color2)
+        {
+            return new Color((byte)(color1.Red & color2.Red),
+                (byte)(color1.Green & color2.Green),
+                (byte)(color1.Blue & color2.Blue),
+                (byte)(color1.Alpha & color2.Alpha));
+        }
+
+        /// <summary>
+        /// Implements the operator |.
+        /// </summary>
+        /// <param name="color1">The color1.</param>
+        /// <param name="color2">The color2.</param>
+        /// <returns>The result of the operator.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Color operator |(Color color1, Color color2)
+        {
+            return new Color((byte)(color1.Red | color2.Red),
+                (byte)(color1.Green | color2.Green),
+                (byte)(color1.Blue | color2.Blue),
+                (byte)(color1.Alpha | color2.Alpha));
+        }
+
+        /// <summary>
+        /// Implements the operator ^.
+        /// </summary>
+        /// <param name="color1">The color1.</param>
+        /// <param name="color2">The color2.</param>
+        /// <returns>The result of the operator.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Color operator ^(Color color1, Color color2)
+        {
+            return new Color((byte)(color1.Red ^ color2.Red),
+                (byte)(color1.Green ^ color2.Green),
+                (byte)(color1.Blue ^ color2.Blue),
+                (byte)(color1.Alpha ^ color2.Alpha));
+        }
+
+        /// <summary>
         /// Implements the operator /.
         /// </summary>
         /// <param name="color1">The color1.</param>
@@ -388,7 +461,10 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color operator /(Color color1, Color color2)
         {
-            return new Color((byte)(color1.Red / color2.Red), (byte)(color1.Green / color2.Green), (byte)(color1.Blue / color2.Blue), (byte)(color1.Alpha / color2.Alpha));
+            return new Color(color2.Red == 0 ? color1.Red : (byte)(((color1.Red / 255f) / (color2.Red / 255f)) * 255f),
+                color2.Green == 0 ? color1.Green : (byte)(((color1.Green / 255f) / (color2.Green / 255f)) * 255f),
+                color2.Blue == 0 ? color1.Blue : (byte)(((color1.Blue / 255f) / (color2.Blue / 255f)) * 255f),
+                color2.Alpha == 0 ? color1.Alpha : (byte)(((color1.Alpha / 255f) / (color2.Alpha / 255f)) * 255f));
         }
 
         /// <summary>
@@ -400,7 +476,13 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color operator /(Color color1, byte factor)
         {
-            return new Color((byte)(color1.Red / factor), (byte)(color1.Green / factor), (byte)(color1.Blue / factor), (byte)(color1.Alpha / factor));
+            if (factor == 0)
+                return new Color(color1.Red, color1.Green, color1.Blue, color1.Alpha);
+            var ScaledFactor = (factor / 255f);
+            return new Color((byte)(((color1.Red / 255f) / ScaledFactor) * 255f),
+                (byte)(((color1.Green / 255f) / ScaledFactor) * 255f),
+                (byte)(((color1.Blue / 255f) / ScaledFactor) * 255f),
+                (byte)(((color1.Alpha / 255f) / ScaledFactor) * 255f));
         }
 
         /// <summary>
@@ -412,8 +494,15 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color operator /(Color color1, float factor)
         {
-            return new Color((byte)(color1.Red / factor), (byte)(color1.Green / factor), (byte)(color1.Blue / factor), (byte)(color1.Alpha / factor));
+            if (Math.Abs(factor) < EPSILON)
+                return new Color(color1.Red, color1.Green, color1.Blue, color1.Alpha);
+            return new Color((byte)(color1.Red / factor).Clamp(0, 255),
+                (byte)(color1.Green / factor).Clamp(0, 255),
+                (byte)(color1.Blue / factor).Clamp(0, 255),
+                (byte)(color1.Alpha / factor).Clamp(0, 255));
         }
+
+        private static float EPSILON = 0.01f;
 
         /// <summary>
         /// Implements the operator +.
@@ -424,7 +513,10 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color operator +(Color color1, Color color2)
         {
-            return new Color((byte)(color1.Red + color2.Red), (byte)(color1.Green + color2.Green), (byte)(color1.Blue + color2.Blue), (byte)(color1.Alpha + color2.Alpha));
+            return new Color((byte)(color1.Red + color2.Red).Clamp(0, 255),
+                (byte)(color1.Green + color2.Green).Clamp(0, 255),
+                (byte)(color1.Blue + color2.Blue).Clamp(0, 255),
+                (byte)(color1.Alpha + color2.Alpha).Clamp(0, 255));
         }
 
         /// <summary>
@@ -436,7 +528,10 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color operator +(Color color1, byte factor)
         {
-            return new Color((byte)(color1.Red + factor), (byte)(color1.Green + factor), (byte)(color1.Blue + factor), (byte)(color1.Alpha + factor));
+            return new Color((byte)(color1.Red + factor).Clamp(0, 255),
+                (byte)(color1.Green + factor).Clamp(0, 255),
+                (byte)(color1.Blue + factor).Clamp(0, 255),
+                (byte)(color1.Alpha + factor).Clamp(0, 255));
         }
 
         /// <summary>

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace Structure.Sketching.Filters.Arithmetic
     /// <summary>
     /// Does an AND operation between two images.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter" />
+    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
     public class And : IFilter
     {
         /// <summary>
@@ -54,28 +55,19 @@ namespace Structure.Sketching.Filters.Arithmetic
             {
                 if (y >= SecondImage.Height)
                     return;
-                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* OutputPointer = Pointer;
-                    fixed (byte* Image2Pointer = &SecondImage.Pixels[((y - targetLocation.Bottom) * SecondImage.Width) * 4])
+                    Color* OutputPointer = Pointer;
+                    fixed (Color* Image2Pointer = &SecondImage.Pixels[(y - targetLocation.Bottom) * SecondImage.Width])
                     {
-                        byte* Image2Pointer2 = Image2Pointer;
+                        Color* Image2Pointer2 = Image2Pointer;
                         int x2 = 0;
                         for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                         {
                             if (x2 > SecondImage.Width)
                                 break;
                             ++x2;
-                            *OutputPointer = (byte)(*OutputPointer & *Image2Pointer2);
-                            ++OutputPointer;
-                            ++Image2Pointer2;
-                            *OutputPointer = (byte)(*OutputPointer & *Image2Pointer2);
-                            ++OutputPointer;
-                            ++Image2Pointer2;
-                            *OutputPointer = (byte)(*OutputPointer & *Image2Pointer2);
-                            ++OutputPointer;
-                            ++Image2Pointer2;
-                            *OutputPointer = (byte)(*OutputPointer & *Image2Pointer2);
+                            *OutputPointer = *OutputPointer & *Image2Pointer2;
                             ++OutputPointer;
                             ++Image2Pointer2;
                         }
