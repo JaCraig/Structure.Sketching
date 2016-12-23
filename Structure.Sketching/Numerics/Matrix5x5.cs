@@ -489,7 +489,7 @@ namespace Structure.Sketching.Numerics
         /// <param name="value2">The vector</param>
         /// <returns>The resulting vector</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe Vector4 operator *(Matrix5x5 value1, Color value2)
+        public static unsafe Color operator *(Matrix5x5 value1, Color value2)
         {
             float r = value2.Red / 255f;
             float g = value2.Green / 255f;

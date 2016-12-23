@@ -237,6 +237,22 @@ namespace Structure.Sketching.Colors
         }
 
         /// <summary>
+        /// Performs an implicit conversion from <see cref="Vector4"/> to <see cref="Color"/>.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        /// <returns>
+        /// The result of the conversion.
+        /// </returns>
+        public static implicit operator Color(Vector4 color)
+        {
+            color = Vector4.Clamp(color, Vector4.Zero, Vector4.One);
+            return new Color((byte)(color.X * 255f),
+                (byte)(color.Y * 255f),
+                (byte)(color.Z * 255f),
+                (byte)(color.W * 255f));
+        }
+
+        /// <summary>
         /// Implements the operator -.
         /// </summary>
         /// <param name="color1">The color1.</param>
@@ -249,6 +265,192 @@ namespace Structure.Sketching.Colors
                 (byte)(color1.Green - color2.Green).Clamp(0, 255),
                 (byte)(color1.Blue - color2.Blue).Clamp(0, 255),
                 (byte)(color1.Alpha - color2.Alpha).Clamp(0, 255));
+        }
+
+        /// <summary>
+        /// Subtracts the specified color.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        /// <returns>This</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Color Subtract(Color color)
+        {
+            Red = (byte)(Red - color.Red).Clamp(0, 255);
+            Green = (byte)(Green - color.Green).Clamp(0, 255);
+            Blue = (byte)(Blue - color.Blue).Clamp(0, 255);
+            Alpha = (byte)(Alpha - color.Alpha).Clamp(0, 255);
+            return this;
+        }
+
+        /// <summary>
+        /// Subtracts the specified factor.
+        /// </summary>
+        /// <param name="factor">The factor.</param>
+        /// <returns>This</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Color Subtract(byte factor)
+        {
+            Red = (byte)(Red - factor).Clamp(0, 255);
+            Green = (byte)(Green - factor).Clamp(0, 255);
+            Blue = (byte)(Blue - factor).Clamp(0, 255);
+            Alpha = (byte)(Alpha - factor).Clamp(0, 255);
+            return this;
+        }
+
+        /// <summary>
+        /// Adds the specified color.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        /// <returns>This</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Color Add(Color color)
+        {
+            Red = (byte)(Red + color.Red).Clamp(0, 255);
+            Green = (byte)(Green + color.Green).Clamp(0, 255);
+            Blue = (byte)(Blue + color.Blue).Clamp(0, 255);
+            Alpha = (byte)(Alpha + color.Alpha).Clamp(0, 255);
+            return this;
+        }
+
+        /// <summary>
+        /// Adds the specified factor.
+        /// </summary>
+        /// <param name="factor">The factor.</param>
+        /// <returns>This</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Color Add(byte factor)
+        {
+            Red = (byte)(Red + factor).Clamp(0, 255);
+            Green = (byte)(Green + factor).Clamp(0, 255);
+            Blue = (byte)(Blue + factor).Clamp(0, 255);
+            Alpha = (byte)(Alpha + factor).Clamp(0, 255);
+            return this;
+        }
+
+        /// <summary>
+        /// Nots this instance.
+        /// </summary>
+        /// <returns>This</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Color Not()
+        {
+            UIntData = uint.MaxValue - UIntData;
+            return this;
+        }
+
+        /// <summary>
+        /// Moduloes the specified factor.
+        /// </summary>
+        /// <param name="factor">The factor.</param>
+        /// <returns>This</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Color Modulo(byte factor)
+        {
+            if (factor == 0)
+                return this;
+            var ScaledFactor = (factor / 255f);
+            Red = (byte)(((Red / 255f) % ScaledFactor) * 255f);
+            Green = (byte)(((Green / 255f) % ScaledFactor) * 255f);
+            Blue = (byte)(((Blue / 255f) % ScaledFactor) * 255f);
+            Alpha = (byte)(((Alpha / 255f) % ScaledFactor) * 255f);
+            return this;
+        }
+
+        /// <summary>
+        /// Moduloes the specified color.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        /// <returns>This</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Color Modulo(Color color)
+        {
+            Red = color.Red == 0 ? Red : (byte)(((Red / 255f) % (color.Red / 255f)) * 255f);
+            Green = color.Green == 0 ? Green : (byte)(((Green / 255f) % (color.Green / 255f)) * 255f);
+            Blue = color.Blue == 0 ? Blue : (byte)(((Blue / 255f) % (color.Blue / 255f)) * 255f);
+            Alpha = color.Alpha == 0 ? Alpha : (byte)(((Alpha / 255f) % (color.Alpha / 255f)) * 255f);
+            return this;
+        }
+
+        /// <summary>
+        /// Multiplies the specified color.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        /// <returns>This</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Color Multiply(Color color)
+        {
+            Red = (byte)(((Red / 255f) * (color.Red / 255f)) * 255f).Clamp(0, 255);
+            Green = (byte)(((Green / 255f) * (color.Green / 255f)) * 255f).Clamp(0, 255);
+            Blue = (byte)(((Blue / 255f) * (color.Blue / 255f)) * 255f).Clamp(0, 255);
+            Alpha = (byte)(((Alpha / 255f) * (color.Alpha / 255f)) * 255f).Clamp(0, 255);
+            return this;
+        }
+
+        /// <summary>
+        /// Multiplies the specified factor.
+        /// </summary>
+        /// <param name="factor">The factor.</param>
+        /// <returns>This</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Color Multiply(float factor)
+        {
+            Red = (byte)(Red * factor).Clamp(0, 255);
+            Green = (byte)(Green * factor).Clamp(0, 255);
+            Blue = (byte)(Blue * factor).Clamp(0, 255);
+            Alpha = (byte)(Alpha * factor).Clamp(0, 255);
+            return this;
+        }
+
+        /// <summary>
+        /// Multiplies the specified factor.
+        /// </summary>
+        /// <param name="factor">The factor.</param>
+        /// <returns>This</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Color Multiply(byte factor)
+        {
+            var ScaledFactor = factor / 255f;
+            Red = (byte)(((Red / 255f) * ScaledFactor) * 255f).Clamp(0, 255);
+            Green = (byte)(((Green / 255f) * ScaledFactor) * 255f).Clamp(0, 255);
+            Blue = (byte)(((Blue / 255f) * ScaledFactor) * 255f).Clamp(0, 255);
+            Alpha = (byte)(((Alpha / 255f) * ScaledFactor) * 255f).Clamp(0, 255);
+            return this;
+        }
+
+        /// <summary>
+        /// Ands the specified color.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        /// <returns>This</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Color And(Color color)
+        {
+            UIntData = UIntData & color.UIntData;
+            return this;
+        }
+
+        /// <summary>
+        /// Ors the specified color.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        /// <returns>This</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Color Or(Color color)
+        {
+            UIntData = UIntData | color.UIntData;
+            return this;
+        }
+
+        /// <summary>
+        /// XOrs the specified color.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        /// <returns>This</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Color XOr(Color color)
+        {
+            UIntData = UIntData ^ color.UIntData;
+            return this;
         }
 
         /// <summary>
@@ -465,6 +667,56 @@ namespace Structure.Sketching.Colors
                 color2.Green == 0 ? color1.Green : (byte)(((color1.Green / 255f) / (color2.Green / 255f)) * 255f),
                 color2.Blue == 0 ? color1.Blue : (byte)(((color1.Blue / 255f) / (color2.Blue / 255f)) * 255f),
                 color2.Alpha == 0 ? color1.Alpha : (byte)(((color1.Alpha / 255f) / (color2.Alpha / 255f)) * 255f));
+        }
+
+        /// <summary>
+        /// Divides the specified color.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        /// <returns>This</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Color Divide(Color color)
+        {
+            Red = color.Red == 0 ? Red : (byte)(((Red / 255f) / (color.Red / 255f)) * 255f);
+            Green = color.Green == 0 ? Green : (byte)(((Green / 255f) / (color.Green / 255f)) * 255f);
+            Blue = color.Blue == 0 ? Blue : (byte)(((Blue / 255f) / (color.Blue / 255f)) * 255f);
+            Alpha = color.Alpha == 0 ? Alpha : (byte)(((Alpha / 255f) / (color.Alpha / 255f)) * 255f);
+            return this;
+        }
+
+        /// <summary>
+        /// Divides the specified factor.
+        /// </summary>
+        /// <param name="factor">The factor.</param>
+        /// <returns>This</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Color Divide(byte factor)
+        {
+            if (factor == 0)
+                return this;
+            var ScaledFactor = (factor / 255f);
+            Red = (byte)(((Red / 255f) / ScaledFactor) * 255f);
+            Green = (byte)(((Green / 255f) / ScaledFactor) * 255f);
+            Blue = (byte)(((Blue / 255f) / ScaledFactor) * 255f);
+            Alpha = (byte)(((Alpha / 255f) / ScaledFactor) * 255f);
+            return this;
+        }
+
+        /// <summary>
+        /// Divides the specified factor.
+        /// </summary>
+        /// <param name="factor">The factor.</param>
+        /// <returns>This</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Color Divide(float factor)
+        {
+            if (Math.Abs(factor) < EPSILON)
+                return this;
+            Red = (byte)(Red / factor).Clamp(0, 255);
+            Green = (byte)(Green / factor).Clamp(0, 255);
+            Blue = (byte)(Blue / factor).Clamp(0, 255);
+            Alpha = (byte)(Alpha / factor).Clamp(0, 255);
+            return this;
         }
 
         /// <summary>

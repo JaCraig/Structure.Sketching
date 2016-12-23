@@ -67,7 +67,7 @@ namespace Structure.Sketching.Filters.Arithmetic
                             if (x2 > SecondImage.Width)
                                 break;
                             ++x2;
-                            *OutputPointer = *OutputPointer & *Image2Pointer2;
+                            (*OutputPointer).And(*Image2Pointer2);
                             ++OutputPointer;
                             ++Image2Pointer2;
                         }

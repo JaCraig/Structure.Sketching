@@ -71,7 +71,7 @@ namespace Structure.Sketching.Filters.Arithmetic
                                 break;
                             }
                             ++x2;
-                            *OutputPointer = *OutputPointer + *Image2Pointer2;
+                            (*OutputPointer).Add(*Image2Pointer2);
                             ++OutputPointer;
                             ++Image2Pointer2;
                         }

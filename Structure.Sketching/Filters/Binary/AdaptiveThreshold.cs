@@ -86,15 +86,15 @@ namespace Structure.Sketching.Filters.Binary
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             new Greyscale709().Apply(image, targetLocation);
-            var TempValues = new byte[image.Width * image.Height * 4];
+            var TempValues = new Color[image.Width * image.Height];
             Array.Copy(image.Pixels, TempValues, TempValues.Length);
             int ApetureMin = -ApetureRadius;
             int ApetureMax = ApetureRadius;
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* TargetPointer = &TempValues[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* TargetPointer = &TempValues[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* TargetPointer2 = TargetPointer;
+                    Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
                         var RValues = new List<byte>();
@@ -108,19 +108,12 @@ namespace Structure.Sketching.Filters.Binary
                                     int TempY = y + y2;
                                     if (TempY >= targetLocation.Bottom && TempY < targetLocation.Top)
                                     {
-                                        RValues.Add(image.Pixels[((TempY * image.Width) + TempX) * 4]);
+                                        RValues.Add(image.Pixels[(TempY * image.Width) + TempX].Red);
                                     }
                                 }
                             }
                         }
-                        var ColorToUse = RValues.Average(_ => _ / 255f) >= Threshold ? Color1 : Color2;
-                        *TargetPointer2 = ColorToUse.Red;
-                        ++TargetPointer2;
-                        *TargetPointer2 = ColorToUse.Green;
-                        ++TargetPointer2;
-                        *TargetPointer2 = ColorToUse.Blue;
-                        ++TargetPointer2;
-                        *TargetPointer2 = ColorToUse.Alpha;
+                        *TargetPointer2 = RValues.Average(_ => _ / 255f) >= Threshold ? Color1 : Color2;
                         ++TargetPointer2;
                     }
                 }
