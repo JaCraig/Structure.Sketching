@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System;
@@ -51,15 +52,15 @@ namespace Structure.Sketching.Filters.Morphology
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var TempValues = new byte[image.Pixels.Length];
+            var TempValues = new Color[image.Pixels.Length];
             Array.Copy(image.Pixels, TempValues, TempValues.Length);
             int ApetureMin = -ApetureRadius;
             int ApetureMax = ApetureRadius;
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* TargetPointer2 = TargetPointer;
+                    Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
                         byte RValue = byte.MaxValue;
@@ -77,20 +78,18 @@ namespace Structure.Sketching.Filters.Morphology
                                     Length += TempX;
                                     TempX = 0;
                                 }
-                                var Start = ((TempY * image.Width) + TempX) * 4;
-                                fixed (byte* ImagePointer = &TempValues[Start])
+                                var Start = ((TempY * image.Width) + TempX);
+                                fixed (Color* ImagePointer = &TempValues[Start])
                                 {
-                                    byte* ImagePointer2 = ImagePointer;
+                                    Color* ImagePointer2 = ImagePointer;
                                     for (int x2 = 0; x2 < Length; ++x2)
                                     {
                                         if (TempX >= image.Width)
                                             break;
-                                        var TempR = (*ImagePointer2);
+                                        var TempR = (*ImagePointer2).Red;
+                                        var TempG = (*ImagePointer2).Green;
+                                        var TempB = (*ImagePointer2).Blue;
                                         ++ImagePointer2;
-                                        var TempG = (*ImagePointer2);
-                                        ++ImagePointer2;
-                                        var TempB = (*ImagePointer2);
-                                        ImagePointer2 += 2;
                                         RValue = RValue < TempR ? RValue : TempR;
                                         GValue = GValue < TempG ? GValue : TempG;
                                         BValue = BValue < TempB ? BValue : TempB;
@@ -99,12 +98,10 @@ namespace Structure.Sketching.Filters.Morphology
                                 }
                             }
                         }
-                        (*TargetPointer2) = RValue;
+                        (*TargetPointer2).Red = RValue;
+                        (*TargetPointer2).Green = GValue;
+                        (*TargetPointer2).Blue = BValue;
                         ++TargetPointer2;
-                        (*TargetPointer2) = GValue;
-                        ++TargetPointer2;
-                        (*TargetPointer2) = BValue;
-                        TargetPointer2 += 2;
                     }
                 }
             });

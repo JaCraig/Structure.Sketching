@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System;
@@ -74,13 +75,13 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
 
-            var tempPixels = new byte[image.Pixels.Length];
+            var tempPixels = new Color[image.Pixels.Length];
             Array.Copy(image.Pixels, tempPixels, image.Pixels.Length);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* OutputPointer = Pointer;
+                    Color* OutputPointer = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
                         var XValue = new Vector4(0, 0, 0, 0);
@@ -108,15 +109,16 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
                                     {
                                         if (*XMatrixValue != 0 || *YMatrixValue != 0)
                                         {
-                                            Start = (((YCurrent + y) * image.Width) + (x + XCurrent)) * 4;
-                                            XValue = XValue + new Vector4((*XMatrixValue * tempPixels[Start]),
-                                                                            (*XMatrixValue * tempPixels[Start + 1]),
-                                                                            (*XMatrixValue * tempPixels[Start + 2]),
-                                                                            (*XMatrixValue * tempPixels[Start + 3]));
-                                            YValue = YValue + new Vector4((*YMatrixValue * tempPixels[Start]),
-                                                                            (*YMatrixValue * tempPixels[Start + 1]),
-                                                                            (*YMatrixValue * tempPixels[Start + 2]),
-                                                                            (*YMatrixValue * tempPixels[Start + 3]));
+                                            Start = ((YCurrent + y) * image.Width) + (x + XCurrent);
+                                            var TempPixel = tempPixels[Start];
+                                            XValue = XValue + new Vector4((*XMatrixValue * TempPixel.Red),
+                                                                            (*XMatrixValue * TempPixel.Green),
+                                                                            (*XMatrixValue * TempPixel.Blue),
+                                                                            (*XMatrixValue * TempPixel.Alpha));
+                                            YValue = YValue + new Vector4((*YMatrixValue * TempPixel.Red),
+                                                                            (*YMatrixValue * TempPixel.Green),
+                                                                            (*YMatrixValue * TempPixel.Blue),
+                                                                            (*YMatrixValue * TempPixel.Alpha));
                                             WeightX += *XMatrixValue;
                                             WeightY += *YMatrixValue;
                                         }
@@ -141,17 +143,13 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
                             XValue /= WeightX;
                             YValue /= WeightY;
                             var TempResult = Vector4.SquareRoot((XValue * XValue) + (YValue * YValue));
-                            TempResult = Vector4.Clamp(TempResult, Vector4.Zero, new Vector4(255, 255, 255, 255));
-                            *OutputPointer = (byte)TempResult.X;
+                            TempResult = Vector4.Clamp(TempResult, Vector4.Zero, new Vector4(255, 255, 255, 255)) / 255f;
+                            *OutputPointer = TempResult;
                             ++OutputPointer;
-                            *OutputPointer = (byte)TempResult.Y;
-                            ++OutputPointer;
-                            *OutputPointer = (byte)TempResult.Z;
-                            OutputPointer += 2;
                         }
                         else
                         {
-                            OutputPointer += 4;
+                            ++OutputPointer;
                         }
                     }
                 }

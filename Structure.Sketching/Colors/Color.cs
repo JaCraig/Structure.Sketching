@@ -334,7 +334,10 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Color Not()
         {
-            UIntData = uint.MaxValue - UIntData;
+            Red = (byte)(255 - Red);
+            Green = (byte)(255 - Green);
+            Blue = (byte)(255 - Blue);
+            Alpha = (byte)(255 - Alpha);
             return this;
         }
 

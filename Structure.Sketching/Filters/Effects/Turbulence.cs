@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.ExtensionMethods;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
@@ -69,28 +70,25 @@ namespace Structure.Sketching.Filters.Effects
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var Result = new byte[image.Width * image.Height * 4];
+            var Result = new Color[image.Pixels.Length];
             Array.Copy(image.Pixels, Result, Result.Length);
             var XNoise = PerlinNoise.Generate(image.Width, image.Height, 255, 0, 0.0625f, 1.0f, 0.5f, Roughness, Seed);
             var YNoise = PerlinNoise.Generate(image.Width, image.Height, 255, 0, 0.0625f, 1.0f, 0.5f, Roughness, Seed * 2);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* TargetPointer2 = TargetPointer;
+                    Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        float XDistortion = x + (XNoise.Pixels[((y * image.Width) + x) * 4] * Power);
-                        float YDistortion = y + (YNoise.Pixels[((y * image.Width) + x) * 4] * Power);
+                        float XDistortion = x + (XNoise.Pixels[(y * image.Width) + x].Red * Power);
+                        float YDistortion = y + (YNoise.Pixels[(y * image.Width) + x].Red * Power);
                         var X1 = (int)XDistortion.Clamp(0, image.Width - 1);
                         var Y1 = (int)YDistortion.Clamp(0, image.Height - 1);
-                        int ResultOffset = ((y * image.Width) + x) * 4;
-                        int SourceOffset = ((Y1 * image.Width) + X1) * 4;
+                        int ResultOffset = ((y * image.Width) + x);
+                        int SourceOffset = ((Y1 * image.Width) + X1);
 
                         Result[ResultOffset] = image.Pixels[SourceOffset];
-                        Result[ResultOffset + 1] = image.Pixels[SourceOffset + 1];
-                        Result[ResultOffset + 2] = image.Pixels[SourceOffset + 2];
-                        Result[ResultOffset + 3] = image.Pixels[SourceOffset + 3];
                     }
                 }
             });

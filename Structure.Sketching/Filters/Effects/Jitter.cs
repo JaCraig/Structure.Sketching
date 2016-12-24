@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
@@ -52,9 +53,9 @@ namespace Structure.Sketching.Filters.Effects
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* SourcePointer = Pointer;
+                    Color* SourcePointer = Pointer;
                     for (int x = 0; x < image.Width; ++x)
                     {
                         var NewX = Random.ThreadSafeNext(-Amount, Amount);
@@ -63,13 +64,7 @@ namespace Structure.Sketching.Filters.Effects
                         NewY += y;
                         NewX = NewX < targetLocation.Left ? targetLocation.Left : NewX >= targetLocation.Right ? targetLocation.Right - 1 : NewX;
                         NewY = NewY < targetLocation.Bottom ? targetLocation.Bottom : NewY >= targetLocation.Top ? targetLocation.Top - 1 : NewY;
-                        image.Pixels[((NewY * image.Width) + NewX) * 4] = *SourcePointer;
-                        ++SourcePointer;
-                        image.Pixels[(((NewY * image.Width) + NewX) * 4) + 1] = *SourcePointer;
-                        ++SourcePointer;
-                        image.Pixels[(((NewY * image.Width) + NewX) * 4) + 2] = *SourcePointer;
-                        ++SourcePointer;
-                        image.Pixels[(((NewY * image.Width) + NewX) * 4) + 3] = *SourcePointer;
+                        image.Pixels[(NewY * image.Width) + NewX] = *SourcePointer;
                         ++SourcePointer;
                     }
                 }

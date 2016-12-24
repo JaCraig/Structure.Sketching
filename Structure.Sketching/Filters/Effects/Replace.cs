@@ -69,20 +69,14 @@ namespace Structure.Sketching.Filters.Effects
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* OutputPointer = Pointer;
+                    Color* OutputPointer = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        if (Distance.Euclidean(new Color(*OutputPointer, *(OutputPointer + 1), *(OutputPointer + 2), *(OutputPointer + 3)), SourceColor) < Epsilon)
+                        if (Distance.Euclidean(*OutputPointer, SourceColor) < Epsilon)
                         {
-                            *(OutputPointer) = TargetColor.Red;
-                            ++OutputPointer;
-                            *(OutputPointer) = TargetColor.Green;
-                            ++OutputPointer;
-                            *(OutputPointer) = TargetColor.Blue;
-                            ++OutputPointer;
-                            *(OutputPointer) = TargetColor.Alpha;
+                            *(OutputPointer) = TargetColor;
                             ++OutputPointer;
                         }
                     }

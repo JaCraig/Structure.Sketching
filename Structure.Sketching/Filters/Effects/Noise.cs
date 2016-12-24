@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
@@ -52,9 +53,9 @@ namespace Structure.Sketching.Filters.Effects
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* OutputPointer = Pointer;
+                    Color* OutputPointer = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
                         int R = (*OutputPointer) + Random.ThreadSafeNext(-Amount, Amount);
@@ -63,12 +64,10 @@ namespace Structure.Sketching.Filters.Effects
                         R = R < 0 ? 0 : R > 255 ? 255 : R;
                         G = G < 0 ? 0 : G > 255 ? 255 : G;
                         B = B < 0 ? 0 : B > 255 ? 255 : B;
-                        (*OutputPointer) = (byte)R;
+                        (*OutputPointer).Red = (byte)R;
+                        (*OutputPointer).Green = (byte)G;
+                        (*OutputPointer).Blue = (byte)B;
                         ++OutputPointer;
-                        (*OutputPointer) = (byte)G;
-                        ++OutputPointer;
-                        (*OutputPointer) = (byte)B;
-                        OutputPointer += 2;
                     }
                 }
             });

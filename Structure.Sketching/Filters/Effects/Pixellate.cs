@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.ExtensionMethods;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
@@ -55,9 +56,9 @@ namespace Structure.Sketching.Filters.Effects
             {
                 var MinY = (y - (PixelSize / 2)).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
                 var MaxY = (y + (PixelSize / 2)).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* TargetPointer2 = TargetPointer;
+                    Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; x += PixelSize)
                     {
                         uint RValue = 0;
@@ -70,9 +71,10 @@ namespace Structure.Sketching.Filters.Effects
                         {
                             for (int y2 = MinY; y2 < MaxY; ++y2)
                             {
-                                RValue += image.Pixels[((y * image.Width) + x) * 4];
-                                GValue += image.Pixels[(((y * image.Width) + x) * 4) + 1];
-                                BValue += image.Pixels[(((y * image.Width) + x) * 4) + 2];
+                                var TempPixel = image.Pixels[(y * image.Width) + x];
+                                RValue += TempPixel.Red;
+                                GValue += TempPixel.Green;
+                                BValue += TempPixel.Blue;
                                 ++NumberPixels;
                             }
                         }
@@ -83,9 +85,9 @@ namespace Structure.Sketching.Filters.Effects
                         {
                             for (int y2 = MinY; y2 < MaxY; ++y2)
                             {
-                                image.Pixels[((y2 * image.Width) + x2) * 4] = (byte)RValue;
-                                image.Pixels[(((y2 * image.Width) + x2) * 4) + 1] = (byte)GValue;
-                                image.Pixels[(((y2 * image.Width) + x2) * 4) + 2] = (byte)BValue;
+                                image.Pixels[(y2 * image.Width) + x2].Red = (byte)RValue;
+                                image.Pixels[(y2 * image.Width) + x2].Green = (byte)GValue;
+                                image.Pixels[(y2 * image.Width) + x2].Blue = (byte)BValue;
                             }
                         });
                     }

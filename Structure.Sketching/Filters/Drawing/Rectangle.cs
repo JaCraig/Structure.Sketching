@@ -75,18 +75,12 @@ namespace Structure.Sketching.Filters.Drawing
         {
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* TargetPointer2 = TargetPointer;
+                    Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        *TargetPointer2 = Color.Red;
-                        ++TargetPointer2;
-                        *TargetPointer2 = Color.Green;
-                        ++TargetPointer2;
-                        *TargetPointer2 = Color.Blue;
-                        ++TargetPointer2;
-                        *TargetPointer2 = Color.Alpha;
+                        *TargetPointer2 = Color;
                         ++TargetPointer2;
                     }
                 }

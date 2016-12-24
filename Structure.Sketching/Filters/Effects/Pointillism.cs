@@ -54,7 +54,7 @@ namespace Structure.Sketching.Filters.Effects
         {
             targetLocation = targetLocation == default(Numerics.Rectangle) ? new Numerics.Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             var PointSize2 = PointSize * 2;
-            var Copy = new byte[image.Pixels.Length];
+            var Copy = new Color[image.Pixels.Length];
             Array.Copy(image.Pixels, Copy, Copy.Length);
             var EllipseDrawer = new Ellipse(Color.AliceBlue, true, PointSize, PointSize, new Vector2(0, 0));
 
@@ -62,9 +62,9 @@ namespace Structure.Sketching.Filters.Effects
             {
                 var MinY = (y - PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
                 var MaxY = (y + PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-                fixed (byte* TargetPointer = &Copy[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* TargetPointer = &Copy[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* TargetPointer2 = TargetPointer;
+                    Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; x += PointSize2)
                     {
                         uint RValue = 0;
@@ -77,10 +77,10 @@ namespace Structure.Sketching.Filters.Effects
                         {
                             for (int y2 = MinY; y2 < MaxY; ++y2)
                             {
-                                var Offset = ((y * image.Width) + x) * 4;
-                                RValue += Copy[Offset];
-                                GValue += Copy[Offset + 1];
-                                BValue += Copy[Offset + 2];
+                                var Offset = ((y * image.Width) + x);
+                                RValue += Copy[Offset].Red;
+                                GValue += Copy[Offset].Green;
+                                BValue += Copy[Offset].Blue;
                                 ++NumberPixels;
                             }
                         }
@@ -97,9 +97,9 @@ namespace Structure.Sketching.Filters.Effects
             {
                 var MinY = (y - PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
                 var MaxY = (y + PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-                fixed (byte* TargetPointer = &Copy[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* TargetPointer = &Copy[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* TargetPointer2 = TargetPointer;
+                    Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left + PointSize; x < targetLocation.Right; x += PointSize2)
                     {
                         uint RValue = 0;
@@ -112,10 +112,10 @@ namespace Structure.Sketching.Filters.Effects
                         {
                             for (int y2 = MinY; y2 < MaxY; ++y2)
                             {
-                                var Offset = ((y * image.Width) + x) * 4;
-                                RValue += Copy[Offset];
-                                GValue += Copy[Offset + 1];
-                                BValue += Copy[Offset + 2];
+                                var Offset = ((y * image.Width) + x);
+                                RValue += Copy[Offset].Red;
+                                GValue += Copy[Offset].Green;
+                                BValue += Copy[Offset].Blue;
                                 ++NumberPixels;
                             }
                         }
@@ -133,9 +133,9 @@ namespace Structure.Sketching.Filters.Effects
                 var TempY = y + new Random(y).Next(-PointSize, PointSize);
                 var MinY = (TempY - PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
                 var MaxY = (TempY + PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-                fixed (byte* TargetPointer = &Copy[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* TargetPointer = &Copy[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* TargetPointer2 = TargetPointer;
+                    Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left + PointSize; x < targetLocation.Right; x += PointSize2)
                     {
                         uint RValue = 0;
@@ -149,10 +149,10 @@ namespace Structure.Sketching.Filters.Effects
                         {
                             for (int y2 = MinY; y2 < MaxY; ++y2)
                             {
-                                var Offset = ((y * image.Width) + x) * 4;
-                                RValue += Copy[Offset];
-                                GValue += Copy[Offset + 1];
-                                BValue += Copy[Offset + 2];
+                                var Offset = ((y * image.Width) + x);
+                                RValue += Copy[Offset].Red;
+                                GValue += Copy[Offset].Green;
+                                BValue += Copy[Offset].Blue;
                                 ++NumberPixels;
                             }
                         }
@@ -166,17 +166,6 @@ namespace Structure.Sketching.Filters.Effects
                 }
             }
             return image;
-            //for (int x = targetLocation.Left; x < targetLocation.Right; x += PointSize)
-            //{
-            //    for (int y = targetLocation.Bottom; y < targetLocation.Top; y += PointSize)
-            //    {
-            //        var Offset = ((y * image.Width) + x) * 4;
-            //        EllipseDrawer.Center = new Vector2(x, y);
-            //        EllipseDrawer.Color = new Color(Copy[Offset], Copy[Offset + 1], Copy[Offset + 2]);
-            //        EllipseDrawer.Apply(image, targetLocation);
-            //    }
-            //}
-            //return image;
         }
     }
 }
