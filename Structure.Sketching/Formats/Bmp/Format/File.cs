@@ -113,7 +113,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// <param name="image">The image.</param>
         private void LoadImage(Image image)
         {
-            var ImageSize = image.Pixels.Length;
+            var ImageSize = image.Pixels.Length * 4;
             FileHeader = new FileHeader(54 + ImageSize, 54);
             Header = new Header(image.Width, image.Height, 24, ImageSize, 0, 0, 0, 0, Compression.RGB);
             Palette = new Palette(0, new byte[0]);

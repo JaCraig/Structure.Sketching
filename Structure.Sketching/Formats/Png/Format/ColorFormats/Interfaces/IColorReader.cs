@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
+
 namespace Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces
 {
     /// <summary>
@@ -28,6 +30,6 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces
         /// <param name="pixels">Resulting pixels</param>
         /// <param name="header">Header information</param>
         /// <param name="row">Current row</param>
-        void ReadScanline(byte[] scanline, byte[] pixels, Header header, int row);
+        void ReadScanline(byte[] scanline, Color[] pixels, Header header, int row);
     }
 }

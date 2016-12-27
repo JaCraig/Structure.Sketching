@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System;
@@ -60,13 +61,13 @@ namespace Structure.Sketching.Filters.Smoothing
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            byte[] Result = new byte[image.Width * image.Height * 4];
+            var Result = new Color[image.Pixels.Length];
             Array.Copy(image.Pixels, Result, Result.Length);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* SourcePointer = Pointer;
+                    Color* SourcePointer = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
                         uint[] RValues = { 0, 0, 0, 0 };
@@ -92,24 +93,24 @@ namespace Structure.Sketching.Filters.Smoothing
                                         int TempY = y + y2;
                                         if (TempY >= 0 && TempY < image.Height)
                                         {
-                                            RValues[i] += image.Pixels[((TempY * image.Width) + TempX) * 4];
-                                            GValues[i] += image.Pixels[(((TempY * image.Width) + TempX) * 4) + 1];
-                                            BValues[i] += image.Pixels[(((TempY * image.Width) + TempX) * 4) + 2];
+                                            RValues[i] += image.Pixels[(TempY * image.Width) + TempX].Red;
+                                            GValues[i] += image.Pixels[(TempY * image.Width) + TempX].Green;
+                                            BValues[i] += image.Pixels[(TempY * image.Width) + TempX].Blue;
 
-                                            if (image.Pixels[(((TempY * image.Width) + TempX) * 4)] > MaxRValue[i])
-                                                MaxRValue[i] = image.Pixels[(((TempY * image.Width) + TempX) * 4)];
-                                            else if (image.Pixels[(((TempY * image.Width) + TempX) * 4)] < MinRValue[i])
-                                                MinRValue[i] = image.Pixels[(((TempY * image.Width) + TempX) * 4)];
+                                            if (image.Pixels[(TempY * image.Width) + TempX].Red > MaxRValue[i])
+                                                MaxRValue[i] = image.Pixels[(TempY * image.Width) + TempX].Red;
+                                            else if (image.Pixels[(TempY * image.Width) + TempX].Red < MinRValue[i])
+                                                MinRValue[i] = image.Pixels[(TempY * image.Width) + TempX].Red;
 
-                                            if (image.Pixels[(((TempY * image.Width) + TempX) * 4) + 1] > MaxGValue[i])
-                                                MaxGValue[i] = image.Pixels[(((TempY * image.Width) + TempX) * 4) + 1];
-                                            else if (image.Pixels[(((TempY * image.Width) + TempX) * 4) + 1] < MinGValue[i])
-                                                MinGValue[i] = image.Pixels[(((TempY * image.Width) + TempX) * 4) + 1];
+                                            if (image.Pixels[(TempY * image.Width) + TempX].Green > MaxGValue[i])
+                                                MaxGValue[i] = image.Pixels[(TempY * image.Width) + TempX].Green;
+                                            else if (image.Pixels[(TempY * image.Width) + TempX].Green < MinGValue[i])
+                                                MinGValue[i] = image.Pixels[(TempY * image.Width) + TempX].Green;
 
-                                            if (image.Pixels[(((TempY * image.Width) + TempX) * 4) + 2] > MaxBValue[i])
-                                                MaxBValue[i] = image.Pixels[(((TempY * image.Width) + TempX) * 4) + 2];
-                                            else if (image.Pixels[(((TempY * image.Width) + TempX) * 4) + 2] < MinBValue[i])
-                                                MinBValue[i] = image.Pixels[(((TempY * image.Width) + TempX) * 4) + 2];
+                                            if (image.Pixels[(TempY * image.Width) + TempX].Blue > MaxBValue[i])
+                                                MaxBValue[i] = image.Pixels[(TempY * image.Width) + TempX].Blue;
+                                            else if (image.Pixels[(TempY * image.Width) + TempX].Blue < MinBValue[i])
+                                                MinBValue[i] = image.Pixels[(TempY * image.Width) + TempX].Blue;
 
                                             ++NumPixels[i];
                                         }
@@ -133,9 +134,9 @@ namespace Structure.Sketching.Filters.Smoothing
                         GValues[j] = GValues[j] / NumPixels[j];
                         BValues[j] = BValues[j] / NumPixels[j];
 
-                        Result[((y * image.Width) + x) * 4] = (byte)RValues[j];
-                        Result[(((y * image.Width) + x) * 4) + 1] = (byte)GValues[j];
-                        Result[(((y * image.Width) + x) * 4) + 2] = (byte)BValues[j];
+                        Result[(y * image.Width) + x].Red = (byte)RValues[j];
+                        Result[(y * image.Width) + x].Green = (byte)GValues[j];
+                        Result[(y * image.Width) + x].Blue = (byte)BValues[j];
                     }
                 }
             });

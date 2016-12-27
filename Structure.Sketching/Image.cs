@@ -53,6 +53,30 @@ namespace Structure.Sketching
         /// <summary>
         /// Initializes a new instance of the <see cref="Image"/> class.
         /// </summary>
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        /// <param name="data">The data.</param>
+        public Image(int width, int height, byte[] data)
+        {
+            if (data == null)
+            {
+                ReCreate(width, height, null);
+                return;
+            }
+            var ReturnValues = new Color[width * height];
+            for (int x = 0; x < ReturnValues.Length; ++x)
+            {
+                ReturnValues[x].Red = data[x * 4];
+                ReturnValues[x].Green = data[(x * 4) + 1];
+                ReturnValues[x].Blue = data[(x * 4) + 2];
+                ReturnValues[x].Alpha = data[(x * 4) + 3];
+            }
+            ReCreate(width, height, ReturnValues);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Image"/> class.
+        /// </summary>
         /// <param name="fileName">Name of the file.</param>
         public Image(string fileName)
         {
@@ -199,7 +223,7 @@ namespace Structure.Sketching
                 {
                     if (ShowLine)
                     {
-                        var RValue = TempImage.Pixels[((y * TempImage.Width) + x) * 4] / 255f;
+                        var RValue = TempImage.Pixels[(y * TempImage.Width) + x].Red / 255f;
                         Builder.Append(_ASCIICharacters[(int)(RValue * _ASCIICharacters.Length)]);
                     }
                 }

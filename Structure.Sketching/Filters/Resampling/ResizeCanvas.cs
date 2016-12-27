@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Filters.Resampling.Enums;
 using Structure.Sketching.Numerics;
@@ -66,7 +67,7 @@ namespace Structure.Sketching.Filters.Resampling
         /// <returns>The image</returns>
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
-            var Final = new byte[Width * Height * 4];
+            var Final = new Color[Width * Height];
             var XOffset = 0;
             var YOffset = 0;
             if (Options == ResizeOptions.Center)
@@ -78,33 +79,24 @@ namespace Structure.Sketching.Filters.Resampling
             {
                 if (y + YOffset >= image.Height || y + YOffset < 0)
                     return;
-                fixed (byte* InputPointer = &image.Pixels[(y + YOffset) * image.Width * 4])
+                fixed (Color* InputPointer = &image.Pixels[(y + YOffset) * image.Width])
                 {
-                    fixed (byte* OutputPointer = &Final[y * Width * 4])
+                    fixed (Color* OutputPointer = &Final[y * Width])
                     {
-                        byte* OutputPointer2 = OutputPointer;
-                        byte* InputPointer2 = InputPointer;
+                        Color* OutputPointer2 = OutputPointer;
+                        Color* InputPointer2 = InputPointer;
                         for (int x = 0; x < Width; ++x)
                         {
                             if ((x + XOffset) >= image.Width)
                                 break;
                             if ((x + XOffset) < 0)
                             {
-                                OutputPointer2 += 4;
-                                InputPointer2 += 4;
+                                ++OutputPointer2;
+                                ++InputPointer2;
                             }
                             else
                             {
-                                *OutputPointer2 = *(InputPointer2 + (XOffset * 4));
-                                ++OutputPointer2;
-                                ++InputPointer2;
-                                *OutputPointer2 = *(InputPointer2 + (XOffset * 4));
-                                ++OutputPointer2;
-                                ++InputPointer2;
-                                *OutputPointer2 = *(InputPointer2 + (XOffset * 4));
-                                ++OutputPointer2;
-                                ++InputPointer2;
-                                *OutputPointer2 = *(InputPointer2 + (XOffset * 4));
+                                *OutputPointer2 = *(InputPointer2 + XOffset);
                                 ++OutputPointer2;
                                 ++InputPointer2;
                             }

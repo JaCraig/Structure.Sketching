@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Colors;
 using Structure.Sketching.Colors.ColorSpaces;
 using Structure.Sketching.Formats.Jpeg.Format.Enums;
 using Structure.Sketching.Formats.Jpeg.Format.HelperClasses;
@@ -732,8 +731,8 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
             {
                 for (int i = 0; i < 8; i++)
                 {
-                    var Offset = (Math.Min(x + i, xmax) + (Math.Min(y + j, ymax) * Image.Width)) * 4;
-                    YCbCr color = new Color(Image.Pixels[Offset], Image.Pixels[Offset + 1], Image.Pixels[Offset + 2], Image.Pixels[Offset + 3]);
+                    var Offset = Math.Min(x + i, xmax) + (Math.Min(y + j, ymax) * Image.Width);
+                    YCbCr color = Image.Pixels[Offset];
                     int index = (8 * j) + i;
                     yBlock[index] = (int)color.YLuminance;
                     cbBlock[index] = (int)color.CbChroma;

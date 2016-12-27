@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.ExtensionMethods;
 using Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces;
 using System.Threading.Tasks;
@@ -33,17 +34,17 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
         /// <param name="pixels">The pixels.</param>
         /// <param name="header">The header.</param>
         /// <param name="row">The row.</param>
-        public void ReadScanline(byte[] scanline, byte[] pixels, Header header, int row)
+        public void ReadScanline(byte[] scanline, Color[] pixels, Header header, int row)
         {
             scanline = scanline.ExpandArray(header.BitDepth);
             Parallel.For(0, header.Width, x =>
             {
-                int Offset = ((row * header.Width) + x) * 4;
+                int Offset = (row * header.Width) + x;
 
-                pixels[Offset] = scanline[x];
-                pixels[Offset + 1] = scanline[x];
-                pixels[Offset + 2] = scanline[x];
-                pixels[Offset + 3] = 1;
+                pixels[Offset].Red = scanline[x];
+                pixels[Offset].Green = scanline[x];
+                pixels[Offset].Blue = scanline[x];
+                pixels[Offset].Alpha = 255;
             });
         }
     }

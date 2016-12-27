@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Formats.Png.Format.ColorFormats;
 using Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces;
 using Structure.Sketching.Formats.Png.Format.Enums;
@@ -134,7 +135,7 @@ namespace Structure.Sketching.Formats.Png.Format
         /// <returns>The resulting image</returns>
         public Image Parse(Header header, Palette palette, Palette alphaPalette)
         {
-            byte[] Pixels = new byte[header.Width * header.Height * 4];
+            Color[] Pixels = new Color[header.Width * header.Height];
             var ColorTypeInfo = ColorTypes[header.ColorType];
 
             if (ColorTypeInfo != null)
@@ -211,21 +212,21 @@ namespace Structure.Sketching.Formats.Png.Format
             Parallel.For(0, image.Width, x =>
               {
                   int dataOffset = (x * 4) + 1;
-                  int PixelOffset = x * 4;
-                  data[dataOffset] = image.Pixels[PixelOffset];
-                  data[dataOffset + 1] = image.Pixels[PixelOffset + 1];
-                  data[dataOffset + 2] = image.Pixels[PixelOffset + 2];
-                  data[dataOffset + 3] = image.Pixels[PixelOffset + 3];
+                  int PixelOffset = x;
+                  data[dataOffset] = image.Pixels[PixelOffset].Red;
+                  data[dataOffset + 1] = image.Pixels[PixelOffset].Green;
+                  data[dataOffset + 2] = image.Pixels[PixelOffset].Blue;
+                  data[dataOffset + 3] = image.Pixels[PixelOffset].Alpha;
                   data[0] = 0;
                   for (int y = 1; y < image.Height; ++y)
                   {
                       dataOffset = (y * RowLength) + (x * 4) + 1;
-                      PixelOffset = ((image.Width * y) + x) * 4;
-                      int AbovePixelOffset = ((image.Width * (y - 1)) + x) * 4;
-                      data[dataOffset] = (byte)(image.Pixels[PixelOffset] - image.Pixels[AbovePixelOffset]);
-                      data[dataOffset + 1] = (byte)(image.Pixels[PixelOffset + 1] - image.Pixels[AbovePixelOffset + 1]);
-                      data[dataOffset + 2] = (byte)(image.Pixels[PixelOffset + 2] - image.Pixels[AbovePixelOffset + 2]);
-                      data[dataOffset + 3] = (byte)(image.Pixels[PixelOffset + 3] - image.Pixels[AbovePixelOffset + 3]);
+                      PixelOffset = (image.Width * y) + x;
+                      int AbovePixelOffset = (image.Width * (y - 1)) + x;
+                      data[dataOffset] = (byte)(image.Pixels[PixelOffset].Red - image.Pixels[AbovePixelOffset].Red);
+                      data[dataOffset + 1] = (byte)(image.Pixels[PixelOffset].Green - image.Pixels[AbovePixelOffset].Green);
+                      data[dataOffset + 2] = (byte)(image.Pixels[PixelOffset].Blue - image.Pixels[AbovePixelOffset].Blue);
+                      data[dataOffset + 3] = (byte)(image.Pixels[PixelOffset].Alpha - image.Pixels[AbovePixelOffset].Alpha);
                       data[y * RowLength] = 2;
                   }
               });
@@ -248,7 +249,7 @@ namespace Structure.Sketching.Formats.Png.Format
         /// <param name="colorReader">The color reader.</param>
         /// <param name="colorTypeInformation">The color type information.</param>
         /// <param name="header">The header.</param>
-        private void ReadScanlines(MemoryStream dataStream, byte[] pixels, IColorReader colorReader, ColorTypeInformation colorTypeInformation, Header header)
+        private void ReadScanlines(MemoryStream dataStream, Color[] pixels, IColorReader colorReader, ColorTypeInformation colorTypeInformation, Header header)
         {
             dataStream.Seek(0, SeekOrigin.Begin);
 

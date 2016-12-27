@@ -75,23 +75,17 @@ namespace Structure.Sketching.Filters.Overlays
 
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* Pointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* Pointer2 = Pointer;
+                    Color* Pointer2 = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
                         var Distance = Vector2.Distance(image.Center, new Vector2(x, y));
-                        var SourceColor = new Vector4(*Pointer2 / 255f, *(Pointer2 + 1) / 255f, *(Pointer2 + 2) / 255f, *(Pointer2 + 3) / 255f);
+                        var SourceColor = (Vector4)(*Pointer2);
                         var Result = Vector4.Lerp(Color, SourceColor, 1 - .9f * (Distance / MaxDistance));
                         var TempAlpha = Result.W;
-                        Result = Vector4.Clamp((SourceColor * (1 - TempAlpha) + (Result * SourceColor * TempAlpha)), Vector4.Zero, Vector4.One);
-                        *Pointer2 = (byte)(Result.X * 255);
-                        ++Pointer2;
-                        *Pointer2 = (byte)(Result.Y * 255);
-                        ++Pointer2;
-                        *Pointer2 = (byte)(Result.Z * 255);
-                        ++Pointer2;
-                        *Pointer2 = (byte)(Result.W * 255);
+                        Result = SourceColor * (1 - TempAlpha) + (Result * SourceColor * TempAlpha);
+                        *Pointer2 = (Color)Result;
                         ++Pointer2;
                     }
                 }

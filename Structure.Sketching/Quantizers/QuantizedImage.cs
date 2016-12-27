@@ -83,16 +83,11 @@ namespace Structure.Sketching.Quantizers
         public static implicit operator Image(QuantizedImage quantizedImage)
         {
             int palletCount = quantizedImage.Palette.Length - 1;
-            byte[] Pixels = new byte[quantizedImage.Pixels.Length * 4];
+            Color[] Pixels = new Color[quantizedImage.Pixels.Length];
 
             Parallel.For(0, quantizedImage.Pixels.Length, x =>
             {
-                int offset = x * 4;
-                Color color = quantizedImage.Palette[Math.Min(palletCount, quantizedImage.Pixels[x])];
-                Pixels[offset] = color.Red;
-                Pixels[offset + 1] = color.Green;
-                Pixels[offset + 2] = color.Blue;
-                Pixels[offset + 3] = color.Alpha;
+                Pixels[x] = quantizedImage.Palette[Math.Min(palletCount, quantizedImage.Pixels[x])];
             });
 
             return new Image(quantizedImage.Width, quantizedImage.Height, Pixels);

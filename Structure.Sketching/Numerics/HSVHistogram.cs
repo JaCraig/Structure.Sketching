@@ -76,9 +76,7 @@ namespace Structure.Sketching.Numerics
         /// Loads the specified colors.
         /// </summary>
         /// <param name="colors">The colors.</param>
-        /// <returns>
-        /// This
-        /// </returns>
+        /// <returns>This</returns>
         public IHistogram Load(params Color[] colors)
         {
             Width = colors.Length;
@@ -102,19 +100,17 @@ namespace Structure.Sketching.Numerics
             Width = image.Width;
             Height = image.Height;
             Array.Clear(V, 0, V.Length);
-            fixed (byte* TargetPointer = &image.Pixels[0])
+            fixed (Color* TargetPointer = &image.Pixels[0])
             {
-                byte* TargetPointer2 = TargetPointer;
+                Color* TargetPointer2 = TargetPointer;
                 for (int x = 0; x < image.Width; ++x)
                 {
                     for (int y = 0; y < image.Height; ++y)
                     {
-                        var TempR = *TargetPointer2;
+                        var TempR = (*TargetPointer2).Red;
+                        var TempG = (*TargetPointer2).Green;
+                        var TempB = (*TargetPointer2).Blue;
                         ++TargetPointer2;
-                        var TempG = *TargetPointer2;
-                        ++TargetPointer2;
-                        var TempB = *TargetPointer2;
-                        TargetPointer2 += 2;
                         var TempHSV = (HSV)new Color(TempR, TempG, TempB);
                         ++V[(int)(TempHSV.Value * 100)];
                     }

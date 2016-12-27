@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Formats.Jpeg.Format.Enums;
 using Structure.Sketching.Formats.Jpeg.Format.Segments;
 using System.Collections.Generic;
@@ -103,7 +104,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
                 int pixelWidth = StartFrameSegment.Width;
                 int pixelHeight = StartFrameSegment.Height;
 
-                byte[] pixels = new byte[pixelWidth * pixelHeight * 4];
+                Color[] pixels = new Color[pixelWidth * pixelHeight];
 
                 Parallel.For(
                             0,
@@ -113,12 +114,12 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
                                 var yoff = GetRowOffset(y);
                                 for (int x = 0; x < pixelWidth; x++)
                                 {
-                                    int offset = ((y * pixelWidth) + x) * 4;
+                                    int offset = (y * pixelWidth) + x;
 
-                                    pixels[offset] = Pixels[yoff + x];
-                                    pixels[offset + 1] = Pixels[yoff + x];
-                                    pixels[offset + 2] = Pixels[yoff + x];
-                                    pixels[offset + 3] = 255;
+                                    pixels[offset].Red = Pixels[yoff + x];
+                                    pixels[offset].Green = Pixels[yoff + x];
+                                    pixels[offset].Blue = Pixels[yoff + x];
+                                    pixels[offset].Alpha = 255;
                                 }
                             });
 

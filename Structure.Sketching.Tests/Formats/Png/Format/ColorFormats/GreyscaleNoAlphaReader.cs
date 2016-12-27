@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Structure.Sketching.Colors;
+using Xunit;
 
 namespace Structure.Sketching.Tests.Formats.Png.Format.ColorFormats
 {
@@ -8,8 +9,19 @@ namespace Structure.Sketching.Tests.Formats.Png.Format.ColorFormats
         public void ReadScanline()
         {
             var data = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
-            var Result = new byte[40];
-            var ExpectedResult = new byte[] { 1, 1, 1, 1, 2, 2, 2, 1, 3, 3, 3, 1, 4, 4, 4, 1, 5, 5, 5, 1, 6, 6, 6, 1, 7, 7, 7, 1, 8, 8, 8, 1, 9, 9, 9, 1, 0, 0, 0, 1 };
+            var Result = new Color[10];
+            var ExpectedResult = new Color[] {
+                new Color(1, 1, 1, 255),
+                new Color(2, 2, 2, 255),
+                new Color(3, 3, 3, 255),
+                new Color(4, 4, 4, 255),
+                new Color(5, 5, 5, 255),
+                new Color(6, 6, 6, 255),
+                new Color(7, 7, 7, 255),
+                new Color(8, 8, 8, 255),
+                new Color(9, 9, 9, 255),
+                new Color(0, 0, 0, 255)
+            };
             var TestObject = new Structure.Sketching.Formats.Png.Format.ColorFormats.GreyscaleNoAlphaReader();
             TestObject.ReadScanline(data, Result, new Sketching.Formats.Png.Format.Header(10, 1, 8, 0, 0, 0, 0), 0);
             Assert.Equal(ExpectedResult, Result);

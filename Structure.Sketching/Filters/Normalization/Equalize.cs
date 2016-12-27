@@ -56,21 +56,16 @@ namespace Structure.Sketching.Filters.Normalization
                      .Equalize();
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* TargetPointer2 = TargetPointer;
+                    Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        var TempR = *TargetPointer2;
-                        var TempG = *(TargetPointer2 + 1);
-                        var TempB = *(TargetPointer2 + 2);
-                        var ResultColor = Histogram.EqualizeColor(new Color(TempR, TempG, TempB));
-                        (*TargetPointer2) = ResultColor.Red;
+                        var ResultColor = Histogram.EqualizeColor(*TargetPointer2);
+                        (*TargetPointer2).Red = ResultColor.Red;
+                        (*TargetPointer2).Green = ResultColor.Green;
+                        (*TargetPointer2).Blue = ResultColor.Blue;
                         ++TargetPointer2;
-                        (*TargetPointer2) = ResultColor.Green;
-                        ++TargetPointer2;
-                        (*TargetPointer2) = ResultColor.Blue;
-                        TargetPointer2 += 2;
                     }
                 }
             });

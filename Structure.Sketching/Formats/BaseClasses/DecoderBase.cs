@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Formats.Interfaces;
 using System;
 using System.IO;
@@ -90,7 +91,7 @@ namespace Structure.Sketching.Formats.BaseClasses
         public Image Decode(Stream stream)
         {
             if (stream == null)
-                return new Image(1, 1, new byte[4]);
+                return new Image(1, 1, new Color[1]);
             return new TFile().Decode(stream);
         }
 
@@ -102,7 +103,7 @@ namespace Structure.Sketching.Formats.BaseClasses
         public Animation DecodeAnimation(Stream stream)
         {
             if (stream == null)
-                return new Animation(new Image[] { new Image(1, 1, new byte[4]) }, 0);
+                return new Animation(new Image[] { new Image(1, 1, new Color[1]) }, 0);
             return new TFile().Decode(stream);
         }
     }

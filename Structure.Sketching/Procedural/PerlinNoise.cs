@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.ExtensionMethods;
 
 namespace Structure.Sketching.Procedural
@@ -39,7 +40,7 @@ namespace Structure.Sketching.Procedural
         public static Image Generate(int Width, int Height, float MaxRGBValue, float MinRGBValue,
             float Frequency, float Amplitude, float Persistance, int Octaves, int Seed)
         {
-            var ReturnValue = new Image(Width, Height, new byte[Width * Height * 4]);
+            var ReturnValue = new Image(Width, Height, new Color[Width * Height]);
             var Noise = GenerateNoise(Seed, Width, Height);
             for (int x = 0; x < Width; ++x)
             {
@@ -49,10 +50,10 @@ namespace Structure.Sketching.Procedural
                     Value = (Value * 0.5f) + 0.5f;
                     Value *= 255;
                     var RGBValue = (byte)Value.Clamp(MinRGBValue, MaxRGBValue);
-                    ReturnValue.Pixels[((y * Width) + x) * 4] = RGBValue;
-                    ReturnValue.Pixels[(((y * Width) + x) * 4) + 1] = RGBValue;
-                    ReturnValue.Pixels[(((y * Width) + x) * 4) + 2] = RGBValue;
-                    ReturnValue.Pixels[(((y * Width) + x) * 4) + 3] = 255;
+                    ReturnValue.Pixels[(y * Width) + x].Red = RGBValue;
+                    ReturnValue.Pixels[(y * Width) + x].Green = RGBValue;
+                    ReturnValue.Pixels[(y * Width) + x].Blue = RGBValue;
+                    ReturnValue.Pixels[(y * Width) + x].Alpha = 255;
                 }
             }
             return ReturnValue;

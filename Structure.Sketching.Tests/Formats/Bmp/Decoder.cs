@@ -55,7 +55,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp
             {
                 var TempDecoder = new Structure.Sketching.Formats.Bmp.Decoder();
                 var TempImage = TempDecoder.Decode(TempFile);
-                Assert.Equal(7040, TempImage.Pixels.Length);
+                Assert.Equal(1760, TempImage.Pixels.Length);
                 Assert.Equal(44, TempImage.Width);
                 Assert.Equal(40, TempImage.Height);
                 Assert.Equal(1.1d, TempImage.PixelRatio);

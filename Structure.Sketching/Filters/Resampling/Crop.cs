@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
@@ -35,21 +36,20 @@ namespace Structure.Sketching.Filters.Resampling
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var Result = new byte[targetLocation.Width * targetLocation.Height * 4];
+            var Result = new Color[targetLocation.Width * targetLocation.Height];
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* TargetPointer = &Result[((y - targetLocation.Bottom) * targetLocation.Width) * 4])
+                fixed (Color* TargetPointer = &Result[(y - targetLocation.Bottom) * targetLocation.Width])
                 {
-                    byte* TargetPointer2 = TargetPointer;
-                    fixed (byte* SourcePointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
+                    Color* TargetPointer2 = TargetPointer;
+                    fixed (Color* SourcePointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
                     {
-                        byte* SourcePointer2 = SourcePointer;
+                        Color* SourcePointer2 = SourcePointer;
                         for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                         {
-                            *(TargetPointer2++) = *(SourcePointer2++);
-                            *(TargetPointer2++) = *(SourcePointer2++);
-                            *(TargetPointer2++) = *(SourcePointer2++);
-                            *(TargetPointer2++) = *(SourcePointer2++);
+                            *TargetPointer2 = *SourcePointer2;
+                            ++TargetPointer2;
+                            ++SourcePointer2;
                         }
                     }
                 }

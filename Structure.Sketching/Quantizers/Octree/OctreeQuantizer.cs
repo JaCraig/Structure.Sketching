@@ -19,7 +19,6 @@ using Structure.Sketching.Colors.ColorSpaces;
 using Structure.Sketching.ExtensionMethods;
 using Structure.Sketching.Quantizers.BaseClasses;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Quantizers.Octree
@@ -69,12 +68,8 @@ namespace Structure.Sketching.Quantizers.Octree
             {
                 for (int x = 0; x < image.Width; x++)
                 {
-                    int TempOffset = (y * image.Width * 4) + (x * 4);
-                    var PixelR = image.Pixels[TempOffset];
-                    var PixelG = image.Pixels[TempOffset + 1];
-                    var PixelB = image.Pixels[TempOffset + 2];
-                    var PixelA = image.Pixels[TempOffset + 3];
-                    octree.AddColor(new Color(PixelR, PixelG, PixelB, PixelA));
+                    int TempOffset = (y * image.Width) + x;
+                    octree.AddColor(image.Pixels[TempOffset]);
                 }
             }
         }
@@ -94,12 +89,8 @@ namespace Structure.Sketching.Quantizers.Octree
                 {
                     for (int x = 0; x < image.Width; x++)
                     {
-                        int TempOffset = (y * image.Width * 4) + (x * 4);
-                        Bgra sourcePixel = new Color(image.Pixels[TempOffset],
-                                                        image.Pixels[TempOffset + 1],
-                                                        image.Pixels[TempOffset + 2],
-                                                        image.Pixels[TempOffset + 3]);
-                        quantizedPixels[(y * image.Width) + x] = QuantizePixel(sourcePixel);
+                        int TempOffset = (y * image.Width) + x;
+                        quantizedPixels[TempOffset] = QuantizePixel((Bgra)image.Pixels[TempOffset]);
                     }
                 });
 

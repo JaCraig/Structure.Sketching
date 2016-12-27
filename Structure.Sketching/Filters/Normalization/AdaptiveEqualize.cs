@@ -62,15 +62,15 @@ namespace Structure.Sketching.Filters.Normalization
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var TempValues = new byte[image.Pixels.Length];
+            var TempValues = new Color[image.Pixels.Length];
             Array.Copy(image.Pixels, TempValues, TempValues.Length);
             int ApetureMin = -Radius;
             int ApetureMax = Radius;
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* TargetPointer = &image.Pixels[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* TargetPointer2 = TargetPointer;
+                    Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
                         var ColorList = new List<Color>();
@@ -86,21 +86,16 @@ namespace Structure.Sketching.Filters.Normalization
                                     Length += TempX;
                                     TempX = 0;
                                 }
-                                var Start = ((TempY * image.Width) + TempX) * 4;
-                                fixed (byte* ImagePointer = &TempValues[Start])
+                                var Start = (TempY * image.Width) + TempX;
+                                fixed (Color* ImagePointer = &TempValues[Start])
                                 {
-                                    byte* ImagePointer2 = ImagePointer;
+                                    Color* ImagePointer2 = ImagePointer;
                                     for (int x2 = 0; x2 < Length; ++x2)
                                     {
                                         if (TempX >= image.Width)
                                             break;
-                                        var TempR = (*ImagePointer2);
+                                        ColorList.Add(*ImagePointer2);
                                         ++ImagePointer2;
-                                        var TempG = (*ImagePointer2);
-                                        ++ImagePointer2;
-                                        var TempB = (*ImagePointer2);
-                                        ImagePointer2 += 2;
-                                        ColorList.Add(new Color(TempR, TempG, TempB));
                                         ++TempX;
                                     }
                                 }
@@ -108,16 +103,11 @@ namespace Structure.Sketching.Filters.Normalization
                         }
                         var TempHistogram = Histogram().Load(ColorList.ToArray()).Equalize();
 
-                        var TempR2 = *TargetPointer2;
-                        var TempG2 = *(TargetPointer2 + 1);
-                        var TempB2 = *(TargetPointer2 + 2);
-                        var ResultColor = TempHistogram.EqualizeColor(new Color(TempR2, TempG2, TempB2));
-                        (*TargetPointer2) = ResultColor.Red;
+                        var ResultColor = TempHistogram.EqualizeColor(*TargetPointer2);
+                        (*TargetPointer2).Red = ResultColor.Red;
+                        (*TargetPointer2).Green = ResultColor.Green;
+                        (*TargetPointer2).Blue = ResultColor.Blue;
                         ++TargetPointer2;
-                        (*TargetPointer2) = ResultColor.Green;
-                        ++TargetPointer2;
-                        (*TargetPointer2) = ResultColor.Blue;
-                        TargetPointer2 += 2;
                     }
                 }
             });

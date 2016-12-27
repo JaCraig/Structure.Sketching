@@ -84,7 +84,7 @@ namespace Structure.Sketching.Tests.Formats.Png
             {
                 var ImageFormat = new Structure.Sketching.Formats.Png.PngFormat();
                 var TempImage = ImageFormat.Decode(TempFile);
-                Assert.Equal(966000, TempImage.Pixels.Length);
+                Assert.Equal(241500, TempImage.Pixels.Length);
                 Assert.Equal(500, TempImage.Width);
                 Assert.Equal(483, TempImage.Height);
                 Assert.Equal(500d / 483d, TempImage.PixelRatio);

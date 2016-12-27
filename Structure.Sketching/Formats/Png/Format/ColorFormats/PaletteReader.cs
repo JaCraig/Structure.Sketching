@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.ExtensionMethods;
 using Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces;
 using Structure.Sketching.Formats.Png.Format.Enums;
@@ -56,7 +57,7 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
         /// <param name="pixels">The pixels.</param>
         /// <param name="header">The header.</param>
         /// <param name="row">The row.</param>
-        public void ReadScanline(byte[] scanline, byte[] pixels, Header header, int row)
+        public void ReadScanline(byte[] scanline, Color[] pixels, Header header, int row)
         {
             scanline = scanline.ExpandArray(header.BitDepth);
 
@@ -64,25 +65,25 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
             {
                 for (int x = 0; x < header.Width; ++x)
                 {
-                    int Offset = ((row * header.Width) + x) * 4;
+                    int Offset = (row * header.Width) + x;
                     int PixelOffset = scanline[x] * 3;
-                    pixels[Offset] = Palette.Data[PixelOffset];
-                    pixels[Offset + 1] = Palette.Data[PixelOffset + 1];
-                    pixels[Offset + 2] = Palette.Data[PixelOffset + 2];
-                    pixels[Offset + 3] = (byte)(AlphaPalette.Data.Length > scanline[x] ? AlphaPalette.Data[scanline[x]] : 255);
+                    pixels[Offset].Red = Palette.Data[PixelOffset];
+                    pixels[Offset].Green = Palette.Data[PixelOffset + 1];
+                    pixels[Offset].Blue = Palette.Data[PixelOffset + 2];
+                    pixels[Offset].Alpha = (byte)(AlphaPalette.Data.Length > scanline[x] ? AlphaPalette.Data[scanline[x]] : 255);
                 }
             }
             else
             {
                 for (int x = 0; x < header.Width; ++x)
                 {
-                    int Offset = ((row * header.Width) + x) * 4;
+                    int Offset = (row * header.Width) + x;
                     int PixelOffset = scanline[x] * 3;
 
-                    pixels[Offset] = Palette.Data[PixelOffset];
-                    pixels[Offset + 1] = Palette.Data[PixelOffset + 1];
-                    pixels[Offset + 2] = Palette.Data[PixelOffset + 2];
-                    pixels[Offset + 3] = 255;
+                    pixels[Offset].Red = Palette.Data[PixelOffset];
+                    pixels[Offset].Green = Palette.Data[PixelOffset + 1];
+                    pixels[Offset].Blue = Palette.Data[PixelOffset + 2];
+                    pixels[Offset].Alpha = 255;
                 }
             }
         }

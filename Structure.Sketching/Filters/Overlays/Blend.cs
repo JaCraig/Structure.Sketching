@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.ColorMatrix;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
@@ -49,7 +50,7 @@ namespace Structure.Sketching.Filters.Overlays
         public float Alpha { get; private set; }
 
         /// <summary>
-        /// Gets or sets the image.
+        /// Gets or sets the image.;
         /// </summary>
         /// <value>The image.</value>
         public Image Image { get; private set; }
@@ -71,25 +72,19 @@ namespace Structure.Sketching.Filters.Overlays
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             for (int y1 = targetLocation.Bottom, y2 = SourceLocation.Bottom; y1 < targetLocation.Top && y2 < SourceLocation.Top; ++y1, ++y2)
             {
-                fixed (byte* TargetPointer = &image.Pixels[((y1 * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* TargetPointer = &image.Pixels[(y1 * image.Width) + targetLocation.Left])
                 {
-                    fixed (byte* SourcePointer = &Image.Pixels[((y2 * Image.Width) + SourceLocation.Left) * 4])
+                    fixed (Color* SourcePointer = &Image.Pixels[(y2 * Image.Width) + SourceLocation.Left])
                     {
-                        byte* TargetPointer2 = TargetPointer;
-                        byte* SourcePointer2 = SourcePointer;
+                        Color* TargetPointer2 = TargetPointer;
+                        Color* SourcePointer2 = SourcePointer;
                         for (int x1 = targetLocation.Left, x2 = SourceLocation.Left; x1 < targetLocation.Right && x2 < SourceLocation.Right; ++x1, ++x2)
                         {
-                            float TempAlpha = *(SourcePointer2 + 3) / 255f;
-                            *TargetPointer2 = (byte)((*TargetPointer2 * (1f - TempAlpha)) + (*SourcePointer2 * TempAlpha));
-                            ++TargetPointer2;
-                            ++SourcePointer2;
-                            *TargetPointer2 = (byte)((*TargetPointer2 * (1f - TempAlpha)) + (*SourcePointer2 * TempAlpha));
-                            ++TargetPointer2;
-                            ++SourcePointer2;
-                            *TargetPointer2 = (byte)((*TargetPointer2 * (1f - TempAlpha)) + (*SourcePointer2 * TempAlpha));
-                            ++TargetPointer2;
-                            ++SourcePointer2;
-                            *TargetPointer2 = (byte)((*TargetPointer2 * (1f - TempAlpha)) + (*SourcePointer2 * TempAlpha));
+                            float TempAlpha = (*SourcePointer2).Alpha / 255f;
+                            (*TargetPointer2).Red = (byte)(((*TargetPointer2).Red * (1f - TempAlpha)) + ((*SourcePointer2).Red * TempAlpha));
+                            (*TargetPointer2).Green = (byte)(((*TargetPointer2).Green * (1f - TempAlpha)) + ((*SourcePointer2).Green * TempAlpha));
+                            (*TargetPointer2).Blue = (byte)(((*TargetPointer2).Blue * (1f - TempAlpha)) + ((*SourcePointer2).Blue * TempAlpha));
+                            (*TargetPointer2).Alpha = (byte)(((*TargetPointer2).Alpha * (1f - TempAlpha)) + ((*SourcePointer2).Alpha * TempAlpha));
                             ++TargetPointer2;
                             ++SourcePointer2;
                         }

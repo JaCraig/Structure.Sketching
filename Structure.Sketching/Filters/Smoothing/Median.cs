@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System;
@@ -53,15 +54,15 @@ namespace Structure.Sketching.Filters.Smoothing
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var TempValues = new byte[image.Width * image.Height * 4];
+            var TempValues = new Color[image.Pixels.Length];
             Array.Copy(image.Pixels, TempValues, TempValues.Length);
             int ApetureMin = -ApetureRadius;
             int ApetureMax = ApetureRadius;
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* TargetPointer = &TempValues[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* TargetPointer = &TempValues[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* TargetPointer2 = TargetPointer;
+                    Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
                         var RValues = new List<byte>();
@@ -77,17 +78,17 @@ namespace Structure.Sketching.Filters.Smoothing
                                     int TempY = y + y2;
                                     if (TempY >= targetLocation.Bottom && TempY < targetLocation.Top)
                                     {
-                                        RValues.Add(image.Pixels[((TempY * image.Width) + TempX) * 4]);
-                                        GValues.Add(image.Pixels[(((TempY * image.Width) + TempX) * 4) + 1]);
-                                        BValues.Add(image.Pixels[(((TempY * image.Width) + TempX) * 4) + 2]);
+                                        RValues.Add(image.Pixels[(TempY * image.Width) + TempX].Red);
+                                        GValues.Add(image.Pixels[(TempY * image.Width) + TempX].Green);
+                                        BValues.Add(image.Pixels[(TempY * image.Width) + TempX].Blue);
                                     }
                                 }
                             }
                         }
-                        TempValues[((y * image.Width) + x) * 4] = RValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
-                        TempValues[(((y * image.Width) + x) * 4) + 1] = GValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
-                        TempValues[(((y * image.Width) + x) * 4) + 2] = BValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
-                        TempValues[(((y * image.Width) + x) * 4) + 3] = image.Pixels[(((y * image.Width) + x) * 4) + 3];
+                        TempValues[(y * image.Width) + x].Red = RValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
+                        TempValues[(y * image.Width) + x].Green = GValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
+                        TempValues[(y * image.Width) + x].Blue = BValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
+                        TempValues[(y * image.Width) + x].Alpha = image.Pixels[(y * image.Width) + x].Alpha;
                     }
                 }
             });

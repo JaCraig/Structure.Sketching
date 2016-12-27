@@ -18,6 +18,7 @@ using Structure.Sketching.Formats.Bmp.Format.PixelFormats;
 using Structure.Sketching.Formats.Bmp.Format.PixelFormats.Interfaces;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Structure.Sketching.Formats.Bmp.Format
 {
@@ -40,7 +41,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// </summary>
         /// <param name="image">The image.</param>
         public Body(Image image)
-            : this(new RGB24bit().Encode(image.Width, image.Height, image.Pixels, null))
+            : this(new RGB24bit().Encode(image.Width, image.Height, image.Pixels.SelectMany(x => (byte[])x).ToArray(), null))
         {
         }
 
@@ -72,8 +73,8 @@ namespace Structure.Sketching.Formats.Bmp.Format
         public static Body Read(Header header, Palette palette, Stream stream)
         {
             var Data = PixelFormats[header.BPP].Read(header.Width, header.Height, stream);
-            Data = PixelFormats[header.BPP].Decode(header.Width, header.Height, Data, palette);
-            return new Body(Data);
+            var Data2 = PixelFormats[header.BPP].Decode(header.Width, header.Height, Data, palette);
+            return new Body(Data2);
         }
 
         /// <summary>

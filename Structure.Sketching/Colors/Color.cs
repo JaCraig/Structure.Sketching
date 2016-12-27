@@ -33,13 +33,7 @@ namespace Structure.Sketching.Colors
         /// The int data
         /// </summary>
         [FieldOffset(0)]
-        public int IntData;
-
-        /// <summary>
-        /// The u int data
-        /// </summary>
-        [FieldOffset(0)]
-        public uint UIntData;
+        public uint IntData;
 
         /// <summary>
         /// The red
@@ -115,7 +109,6 @@ namespace Structure.Sketching.Colors
                 throw new ArgumentException("Hex value is not convertable");
             }
             IntData = 0;
-            UIntData = 0;
             Red = Convert.ToByte(hex.Substring(2, 2), 16);
             Green = Convert.ToByte(hex.Substring(4, 2), 16);
             Blue = Convert.ToByte(hex.Substring(6, 2), 16);
@@ -129,25 +122,10 @@ namespace Structure.Sketching.Colors
         public Color(byte[] vector)
         {
             IntData = 0;
-            UIntData = 0;
             Red = vector[0];
             Green = vector[1];
             Blue = vector[2];
             Alpha = vector[3];
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Color"/> struct.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        public Color(int data)
-        {
-            Red = 0;
-            Green = 0;
-            Blue = 0;
-            Alpha = 0;
-            UIntData = 0;
-            IntData = data;
         }
 
         /// <summary>
@@ -160,8 +138,7 @@ namespace Structure.Sketching.Colors
             Green = 0;
             Blue = 0;
             Alpha = 0;
-            IntData = 0;
-            UIntData = data;
+            IntData = data;
         }
 
         /// <summary>
@@ -201,16 +178,6 @@ namespace Structure.Sketching.Colors
         /// </summary>
         /// <param name="color">The color.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator Color(int color)
-        {
-            return new Color(color);
-        }
-
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="ColorSpaces.Bgra"/> to <see cref="int"/>.
-        /// </summary>
-        /// <param name="color">The color.</param>
-        /// <returns>The result of the conversion.</returns>
         public static implicit operator Color(uint color)
         {
             return new Color(color);
@@ -221,7 +188,7 @@ namespace Structure.Sketching.Colors
         /// </summary>
         /// <param name="color">The color.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator int(Color color)
+        public static implicit operator uint(Color color)
         {
             return color.IntData;
         }
@@ -240,9 +207,7 @@ namespace Structure.Sketching.Colors
         /// Performs an implicit conversion from <see cref="Vector4"/> to <see cref="Color"/>.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Color(Vector4 color)
         {
             color = Vector4.Clamp(color, Vector4.Zero, Vector4.One);
@@ -334,10 +299,7 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Color Not()
         {
-            Red = (byte)(255 - Red);
-            Green = (byte)(255 - Green);
-            Blue = (byte)(255 - Blue);
-            Alpha = (byte)(255 - Alpha);
+            IntData = uint.MaxValue - IntData;
             return this;
         }
 
@@ -428,7 +390,7 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Color And(Color color)
         {
-            UIntData = UIntData & color.UIntData;
+            IntData = IntData & color.IntData;
             return this;
         }
 
@@ -440,7 +402,7 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Color Or(Color color)
         {
-            UIntData = UIntData | color.UIntData;
+            IntData = IntData | color.IntData;
             return this;
         }
 
@@ -452,7 +414,7 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Color XOr(Color color)
         {
-            UIntData = UIntData ^ color.UIntData;
+            IntData = IntData ^ color.IntData;
             return this;
         }
 
@@ -494,7 +456,7 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color operator !(Color color)
         {
-            return (byte)255 - color;
+            return new Color(uint.MaxValue - color.IntData);
         }
 
         /// <summary>
@@ -621,10 +583,7 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color operator &(Color color1, Color color2)
         {
-            return new Color((byte)(color1.Red & color2.Red),
-                (byte)(color1.Green & color2.Green),
-                (byte)(color1.Blue & color2.Blue),
-                (byte)(color1.Alpha & color2.Alpha));
+            return new Color(color1.IntData & color2.IntData);
         }
 
         /// <summary>
@@ -636,10 +595,7 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color operator |(Color color1, Color color2)
         {
-            return new Color((byte)(color1.Red | color2.Red),
-                (byte)(color1.Green | color2.Green),
-                (byte)(color1.Blue | color2.Blue),
-                (byte)(color1.Alpha | color2.Alpha));
+            return new Color(color1.IntData | color2.IntData);
         }
 
         /// <summary>
@@ -651,10 +607,7 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Color operator ^(Color color1, Color color2)
         {
-            return new Color((byte)(color1.Red ^ color2.Red),
-                (byte)(color1.Green ^ color2.Green),
-                (byte)(color1.Blue ^ color2.Blue),
-                (byte)(color1.Alpha ^ color2.Alpha));
+            return new Color(color1.IntData ^ color2.IntData);
         }
 
         /// <summary>
@@ -839,10 +792,7 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Color other)
         {
-            return other.Alpha == Alpha
-                && other.Red == Red
-                && other.Green == Green
-                && other.Blue == Blue;
+            return other.IntData == IntData;
         }
 
         /// <summary>

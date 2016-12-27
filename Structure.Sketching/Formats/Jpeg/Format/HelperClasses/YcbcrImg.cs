@@ -285,7 +285,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
         {
             var StartFrameSegment = segments.OfType<StartOfFrame>().FirstOrDefault();
             int cScale = StartFrameSegment.Components[0].HorizontalSamplingFactor / StartFrameSegment.Components[1].HorizontalSamplingFactor;
-            byte[] pixels = new byte[width * height * 4];
+            var pixels = new Color[width * height];
 
             Parallel.For(
                0,
@@ -301,12 +301,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
                        byte green = CBPixels[co + x / cScale];
                        byte blue = CRPixels[co + x / cScale];
 
-                       int index = ((y * width) + x) * 4;
-                       Color color = new Bgra(red, green, blue);
-                       pixels[index] = color.Red;
-                       pixels[index + 1] = color.Green;
-                       pixels[index + 2] = color.Blue;
-                       pixels[index + 3] = color.Alpha;
+                       pixels[(y * width) + x] = new Bgra(red, green, blue);
                    }
                });
 
@@ -318,7 +313,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
             var StartFrameSegment = segments.OfType<StartOfFrame>().FirstOrDefault();
             int cScale = StartFrameSegment.Components[0].HorizontalSamplingFactor / StartFrameSegment.Components[1].HorizontalSamplingFactor;
 
-            byte[] pixels = new byte[width * height * 4];
+            Color[] pixels = new Color[width * height];
 
             Parallel.For(
                 0,
@@ -334,13 +329,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
                         byte cb = CBPixels[co + (x / cScale)];
                         byte cr = CRPixels[co + (x / cScale)];
 
-                        int index = ((y * width) + x) * 4;
-
-                        Color color = new YCbCr(yy, cb, cr);
-                        pixels[index] = color.Red;
-                        pixels[index + 1] = color.Green;
-                        pixels[index + 2] = color.Blue;
-                        pixels[index + 3] = color.Alpha;
+                        pixels[(y * width) + x] = new YCbCr(yy, cb, cr);
                     }
                 });
 

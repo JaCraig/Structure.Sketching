@@ -58,9 +58,9 @@ namespace Structure.Sketching.Filters.Effects
                     Color* OutputPointer = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        int R = (*OutputPointer) + Random.ThreadSafeNext(-Amount, Amount);
-                        int G = *(OutputPointer + 1) + Random.ThreadSafeNext(-Amount, Amount);
-                        int B = *(OutputPointer + 2) + Random.ThreadSafeNext(-Amount, Amount);
+                        int R = (*OutputPointer).Red + Random.ThreadSafeNext(-Amount, Amount);
+                        int G = (*OutputPointer).Green + Random.ThreadSafeNext(-Amount, Amount);
+                        int B = (*OutputPointer).Blue + Random.ThreadSafeNext(-Amount, Amount);
                         R = R < 0 ? 0 : R > 255 ? 255 : R;
                         G = G < 0 ? 0 : G > 255 ? 255 : G;
                         B = B < 0 ? 0 : B > 255 ? 255 : B;

@@ -1,4 +1,5 @@
-﻿using Structure.Sketching.Formats;
+﻿using Structure.Sketching.Colors;
+using Structure.Sketching.Formats;
 using Structure.Sketching.Tests.BaseClasses;
 using System;
 using System.IO;
@@ -28,7 +29,7 @@ namespace Structure.Sketching.Tests
         [Fact]
         public void BadDataConstructor()
         {
-            var TempImage = new Image(-1, -1, null);
+            var TempImage = new Image(-1, -1, (byte[])null);
             Assert.Equal(1, TempImage.Width);
             Assert.Equal(1, TempImage.Height);
             Assert.Equal(1, TempImage.PixelRatio);
@@ -78,7 +79,7 @@ namespace Structure.Sketching.Tests
             Assert.Equal(1, TempImage.Width);
             Assert.Equal(1, TempImage.Height);
             Assert.Equal(1, TempImage.PixelRatio);
-            Assert.Equal(new byte[] { 0, 0, 0, 0 }, TempImage.Pixels);
+            Assert.Equal(new Color(0, 0, 0, 0), TempImage.Pixels[0]);
         }
 
         [Fact]

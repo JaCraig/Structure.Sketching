@@ -52,15 +52,15 @@ namespace Structure.Sketching.Filters.Smoothing
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var TempValues = new byte[image.Width * image.Height * 4];
+            var TempValues = new Color[image.Pixels.Length];
             Array.Copy(image.Pixels, TempValues, TempValues.Length);
             int ApetureMin = -ApetureRadius;
             int ApetureMax = ApetureRadius;
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (byte* TargetPointer = &TempValues[((y * image.Width) + targetLocation.Left) * 4])
+                fixed (Color* TargetPointer = &TempValues[(y * image.Width) + targetLocation.Left])
                 {
-                    byte* TargetPointer2 = TargetPointer;
+                    Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
                         uint RValue = 0;
@@ -79,15 +79,9 @@ namespace Structure.Sketching.Filters.Smoothing
                                     int TempY2 = y - y2;
                                     if (TempY1 >= targetLocation.Bottom && TempY1 < targetLocation.Top && TempY2 >= targetLocation.Bottom && TempY2 < targetLocation.Top)
                                     {
-                                        var TempValue1 = new Color(image.Pixels[((y * image.Width) + x) * 4],
-                                            image.Pixels[(((y * image.Width) + x) * 4) + 1],
-                                            image.Pixels[(((y * image.Width) + x) * 4) + 2]);
-                                        var TempValue2 = new Color(image.Pixels[((TempY1 * image.Width) + TempX1) * 4],
-                                            image.Pixels[(((TempY1 * image.Width) + TempX1) * 4) + 1],
-                                            image.Pixels[(((TempY1 * image.Width) + TempX1) * 4) + 2]);
-                                        var TempValue3 = new Color(image.Pixels[((TempY2 * image.Width) + TempX2) * 4],
-                                            image.Pixels[(((TempY2 * image.Width) + TempX2) * 4) + 1],
-                                            image.Pixels[(((TempY2 * image.Width) + TempX2) * 4) + 2]);
+                                        var TempValue1 = image.Pixels[(y * image.Width) + x];
+                                        var TempValue2 = image.Pixels[(TempY1 * image.Width) + TempX1];
+                                        var TempValue3 = image.Pixels[(TempY2 * image.Width) + TempX2];
                                         if (Distance.Euclidean(TempValue1, TempValue2) < Distance.Euclidean(TempValue1, TempValue3))
                                         {
                                             RValue += TempValue2.Red;
@@ -105,10 +99,10 @@ namespace Structure.Sketching.Filters.Smoothing
                                 }
                             }
                         }
-                        TempValues[((y * image.Width) + x) * 4] = (byte)(RValue / NumPixels);
-                        TempValues[(((y * image.Width) + x) * 4) + 1] = (byte)(GValue / NumPixels);
-                        TempValues[(((y * image.Width) + x) * 4) + 2] = (byte)(BValue / NumPixels);
-                        TempValues[(((y * image.Width) + x) * 4) + 3] = image.Pixels[(((y * image.Width) + x) * 4) + 3];
+                        TempValues[(y * image.Width) + x].Red = (byte)(RValue / NumPixels);
+                        TempValues[(y * image.Width) + x].Green = (byte)(GValue / NumPixels);
+                        TempValues[(y * image.Width) + x].Blue = (byte)(BValue / NumPixels);
+                        TempValues[(y * image.Width) + x].Alpha = image.Pixels[(y * image.Width) + x].Alpha;
                     }
                 }
             });

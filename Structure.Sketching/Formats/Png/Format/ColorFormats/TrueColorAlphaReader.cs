@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.Colors;
 using Structure.Sketching.ExtensionMethods;
 using Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces;
 
@@ -32,30 +33,27 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
         /// <param name="pixels">The pixels.</param>
         /// <param name="header">The header.</param>
         /// <param name="row">The row.</param>
-        public unsafe void ReadScanline(byte[] scanline, byte[] pixels, Header header, int row)
+        public unsafe void ReadScanline(byte[] scanline, Color[] pixels, Header header, int row)
         {
             scanline = scanline.ExpandArray(header.BitDepth);
             int BytesPerPixel = (header.BitDepth * 4) / 8;
             int BytesPerChannel = header.BitDepth / 8;
 
-            fixed (byte* PixelPointer = &pixels[row * header.Width * 4])
+            fixed (Color* PixelPointer = &pixels[row * header.Width])
             {
-                byte* PixelPointer2 = PixelPointer;
+                Color* PixelPointer2 = PixelPointer;
                 fixed (byte* ScanlinePointer = &scanline[0])
                 {
                     byte* ScanlinePointer2 = ScanlinePointer;
                     for (int x = 0; x < scanline.Length; x += BytesPerPixel)
                     {
-                        *PixelPointer2 = *ScanlinePointer2;
-                        ++PixelPointer2;
+                        (*PixelPointer2).Red = *ScanlinePointer2;
                         ScanlinePointer2 += BytesPerChannel;
-                        *PixelPointer2 = *ScanlinePointer2;
-                        ++PixelPointer2;
+                        (*PixelPointer2).Green = *ScanlinePointer2;
                         ScanlinePointer2 += BytesPerChannel;
-                        *PixelPointer2 = *ScanlinePointer2;
-                        ++PixelPointer2;
+                        (*PixelPointer2).Blue = *ScanlinePointer2;
                         ScanlinePointer2 += BytesPerChannel;
-                        *PixelPointer2 = *ScanlinePointer2;
+                        (*PixelPointer2).Alpha = *ScanlinePointer2;
                         ++PixelPointer2;
                         ScanlinePointer2 += BytesPerChannel;
                     }
