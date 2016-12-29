@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces;
+using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
 using System;
 
 namespace Structure.Sketching.Filters.Resampling.ResamplingFilters
@@ -23,20 +23,20 @@ namespace Structure.Sketching.Filters.Resampling.ResamplingFilters
     /// Cosine filter
     /// </summary>
     /// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
-    public class CosineFilter : IResamplingFilter
+    public class CosineFilter : ResamplingFilterBase
     {
         /// <summary>
         /// Gets the filter radius.
         /// </summary>
         /// <value>The filter radius.</value>
-        public float FilterRadius => 1f;
+        public override float FilterRadius => 1f;
 
         /// <summary>
         /// Gets the value based on the resampling filter.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The new value based on the input.</returns>
-        public double GetValue(double value)
+        public override double GetValue(double value)
         {
             if (value >= -1 && value <= 1) return (Math.Cos(value * Math.PI) + 1) / 2f;
             return 0;

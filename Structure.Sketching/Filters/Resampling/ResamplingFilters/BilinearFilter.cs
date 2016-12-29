@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces;
+using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
 
 namespace Structure.Sketching.Filters.Resampling.ResamplingFilters
 {
@@ -22,20 +22,20 @@ namespace Structure.Sketching.Filters.Resampling.ResamplingFilters
     /// Bilinear resampling filter
     /// </summary>
     /// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
-    public class BilinearFilter : IResamplingFilter
+    public class BilinearFilter : ResamplingFilterBase
     {
         /// <summary>
         /// Gets the filter radius.
         /// </summary>
         /// <value>The filter radius.</value>
-        public float FilterRadius => 0.5f;
+        public override float FilterRadius => 0.5f;
 
         /// <summary>
         /// Gets the value based on the resampling filter.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The new value based on the input.</returns>
-        public double GetValue(double value)
+        public override double GetValue(double value)
         {
             value = value < 0 ? -value : value;
             if (value <= 0.5) return 1;

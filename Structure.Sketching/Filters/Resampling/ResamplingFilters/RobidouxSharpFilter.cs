@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces;
+using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
 
 namespace Structure.Sketching.Filters.Resampling.ResamplingFilters
 {
@@ -22,20 +22,20 @@ namespace Structure.Sketching.Filters.Resampling.ResamplingFilters
     /// Robidoux sharp filter
     /// </summary>
     /// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
-    public class RobidouxSharpFilter : IResamplingFilter
+    public class RobidouxSharpFilter : ResamplingFilterBase
     {
         /// <summary>
         /// Gets the filter radius.
         /// </summary>
         /// <value>The filter radius.</value>
-        public float FilterRadius => 2f;
+        public override float FilterRadius => 2f;
 
         /// <summary>
         /// Gets the value based on the resampling filter.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The new value based on the input.</returns>
-        public double GetValue(double value)
+        public override double GetValue(double value)
         {
             const float B = 0.26201451F;
             const float C = 0.36899274F;

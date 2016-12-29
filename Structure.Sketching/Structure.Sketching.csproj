@@ -123,6 +123,8 @@
     <Compile Include="Filters\Normalization\Logarithm.cs" />
     <Compile Include="Filters\Morphology\Constrict.cs" />
     <Compile Include="Filters\Morphology\Dilate.cs" />
+    <Compile Include="Filters\Resampling\ResamplingFilters\BaseClasses\ResamplingFilterBase.cs" />
+    <Compile Include="Filters\Resampling\ResamplingFilters\HelperClasses\Weights.cs" />
     <Compile Include="Filters\Sharpening\Unsharp.cs" />
     <Compile Include="Filters\Effects\Noise.cs" />
     <Compile Include="Filters\Overlays\Blend.cs" />

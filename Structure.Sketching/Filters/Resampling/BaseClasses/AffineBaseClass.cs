@@ -117,6 +117,7 @@ namespace Structure.Sketching.Filters.Resampling.BaseClasses
         /// <returns>The image</returns>
         public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
+            Filter.Precompute(image.Width, image.Height, Width, Height);
             targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             var Copy = new Color[image.Pixels.Length];
             Array.Copy(image.Pixels, Copy, Copy.Length);
@@ -141,39 +142,54 @@ namespace Structure.Sketching.Filters.Resampling.BaseClasses
                         var rotated = Vector2.Transform(new Vector2(x, y), TransformationMatrix);
                         var rotatedY = (int)rotated.Y;
                         var rotatedX = (int)rotated.X;
-
+                        if (rotatedY >= image.Height
+                            || rotatedY < 0
+                            || rotatedX >= image.Width
+                            || rotatedX < 0)
+                        {
+                            (*OutputPointer2).Red = 0;
+                            (*OutputPointer2).Green = 0;
+                            (*OutputPointer2).Blue = 0;
+                            (*OutputPointer2).Alpha = 255;
+                            ++OutputPointer2;
+                            continue;
+                        }
                         var Left = (int)(rotatedX - XRadius);
                         var Right = (int)(rotatedX + XRadius);
                         var Top = (int)(rotatedY - YRadius);
                         var Bottom = (int)(rotatedY + YRadius);
-                        for (int i = Top; i <= Bottom; ++i)
+                        if (Top < 0)
+                            Top = 0;
+                        if (Bottom >= image.Height)
+                            Bottom = image.Height - 1;
+                        if (Left < 0)
+                            Left = 0;
+                        if (Right >= image.Width)
+                            Right = image.Width - 1;
+                        for (int i = Top, YCount = 0; i <= Bottom; ++i, ++YCount)
                         {
-                            if (i < 0 || i >= image.Height)
-                                continue;
                             fixed (Color* PixelPointer = &Copy[i * image.Width])
                             {
-                                for (int j = Left; j <= Right; ++j)
+                                Color* PixelPointer2 = PixelPointer + Left;
+                                for (int j = Left, XCount = 0; j <= Right; ++j, ++XCount)
                                 {
-                                    if (j < 0 || j >= image.Width)
-                                        continue;
-                                    Color* PixelPointer2 = PixelPointer + j;
-                                    var TempYWeight = YScale < 1f ?
-                                        Filter.GetValue((rotatedY - i) * YScale) :
-                                        Filter.GetValue(rotatedY - i);
-                                    var TempXWeight = XScale < 1f ?
-                                        Filter.GetValue((rotatedX - j) * XScale) :
-                                        Filter.GetValue(rotatedX - j);
+                                    var TempYWeight = Filter.YWeights[rotatedY].Values[YCount];
+                                    var TempXWeight = Filter.XWeights[rotatedX].Values[XCount];
                                     var TempWeight = TempYWeight * TempXWeight;
 
                                     if (YRadius == 0 && XRadius == 0)
                                         TempWeight = 1;
 
                                     if (TempWeight == 0)
+                                    {
+                                        ++PixelPointer2;
                                         continue;
+                                    }
                                     Values.X = Values.X + ((*PixelPointer2).Red * (float)TempWeight);
                                     Values.Y = Values.Y + ((*PixelPointer2).Green * (float)TempWeight);
                                     Values.Z = Values.Z + ((*PixelPointer2).Blue * (float)TempWeight);
                                     Values.W = Values.W + ((*PixelPointer2).Alpha * (float)TempWeight);
+                                    ++PixelPointer2;
                                     Weight += (float)TempWeight;
                                 }
                             }
@@ -182,7 +198,6 @@ namespace Structure.Sketching.Filters.Resampling.BaseClasses
                             Weight = 1;
                         if (Weight > 0)
                         {
-                            Values /= Weight;
                             Values = Vector4.Clamp(Values, Vector4.Zero, new Vector4(255, 255, 255, 255));
                             (*OutputPointer2).Red = (byte)Values.X;
                             (*OutputPointer2).Green = (byte)Values.Y;
