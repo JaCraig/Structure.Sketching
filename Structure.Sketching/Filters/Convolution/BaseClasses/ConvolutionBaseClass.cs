@@ -142,10 +142,10 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
                                     {
                                         Start = ((YCurrent + y) * image.Width) + (x + XCurrent);
                                         var TempPixel = tempPixels[Start];
-                                        Values = Values + new Vector4((*MatrixValue * TempPixel.Red),
-                                                                            (*MatrixValue * TempPixel.Green),
-                                                                            (*MatrixValue * TempPixel.Blue),
-                                                                            (*MatrixValue * TempPixel.Alpha));
+                                        Values += new Vector4(*MatrixValue * TempPixel.Red,
+                                            *MatrixValue * TempPixel.Green,
+                                            *MatrixValue * TempPixel.Blue,
+                                            TempPixel.Alpha);
                                         Weight += *MatrixValue;
                                     }
                                     ++MatrixValue;
@@ -163,8 +163,10 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
                             }
                             Values /= Weight;
                             Values = new Vector4(Values.X + Offset, Values.Y + Offset, Values.Z + Offset, 1);
-                            Values = Vector4.Clamp(Values, Vector4.Zero, new Vector4(255, 255, 255, 255)) / 255f;
-                            *OutputPointer = Values;
+                            Values = Vector4.Clamp(Values, Vector4.Zero, new Vector4(255, 255, 255, 255));
+                            (*OutputPointer).Red = (byte)Values.X;
+                            (*OutputPointer).Green = (byte)Values.Y;
+                            (*OutputPointer).Blue = (byte)Values.Z;
                             ++OutputPointer;
                         }
                         else

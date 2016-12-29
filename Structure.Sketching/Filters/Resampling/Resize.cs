@@ -145,11 +145,11 @@ namespace Structure.Sketching.Filters.Resampling
                                 continue;
                             fixed (Color* PixelPointer = &image.Pixels[i * oldWidth])
                             {
-                                Color* PixelPointer2 = PixelPointer + Left;
                                 for (int j = Left; j <= Right; ++j)
                                 {
                                     if (j < 0 || j >= oldWidth)
                                         continue;
+                                    Color* PixelPointer2 = PixelPointer + j;
                                     var TempYWeight = yScale < 1f ?
                                         Filter.GetValue((YCenter - i - 0.5) * yScale) :
                                         Filter.GetValue(YCenter - i - 0.5);
@@ -177,8 +177,11 @@ namespace Structure.Sketching.Filters.Resampling
                         if (Weight > 0)
                         {
                             Values /= Weight;
-                            Values /= 255f;
-                            *OutputPointer2 = (Color)Values;
+                            Values = Vector4.Clamp(Values, Vector4.Zero, new Vector4(255, 255, 255, 255));
+                            (*OutputPointer2).Red = (byte)Values.X;
+                            (*OutputPointer2).Green = (byte)Values.Y;
+                            (*OutputPointer2).Blue = (byte)Values.Z;
+                            (*OutputPointer2).Alpha = (byte)Values.W;
                             ++OutputPointer2;
                         }
                         else

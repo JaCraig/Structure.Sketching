@@ -14,7 +14,7 @@
     "allowUnsafe": true
   },
   "dependencies": {
-    "BenchmarkDotNet.Diagnostics.Windows": "0.9.9",
+    "BenchmarkDotNet.Diagnostics.Windows": "0.10.1",
     "ImageProcessor": "2.4.4",
     "System.IO.FileSystem": "4.0.1",
     "System.Numerics.Vectors": "4.1.1",

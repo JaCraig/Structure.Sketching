@@ -81,10 +81,7 @@ namespace Structure.Sketching.Filters.Overlays
                         for (int x1 = targetLocation.Left, x2 = SourceLocation.Left; x1 < targetLocation.Right && x2 < SourceLocation.Right; ++x1, ++x2)
                         {
                             float TempAlpha = (*SourcePointer2).Alpha / 255f;
-                            (*TargetPointer2).Red = (byte)(((*TargetPointer2).Red * (1f - TempAlpha)) + ((*SourcePointer2).Red * TempAlpha));
-                            (*TargetPointer2).Green = (byte)(((*TargetPointer2).Green * (1f - TempAlpha)) + ((*SourcePointer2).Green * TempAlpha));
-                            (*TargetPointer2).Blue = (byte)(((*TargetPointer2).Blue * (1f - TempAlpha)) + ((*SourcePointer2).Blue * TempAlpha));
-                            (*TargetPointer2).Alpha = (byte)(((*TargetPointer2).Alpha * (1f - TempAlpha)) + ((*SourcePointer2).Alpha * TempAlpha));
+                            *TargetPointer2 = (*TargetPointer2 * (1f - TempAlpha)) + (*SourcePointer2 * TempAlpha);
                             ++TargetPointer2;
                             ++SourcePointer2;
                         }
