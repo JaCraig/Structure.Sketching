@@ -105,12 +105,10 @@ namespace Structure.Sketching.Filters.Resampling
         /// <returns>The image</returns>
         public Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
         {
-            var Output = new Color[Width * Height];
-
             double XScale = (double)Width / image.Width;
             double YScale = (double)Height / image.Height;
 
-            Output = Sample(image, XScale, YScale, image.Width, image.Height);
+            var Output = Sample(image, XScale, YScale, image.Width, image.Height);
             image.ReCreate(Width, Height, Output);
             return image;
         }
@@ -167,7 +165,6 @@ namespace Structure.Sketching.Filters.Resampling
                                     Values.Y = Values.Y + ((*PixelPointer2).Green * (float)TempWeight);
                                     Values.Z = Values.Z + ((*PixelPointer2).Blue * (float)TempWeight);
                                     Values.W = Values.W + ((*PixelPointer2).Alpha * (float)TempWeight);
-                                    ++PixelPointer2;
                                     Weight += (float)TempWeight;
                                 }
                             }
