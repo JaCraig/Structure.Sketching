@@ -72,7 +72,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// <returns>The resulting Body information</returns>
         public static Body Read(Header header, Palette palette, Stream stream)
         {
-            var Data = PixelFormats[header.BPP].Read(header.Width, header.Height, stream);
+            var Data = PixelFormats[header.BPP].Read(header, stream);
             var Data2 = PixelFormats[header.BPP].Decode(header.Width, header.Height, Data, palette);
             return new Body(Data2);
         }

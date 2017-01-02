@@ -46,10 +46,11 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats.Interfaces
         /// <summary>
         /// Reads the byte array from the stream
         /// </summary>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
+        /// <param name="header">The header.</param>
         /// <param name="stream">The stream.</param>
-        /// <returns>The byte array of the data</returns>
-        byte[] Read(int width, int height, Stream stream);
+        /// <returns>
+        /// The byte array of the data
+        /// </returns>
+        byte[] Read(Header header, Stream stream);
     }
 }

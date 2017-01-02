@@ -54,18 +54,84 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses
         /// <summary>
         /// Reads the byte array from the stream
         /// </summary>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
+        /// <param name="header">The header.</param>
         /// <param name="stream">The stream.</param>
-        /// <returns>The byte array of the data</returns>
-        public byte[] Read(int width, int height, Stream stream)
+        /// <returns>
+        /// The byte array of the data
+        /// </returns>
+        public byte[] Read(Header header, Stream stream)
         {
-            int dataWidth = width;
-            int alignment = (4 - ((width * BPP) % 4)) % 4;
-            int size = ((dataWidth * BPP) + alignment) * height;
-            byte[] data = new byte[size];
-            stream.Read(data, 0, size);
-            return data;
+            if (header.Compression == Compression.RGB)
+            {
+                int width = header.Width;
+                int height = header.Height;
+                int dataWidth = width;
+                int alignment = (4 - ((width * BPP) % 4)) % 4;
+                int size = ((dataWidth * BPP) + alignment) * height;
+                byte[] data = new byte[size];
+                stream.Read(data, 0, size);
+                return data;
+            }
+            if (header.Compression == Compression.RLE8)
+            {
+                int width = header.Width;
+                int height = header.Height;
+                int dataWidth = width;
+                int alignment = (4 - ((width * BPP) % 4)) % 4;
+                byte[] TempData = new byte[2048];
+                using (MemoryStream MemStream = new MemoryStream())
+                {
+                    int Length = 0;
+                    while ((Length = stream.Read(TempData, 0, 2048)) > 0)
+                    {
+                        MemStream.Write(TempData, 0, Length);
+                    }
+                    TempData = MemStream.ToArray();
+                }
+                using (MemoryStream MemStream = new MemoryStream())
+                {
+                    for (int x = 0; x < TempData.Length;)
+                    {
+                        if (TempData[x] == 0)
+                        {
+                            if (TempData[x + 1] == 0)
+                            {
+                                for (int y = 0; y < alignment; ++y)
+                                {
+                                    MemStream.WriteByte(0);
+                                }
+                                x += 2;
+                            }
+                            else if (TempData[x + 1] == 1)
+                            {
+                                return MemStream.ToArray();
+                            }
+                            else if (TempData[x + 1] == 2)
+                            {
+                            }
+                            else
+                            {
+                                for (int y = 0; y < TempData[x + 1]; ++y)
+                                {
+                                    MemStream.WriteByte(TempData[x + 2 + y]);
+                                }
+                                x += TempData[x + 1] + 2;
+                            }
+                        }
+                        else
+                        {
+                            int RunLength = TempData[x];
+                            byte Value = TempData[x + 1];
+                            for (int y = 0; y < RunLength; ++y)
+                            {
+                                MemStream.WriteByte(Value);
+                            }
+                            x += 2;
+                        }
+                    }
+                }
+            }
+            return new byte[0];
         }
     }
 }
