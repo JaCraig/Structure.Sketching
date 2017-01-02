@@ -59,7 +59,6 @@ namespace Structure.Sketching.Formats.Bmp.Format
             FileHeader = FileHeader.Read(stream);
             Header = Header.Read(stream);
             Palette = Palette.Read(Header, stream);
-            stream.Seek(FileHeader.Offset, SeekOrigin.Begin);
             Body = Body.Read(Header, Palette, stream);
             return this;
         }

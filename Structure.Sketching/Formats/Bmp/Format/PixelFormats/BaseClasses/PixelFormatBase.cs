@@ -94,39 +94,44 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses
                     {
                         if (TempData[x] == 0)
                         {
-                            if (TempData[x + 1] == 0)
+                            ++x;
+                            if (TempData[x] == 0)
                             {
                                 for (int y = 0; y < alignment; ++y)
                                 {
                                     MemStream.WriteByte(0);
                                 }
-                                x += 2;
+                                ++x;
                             }
-                            else if (TempData[x + 1] == 1)
+                            else if (TempData[x] == 1)
                             {
                                 return MemStream.ToArray();
                             }
-                            else if (TempData[x + 1] == 2)
+                            else if (TempData[x] == 2)
                             {
                             }
                             else
                             {
-                                for (int y = 0; y < TempData[x + 1]; ++y)
+                                int RunLength = TempData[x];
+                                ++x;
+                                int AbsoluteAlignment = (2 - ((RunLength) % 2)) % 2;
+                                for (int y = 0; y < RunLength; ++y, ++x)
                                 {
-                                    MemStream.WriteByte(TempData[x + 2 + y]);
+                                    MemStream.WriteByte(TempData[x]);
                                 }
-                                x += TempData[x + 1] + 2;
+                                x += AbsoluteAlignment;
                             }
                         }
                         else
                         {
                             int RunLength = TempData[x];
-                            byte Value = TempData[x + 1];
+                            ++x;
+                            byte Value = TempData[x];
+                            ++x;
                             for (int y = 0; y < RunLength; ++y)
                             {
                                 MemStream.WriteByte(Value);
                             }
-                            x += 2;
                         }
                     }
                 }

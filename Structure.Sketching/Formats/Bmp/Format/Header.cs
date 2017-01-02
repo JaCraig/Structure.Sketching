@@ -38,13 +38,14 @@ namespace Structure.Sketching.Formats.Bmp.Format
                  BitConverter.ToInt32(data, 28),
                  BitConverter.ToInt32(data, 32),
                  BitConverter.ToInt32(data, 36),
-                 (Compression)BitConverter.ToInt32(data, 16)
+                 (Compression)BitConverter.ToInt32(data, 16),
+                 BitConverter.ToInt32(data, 0)
                  )
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Header"/> class.
+        /// Initializes a new instance of the <see cref="Header" /> class.
         /// </summary>
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
@@ -55,8 +56,10 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// <param name="colorsUsed">The number of colors used.</param>
         /// <param name="colorsImportant">The number of important colors.</param>
         /// <param name="compression">The compression.</param>
-        public Header(int width, int height, short bpp, int imageSize, int xppm, int yppm, int colorsUsed, int colorsImportant, Compression compression)
+        /// <param name="size">The size.</param>
+        public Header(int width, int height, short bpp, int imageSize, int xppm, int yppm, int colorsUsed, int colorsImportant, Compression compression, int size = 40)
         {
+            Size = size;
             Width = width;
             Height = height;
             BPP = bpp;
@@ -116,7 +119,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// Gets the size of the header
         /// </summary>
         /// <value>The size of the header</value>
-        public static int Size => 40;
+        public int Size { get; private set; }
 
         /// <summary>
         /// Gets the width.
@@ -143,8 +146,15 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// <returns>The header information.</returns>
         public static Header Read(Stream stream)
         {
+            byte[] HeaderSize = new byte[4];
+            stream.Read(HeaderSize, 0, 4);
+            int Size = BitConverter.ToInt32(HeaderSize, 0);
             byte[] data = new byte[Size];
-            stream.Read(data, 0, Size);
+            stream.Read(data, 4, Size - 4);
+            data[0] = HeaderSize[0];
+            data[1] = HeaderSize[1];
+            data[2] = HeaderSize[2];
+            data[3] = HeaderSize[3];
             return new Header(data);
         }
 
