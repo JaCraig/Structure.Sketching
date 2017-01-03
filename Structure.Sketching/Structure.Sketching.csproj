@@ -197,6 +197,7 @@
     <Compile Include="Formats\Bmp\Format\PixelFormats\BaseClasses\PixelFormatBase.cs" />
     <Compile Include="Formats\Bmp\Format\PixelFormats\Interfaces\IPixelFormat.cs" />
     <Compile Include="Formats\Bmp\Format\PixelFormats\RGB16bit.cs" />
+    <Compile Include="Formats\Bmp\Format\PixelFormats\RGB1bit.cs" />
     <Compile Include="Formats\Bmp\Format\PixelFormats\RGB24bit.cs" />
     <Compile Include="Formats\Bmp\Format\PixelFormats\RGB32bit.cs" />
     <Compile Include="Formats\Bmp\Format\PixelFormats\RGB4bit.cs" />

@@ -21,7 +21,8 @@ namespace Structure.Sketching.Tests.Formats.Bmp
             {"Test4.bmp" },
             {"Test16.bmp" },
             {"Test32.bmp" },
-            {"TestRLE8.bmp" }
+            {"TestRLE8.bmp" },
+            {"Test1.bmp" }
         };
 
         [Fact]
