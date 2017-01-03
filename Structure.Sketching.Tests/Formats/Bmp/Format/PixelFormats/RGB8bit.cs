@@ -18,7 +18,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format.PixelFormats
             using (var TempFile = System.IO.File.Open(FileName, FileMode.Open, FileAccess.Read))
             {
                 byte[] Data = Format.Read(new Sketching.Formats.Bmp.Format.Header(44, 40, 0, 1760, 0, 0, 0, 0, Sketching.Formats.Bmp.Format.Compression.RGB), TempFile);
-                Data = Format.Decode(44, 40, Data, TempPalette);
+                Data = Format.Decode(new Sketching.Formats.Bmp.Format.Header(44, 40, 0, 1760, 0, 0, 0, 0, Sketching.Formats.Bmp.Format.Compression.RGB), Data, TempPalette);
                 Assert.Equal(7040, Data.Length);
             }
         }
@@ -31,8 +31,8 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format.PixelFormats
             using (var TempFile = System.IO.File.Open(FileName, FileMode.Open, FileAccess.Read))
             {
                 byte[] Data = Format.Read(new Sketching.Formats.Bmp.Format.Header(44, 40, 0, 1760, 0, 0, 0, 0, Sketching.Formats.Bmp.Format.Compression.RGB), TempFile);
-                Data = Format.Decode(44, 40, Data, TempPalette);
-                Data = Format.Encode(44, 40, Data, TempPalette);
+                Data = Format.Decode(new Sketching.Formats.Bmp.Format.Header(44, 40, 0, 1760, 0, 0, 0, 0, Sketching.Formats.Bmp.Format.Compression.RGB), Data, TempPalette);
+                Data = Format.Encode(new Sketching.Formats.Bmp.Format.Header(44, 40, 0, 1760, 0, 0, 0, 0, Sketching.Formats.Bmp.Format.Compression.RGB), Data, TempPalette);
                 Assert.Equal(1760, Data.Length);
             }
         }

@@ -26,22 +26,24 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats.Interfaces
         /// <summary>
         /// Decodes the specified data.
         /// </summary>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
+        /// <param name="header">The header.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>The decoded data</returns>
-        byte[] Decode(int width, int height, byte[] data, Palette palette);
+        /// <returns>
+        /// The decoded data
+        /// </returns>
+        byte[] Decode(Header header, byte[] data, Palette palette);
 
         /// <summary>
         /// Encodes the specified data.
         /// </summary>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
+        /// <param name="header">The header.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>The encoded data</returns>
-        byte[] Encode(int width, int height, byte[] data, Palette palette);
+        /// <returns>
+        /// The encoded data
+        /// </returns>
+        byte[] Encode(Header header, byte[] data, Palette palette);
 
         /// <summary>
         /// Reads the byte array from the stream

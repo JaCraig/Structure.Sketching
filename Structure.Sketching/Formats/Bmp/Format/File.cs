@@ -117,7 +117,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
             FileHeader = new FileHeader(54 + ImageSize, 54);
             Header = new Header(image.Width, image.Height, 24, ImageSize, 0, 0, 0, 0, Compression.RGB);
             Palette = new Palette(0, new byte[0]);
-            Body = new Body(image);
+            Body = new Body(image, Header);
         }
     }
 }

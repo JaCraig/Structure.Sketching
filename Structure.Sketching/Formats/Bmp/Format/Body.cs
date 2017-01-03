@@ -37,11 +37,12 @@ namespace Structure.Sketching.Formats.Bmp.Format
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Body"/> class.
+        /// Initializes a new instance of the <see cref="Body" /> class.
         /// </summary>
         /// <param name="image">The image.</param>
-        public Body(Image image)
-            : this(new RGB24bit().Encode(image.Width, image.Height, image.Pixels.SelectMany(x => (byte[])x).ToArray(), null))
+        /// <param name="header">The header.</param>
+        public Body(Image image, Header header)
+            : this(new RGB24bit().Encode(header, image.Pixels.SelectMany(x => (byte[])x).ToArray(), null))
         {
         }
 
@@ -73,7 +74,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
         public static Body Read(Header header, Palette palette, Stream stream)
         {
             var Data = PixelFormats[header.BPP].Read(header, stream);
-            var Data2 = PixelFormats[header.BPP].Decode(header.Width, header.Height, Data, palette);
+            var Data2 = PixelFormats[header.BPP].Decode(header, Data, palette);
             return new Body(Data2);
         }
 

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Structure.Sketching.ExtensionMethods;
 using Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses;
 using System;
 using System.Threading.Tasks;
@@ -33,30 +34,18 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         public override int BPP => 2;
 
         /// <summary>
-        /// The RGB 16bit B mask
-        /// </summary>
-        private const int RGB16BitBMask = 0x0000001F;
-
-        /// <summary>
-        /// /// The RGB 16bit G mask
-        /// </summary>
-        private const int RGB16BitGMask = 0x000003E0;
-
-        /// <summary>
-        /// The RGB 16bit R mask
-        /// </summary>
-        private const int RGB16BitRMask = 0x00007C00;
-
-        /// <summary>
         /// Decodes the specified data.
         /// </summary>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
+        /// <param name="header">The header.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>The decoded data</returns>
-        public override byte[] Decode(int width, int height, byte[] data, Palette palette)
+        /// <returns>
+        /// The decoded data
+        /// </returns>
+        public override byte[] Decode(Header header, byte[] data, Palette palette)
         {
+            int width = header.Width;
+            int height = header.Height;
             int alignment = (4 - ((width * BPP) % 4)) % 4;
             byte[] ReturnValue = new byte[width * height * 4];
             Parallel.For(0, height, y =>
@@ -71,15 +60,16 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
                 {
                     int Offset = RowOffset + (x * BPP);
                     var TempValue = BitConverter.ToInt16(data, Offset);
-                    int r = ((TempValue & RGB16BitRMask) >> 11) << 3;
-                    int g = ((TempValue & RGB16BitGMask) >> 5) << 2;
-                    int b = (TempValue & RGB16BitBMask) << 3;
+                    int r = (int)(((TempValue & header.RedMask) >> header.RedOffset) * header.RedMultiplier);
+                    int g = (int)(((TempValue & header.GreenMask) >> header.GreenOffset) * header.GreenMultiplier);
+                    int b = (int)(((TempValue & header.BlueMask) >> header.BlueOffset) * header.BlueMultiplier);
+                    int a = (int)(header.AlphaMask == 0 ? 255 : ((TempValue & header.AlphaMask) >> header.AlphaOffset) * header.AlphaMultiplier);
 
                     int ArrayOffset = ((CurrentY * width) + x) * 4;
-                    ReturnValue[ArrayOffset] = (byte)r;
-                    ReturnValue[ArrayOffset + 1] = (byte)g;
-                    ReturnValue[ArrayOffset + 2] = (byte)b;
-                    ReturnValue[ArrayOffset + 3] = 255;
+                    ReturnValue[ArrayOffset] = (byte)r.Clamp(0, 255);
+                    ReturnValue[ArrayOffset + 1] = (byte)g.Clamp(0, 255);
+                    ReturnValue[ArrayOffset + 2] = (byte)b.Clamp(0, 255);
+                    ReturnValue[ArrayOffset + 3] = (byte)a.Clamp(0, 255);
                 }
             });
             return ReturnValue;
@@ -88,13 +78,16 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         /// <summary>
         /// Encodes the specified data.
         /// </summary>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
+        /// <param name="header">The header.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>The encoded data</returns>
-        public override byte[] Encode(int width, int height, byte[] data, Palette palette)
+        /// <returns>
+        /// The encoded data
+        /// </returns>
+        public override byte[] Encode(Header header, byte[] data, Palette palette)
         {
+            int width = header.Width;
+            int height = header.Height;
             int alignment = (4 - ((width * BPP) % 4)) % 4;
             var ReturnValue = new byte[((width * BPP) + alignment) * height];
             Parallel.For(0, height, y =>

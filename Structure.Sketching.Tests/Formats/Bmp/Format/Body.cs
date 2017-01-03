@@ -19,7 +19,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format
         {
             var data = new byte[1600];
             var image = new Image(10, 40, data);
-            var TestBody = new Sketching.Formats.Bmp.Format.Body(image);
+            var TestBody = new Sketching.Formats.Bmp.Format.Body(image, new Sketching.Formats.Bmp.Format.Header(10, 40, 24, 1280, 0, 0, 0, 0, Compression.RGB));
             Assert.Equal(1280, TestBody.Data.Length);
         }
 
@@ -39,7 +39,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format
         {
             var data = new byte[7040];
             var image = new Image(44, 40, data);
-            var TestBody = new Sketching.Formats.Bmp.Format.Body(image);
+            var TestBody = new Sketching.Formats.Bmp.Format.Body(image, new Sketching.Formats.Bmp.Format.Header(44, 40, 24, 1280, 0, 0, 0, 0, Compression.RGB));
             using (var BWriter = new BinaryWriter(new MemoryStream()))
             {
                 TestBody.Write(BWriter);

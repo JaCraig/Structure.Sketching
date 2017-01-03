@@ -39,7 +39,11 @@ namespace Structure.Sketching.Formats.Bmp.Format
                  BitConverter.ToInt32(data, 32),
                  BitConverter.ToInt32(data, 36),
                  (Compression)BitConverter.ToInt32(data, 16),
-                 BitConverter.ToInt32(data, 0)
+                 BitConverter.ToInt32(data, 0),
+                 BitConverter.ToInt32(data, 16) == 3 ? BitConverter.ToInt32(data, 40) : 0,
+                 BitConverter.ToInt32(data, 16) == 3 ? BitConverter.ToInt32(data, 44) : 0,
+                 BitConverter.ToInt32(data, 16) == 3 ? BitConverter.ToInt32(data, 48) : 0,
+                 BitConverter.ToInt32(data, 16) == 3 ? BitConverter.ToInt32(data, 52) : 0
                  )
         {
         }
@@ -57,8 +61,18 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// <param name="colorsImportant">The number of important colors.</param>
         /// <param name="compression">The compression.</param>
         /// <param name="size">The size.</param>
-        public Header(int width, int height, short bpp, int imageSize, int xppm, int yppm, int colorsUsed, int colorsImportant, Compression compression, int size = 40)
+        /// <param name="redMask">The red mask.</param>
+        /// <param name="greenMask">The green mask.</param>
+        /// <param name="blueMask">The blue mask.</param>
+        /// <param name="alphaMask">The alpha mask.</param>
+        public Header(int width, int height, short bpp, int imageSize, int xppm, int yppm, int colorsUsed,
+            int colorsImportant, Compression compression, int size = 40,
+            int redMask = 0, int greenMask = 0, int blueMask = 0, int alphaMask = 0)
         {
+            AlphaMask = alphaMask;
+            BlueMask = blueMask;
+            GreenMask = greenMask;
+            RedMask = redMask;
             Size = size;
             Width = width;
             Height = height;
@@ -69,7 +83,65 @@ namespace Structure.Sketching.Formats.Bmp.Format
             ColorsUsed = colorsUsed;
             ColorsImportant = colorsImportant;
             Compression = compression;
+
+            AlphaOffset = GetOffset(alphaMask);
+            RedOffset = GetOffset(redMask);
+            GreenOffset = GetOffset(greenMask);
+            BlueOffset = GetOffset(blueMask);
+
+            AlphaMultiplier = GetMultiplier(alphaMask, AlphaOffset);
+            RedMultiplier = GetMultiplier(redMask, RedOffset);
+            GreenMultiplier = GetMultiplier(greenMask, GreenOffset);
+            BlueMultiplier = GetMultiplier(blueMask, BlueOffset);
         }
+
+        /// <summary>
+        /// Gets or sets the alpha mask.
+        /// </summary>
+        /// <value>
+        /// The alpha mask.
+        /// </value>
+        public int AlphaMask { get; set; }
+
+        /// <summary>
+        /// Gets or sets the alpha multiplier.
+        /// </summary>
+        /// <value>
+        /// The alpha multiplier.
+        /// </value>
+        public double AlphaMultiplier { get; set; }
+
+        /// <summary>
+        /// Gets or sets the alpha offset.
+        /// </summary>
+        /// <value>
+        /// The alpha offset.
+        /// </value>
+        public int AlphaOffset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the blue mask.
+        /// </summary>
+        /// <value>
+        /// The blue mask.
+        /// </value>
+        public int BlueMask { get; set; }
+
+        /// <summary>
+        /// Gets or sets the blue multiplier.
+        /// </summary>
+        /// <value>
+        /// The blue multiplier.
+        /// </value>
+        public double BlueMultiplier { get; set; }
+
+        /// <summary>
+        /// Gets or sets the blue offset.
+        /// </summary>
+        /// <value>
+        /// The blue offset.
+        /// </value>
+        public int BlueOffset { get; set; }
 
         /// <summary>
         /// The bits per pixel
@@ -98,6 +170,30 @@ namespace Structure.Sketching.Formats.Bmp.Format
         public Compression Compression { get; private set; }
 
         /// <summary>
+        /// Gets or sets the green mask.
+        /// </summary>
+        /// <value>
+        /// The green mask.
+        /// </value>
+        public int GreenMask { get; set; }
+
+        /// <summary>
+        /// Gets or sets the green multiplier.
+        /// </summary>
+        /// <value>
+        /// The green multiplier.
+        /// </value>
+        public double GreenMultiplier { get; set; }
+
+        /// <summary>
+        /// Gets or sets the green offset.
+        /// </summary>
+        /// <value>
+        /// The green offset.
+        /// </value>
+        public int GreenOffset { get; set; }
+
+        /// <summary>
         /// Gets the height.
         /// </summary>
         /// <value>The height.</value>
@@ -114,6 +210,30 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// </summary>
         /// <value>The number of planes.</value>
         public short Planes => 1;
+
+        /// <summary>
+        /// Gets or sets the red mask.
+        /// </summary>
+        /// <value>
+        /// The red mask.
+        /// </value>
+        public int RedMask { get; set; }
+
+        /// <summary>
+        /// Gets or sets the red multiplier.
+        /// </summary>
+        /// <value>
+        /// The red multiplier.
+        /// </value>
+        public double RedMultiplier { get; set; }
+
+        /// <summary>
+        /// Gets or sets the red offset.
+        /// </summary>
+        /// <value>
+        /// The red offset.
+        /// </value>
+        public int RedOffset { get; set; }
 
         /// <summary>
         /// Gets the size of the header
@@ -175,6 +295,43 @@ namespace Structure.Sketching.Formats.Bmp.Format
             writer.Write(YPPM);
             writer.Write(ColorsUsed);
             writer.Write(ColorsImportant);
+        }
+
+        /// <summary>
+        /// Gets the multiplier.
+        /// </summary>
+        /// <param name="mask">The mask.</param>
+        /// <param name="offset">The offset.</param>
+        /// <returns>
+        /// The multiplier
+        /// </returns>
+        private double GetMultiplier(int mask, int offset)
+        {
+            if (mask != 0)
+            {
+                mask = mask >> offset;
+                return 255d / (double)mask;
+            }
+            return 1;
+        }
+
+        /// <summary>
+        /// Gets the offset.
+        /// </summary>
+        /// <param name="mask">The mask.</param>
+        /// <returns>The offset</returns>
+        private int GetOffset(int mask)
+        {
+            int Offset = 0;
+            if (mask != 0)
+            {
+                while ((mask & 1) == 0)
+                {
+                    ++Offset;
+                    mask = mask >> 1;
+                }
+            }
+            return Offset;
         }
     }
 }

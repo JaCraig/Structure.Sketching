@@ -34,22 +34,24 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses
         /// <summary>
         /// Decodes the specified data.
         /// </summary>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
+        /// <param name="header">The header.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>The decoded data</returns>
-        public abstract byte[] Decode(int width, int height, byte[] data, Palette palette);
+        /// <returns>
+        /// The decoded data
+        /// </returns>
+        public abstract byte[] Decode(Header header, byte[] data, Palette palette);
 
         /// <summary>
         /// Encodes the specified data.
         /// </summary>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
+        /// <param name="header">The header.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>The encoded data</returns>
-        public abstract byte[] Encode(int width, int height, byte[] data, Palette palette);
+        /// <returns>
+        /// The encoded data
+        /// </returns>
+        public abstract byte[] Encode(Header header, byte[] data, Palette palette);
 
         /// <summary>
         /// Reads the byte array from the stream
@@ -61,7 +63,8 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses
         /// </returns>
         public byte[] Read(Header header, Stream stream)
         {
-            if (header.Compression == Compression.RGB)
+            if (header.Compression == Compression.RGB
+                || header.Compression == Compression.BITFIELDS)
             {
                 int width = header.Width;
                 int height = header.Height;

@@ -34,13 +34,16 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         /// <summary>
         /// Decodes the specified data.
         /// </summary>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
+        /// <param name="header">The header.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>The decoded data</returns>
-        public override byte[] Decode(int width, int height, byte[] data, Palette palette)
+        /// <returns>
+        /// The decoded data
+        /// </returns>
+        public override byte[] Decode(Header header, byte[] data, Palette palette)
         {
+            int width = header.Width;
+            int height = header.Height;
             int alignment = (4 - ((width / 2) % 4)) % 4;
             byte[] ReturnValue = new byte[width * height * 4];
             Parallel.For(0, height, y =>
@@ -73,12 +76,13 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         /// <summary>
         /// Encodes the specified data.
         /// </summary>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
+        /// <param name="header">The header.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>The encoded data</returns>
-        public override byte[] Encode(int width, int height, byte[] data, Palette palette)
+        /// <returns>
+        /// The encoded data
+        /// </returns>
+        public override byte[] Encode(Header header, byte[] data, Palette palette)
         {
             return data;
         }

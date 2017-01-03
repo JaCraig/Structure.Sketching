@@ -34,6 +34,11 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// <summary>
         /// RLE4, only used with 4-BPP bitmaps
         /// </summary>
-        RLE4 = 2
+        RLE4 = 2,
+
+        /// <summary>
+        /// Uses bitfields to determine pixel layout
+        /// </summary>
+        BITFIELDS = 3
     }
 }
