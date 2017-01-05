@@ -10,13 +10,12 @@ namespace Structure.Sketching.Benchmarks.Formats.BMP.TestClasses
         /// The bytes per pixel
         /// </summary>
         /// <value>The BPP.</value>
-        public override int BPP => 3;
+        public override double BPP => 3;
 
         /// <summary>
         /// Decodes the specified data.
         /// </summary>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
+        /// <param name="header">The header.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
         /// <returns>The decoded data</returns>
@@ -24,7 +23,7 @@ namespace Structure.Sketching.Benchmarks.Formats.BMP.TestClasses
         {
             int width = header.Width;
             int height = header.Height;
-            int alignment = (4 - ((width * BPP) % 4)) % 4;
+            int alignment = (4 - ((width * (int)BPP) % 4)) % 4;
             byte[] ReturnValue = new byte[width * height * 4];
             Parallel.For(0, height, y =>
             {
@@ -33,7 +32,7 @@ namespace Structure.Sketching.Benchmarks.Formats.BMP.TestClasses
                     SourceY = 0;
                 if (SourceY >= height)
                     SourceY = height - 1;
-                int SourceRowOffset = SourceY * ((width * BPP) + alignment);
+                int SourceRowOffset = SourceY * ((width * (int)BPP) + alignment);
                 int DestinationY = y;
                 int DestinationRowOffset = DestinationY * width * 4;
                 fixed (byte* DataFixed = &data[SourceRowOffset])
@@ -63,15 +62,13 @@ namespace Structure.Sketching.Benchmarks.Formats.BMP.TestClasses
         /// <param name="header">The header.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>
-        /// The encoded data
-        /// </returns>
+        /// <returns>The encoded data</returns>
         public override byte[] Encode(Header header, byte[] data, Palette palette)
         {
             int width = header.Width;
             int height = header.Height;
-            int alignment = (4 - ((width * BPP) % 4)) % 4;
-            var ReturnValue = new byte[((width * BPP) + alignment) * height];
+            int alignment = (4 - ((width * (int)BPP) % 4)) % 4;
+            var ReturnValue = new byte[((width * (int)BPP) + alignment) * height];
             Parallel.For(0, height, y =>
             {
                 int SourceY = height - y - 1;
@@ -81,7 +78,7 @@ namespace Structure.Sketching.Benchmarks.Formats.BMP.TestClasses
                     SourceY = height - 1;
                 int SourceRowOffset = SourceY * width * 4;
                 int DestinationY = y;
-                int DestinationRowOffset = DestinationY * ((width * BPP) + alignment);
+                int DestinationRowOffset = DestinationY * ((width * (int)BPP) + alignment);
                 fixed (byte* DataFixed = &data[SourceRowOffset])
                 fixed (byte* ReturnValueFixed = &ReturnValue[DestinationRowOffset])
                 {

@@ -303,6 +303,7 @@
     <Compile Include="Image.cs" />
     <Compile Include="Image.Filters.cs" />
     <Compile Include="Image.Operators.cs" />
+    <Compile Include="IO\BitReader.cs" />
     <Compile Include="IO\Converters\BaseClasses\EndianBitConverterBase.cs" />
     <Compile Include="IO\Converters\BigEndianBitConverter.cs" />
     <Compile Include="IO\Converters\LittleEndianBitConverter.cs" />

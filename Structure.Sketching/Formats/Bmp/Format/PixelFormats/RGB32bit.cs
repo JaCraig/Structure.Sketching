@@ -29,7 +29,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         /// The bytes per pixel
         /// </summary>
         /// <value>The BPP.</value>
-        public override int BPP => 4;
+        public override double BPP => 4;
 
         /// <summary>
         /// Decodes the specified data.
@@ -37,14 +37,12 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         /// <param name="header">The header.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>
-        /// The decoded data
-        /// </returns>
+        /// <returns>The decoded data</returns>
         public override byte[] Decode(Header header, byte[] data, Palette palette)
         {
             int width = header.Width;
             int height = header.Height;
-            int alignment = (4 - ((width * BPP) % 4)) % 4;
+            int alignment = (4 - ((width * (int)BPP) % 4)) % 4;
             byte[] ReturnValue = new byte[width * height * 4];
             Parallel.For(0, height, y =>
             {
@@ -53,12 +51,12 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
                     SourceY = 0;
                 if (SourceY >= height)
                     SourceY = height - 1;
-                int SourceRowOffset = SourceY * ((width * BPP) + alignment);
+                int SourceRowOffset = SourceY * ((width * (int)BPP) + alignment);
                 int DestinationY = y;
                 int DestinationRowOffset = DestinationY * width * 4;
                 for (int x = 0; x < width; ++x)
                 {
-                    int SourceX = x * BPP;
+                    int SourceX = x * (int)BPP;
                     int SourceOffset = SourceX + SourceRowOffset;
                     int DestinationX = x * 4;
                     int DestinationOffset = DestinationX + DestinationRowOffset;
@@ -77,15 +75,13 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         /// <param name="header">The header.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>
-        /// The encoded data
-        /// </returns>
+        /// <returns>The encoded data</returns>
         public override byte[] Encode(Header header, byte[] data, Palette palette)
         {
             int width = header.Width;
             int height = header.Height;
-            int alignment = (4 - ((width * BPP) % 4)) % 4;
-            var ReturnValue = new byte[((width * BPP) + alignment) * height];
+            int alignment = (4 - ((width * (int)BPP) % 4)) % 4;
+            var ReturnValue = new byte[((width * (int)BPP) + alignment) * height];
             Parallel.For(0, height, y =>
             {
                 int SourceY = height - y - 1;
@@ -95,12 +91,12 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
                     SourceY = height - 1;
                 int SourceRowOffset = SourceY * width * 4;
                 int DestinationY = y;
-                int DestinationRowOffset = DestinationY * ((width * BPP) + alignment);
+                int DestinationRowOffset = DestinationY * ((width * (int)BPP) + alignment);
                 for (int x = 0; x < width; ++x)
                 {
                     int SourceX = x * 4;
                     int SourceOffset = SourceX + SourceRowOffset;
-                    int DestinationX = x * BPP;
+                    int DestinationX = x * (int)BPP;
                     int DestinationOffset = DestinationX + DestinationRowOffset;
                     ReturnValue[DestinationOffset] = data[SourceOffset + 2];
                     ReturnValue[DestinationOffset + 1] = data[SourceOffset + 1];

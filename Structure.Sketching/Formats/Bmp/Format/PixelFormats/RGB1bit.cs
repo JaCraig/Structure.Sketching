@@ -15,6 +15,9 @@ limitations under the License.
 */
 
 using Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses;
+using Structure.Sketching.IO;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
@@ -43,14 +46,12 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         /// The bytes per pixel
         /// </summary>
         /// <value>The BPP.</value>
-        public override int BPP => 1;
+        public override double BPP => 0.125;
 
         /// <summary>
         /// Gets or sets the byte masks.
         /// </summary>
-        /// <value>
-        /// The byte masks.
-        /// </value>
+        /// <value>The byte masks.</value>
         private byte[] ByteMasks { get; set; }
 
         /// <summary>
@@ -59,46 +60,43 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         /// <param name="header">The header.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>
-        /// The decoded data
-        /// </returns>
+        /// <returns>The decoded data</returns>
         public override byte[] Decode(Header header, byte[] data, Palette palette)
         {
             int width = header.Width;
             int height = header.Height;
-            int alignment = (4 - ((width * BPP) % 4)) % 4;
+            var alignment = (int)(((4d - ((width / 8.0d) % 4d)) % 4d) * 8);
             byte[] ReturnValue = new byte[width * height * 4];
-            Parallel.For(0, height, y =>
+            using (var BitStream = new BitReader(data))
             {
-                int SourceY = y * ((width / 8) + alignment);
-                int DestinationY = height - y - 1;
-                int SourceOffset = SourceY;
-                int DestinationOffset = DestinationY * width * 4;
-                for (int x = 0; x < width; ++x)
+                for (int y = 0; y < height; ++y)
                 {
-                    for (int z = 0; z < 8; ++z)
+                    int DestinationY = height - y - 1;
+                    int DestinationOffset = DestinationY * width * 4;
+                    for (int x = 0; x < width; ++x)
                     {
-                        if ((data[SourceOffset] & ByteMasks[z]) == 1)
-                        {
-                            ReturnValue[DestinationOffset] = 0;
-                            ReturnValue[DestinationOffset + 1] = 0;
-                            ReturnValue[DestinationOffset + 2] = 0;
-                            ReturnValue[DestinationOffset + 3] = 255;
-                        }
-                        else
+                        var CurrentBit = BitStream.ReadBit();
+                        if (CurrentBit == null)
+                            return ReturnValue;
+                        if (CurrentBit.Value)
                         {
                             ReturnValue[DestinationOffset] = 255;
                             ReturnValue[DestinationOffset + 1] = 255;
                             ReturnValue[DestinationOffset + 2] = 255;
                             ReturnValue[DestinationOffset + 3] = 255;
                         }
+                        else
+                        {
+                            ReturnValue[DestinationOffset] = 0;
+                            ReturnValue[DestinationOffset + 1] = 0;
+                            ReturnValue[DestinationOffset + 2] = 0;
+                            ReturnValue[DestinationOffset + 3] = 255;
+                        }
                         DestinationOffset += 4;
-                        if (DestinationOffset >= ReturnValue.Length)
-                            break;
                     }
-                    ++SourceOffset;
+                    BitStream.Skip(alignment);
                 }
-            });
+            }
             return ReturnValue;
         }
 
@@ -108,9 +106,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         /// <param name="header">The header.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>
-        /// The encoded data
-        /// </returns>
+        /// <returns>The encoded data</returns>
         public override byte[] Encode(Header header, byte[] data, Palette palette)
         {
             return data;

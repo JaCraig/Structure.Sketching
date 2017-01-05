@@ -15,7 +15,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format.PixelFormats
         {
             using (var TempFile = File.Open(FileName, FileMode.Open, FileAccess.Read))
             {
-                byte[] Data = Format.Read(new Sketching.Formats.Bmp.Format.Header(44, 40, 0, 5280, 0, 0, 0, 0, Sketching.Formats.Bmp.Format.Compression.RGB), TempFile);
+                var Data = Format.Read(new Sketching.Formats.Bmp.Format.Header(44, 40, 0, 5280, 0, 0, 0, 0, Sketching.Formats.Bmp.Format.Compression.RGB), TempFile);
                 Data = Format.Decode(new Sketching.Formats.Bmp.Format.Header(44, 40, 0, 5280, 0, 0, 0, 0, Sketching.Formats.Bmp.Format.Compression.RGB), Data, null);
                 Assert.Equal(7040, Data.Length);
             }
@@ -26,7 +26,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format.PixelFormats
         {
             using (var TempFile = File.Open(FileName, FileMode.Open, FileAccess.Read))
             {
-                byte[] Data = Format.Read(new Sketching.Formats.Bmp.Format.Header(44, 40, 0, 5280, 0, 0, 0, 0, Sketching.Formats.Bmp.Format.Compression.RGB), TempFile);
+                var Data = Format.Read(new Sketching.Formats.Bmp.Format.Header(44, 40, 0, 5280, 0, 0, 0, 0, Sketching.Formats.Bmp.Format.Compression.RGB), TempFile);
                 Data = Format.Decode(new Sketching.Formats.Bmp.Format.Header(44, 40, 0, 5280, 0, 0, 0, 0, Sketching.Formats.Bmp.Format.Compression.RGB), Data, null);
                 Data = Format.Encode(new Sketching.Formats.Bmp.Format.Header(44, 40, 0, 5280, 0, 0, 0, 0, Sketching.Formats.Bmp.Format.Compression.RGB), Data, null);
                 Assert.Equal(5280, Data.Length);
@@ -38,7 +38,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format.PixelFormats
         {
             using (var TempFile = File.Open(FileName, FileMode.Open, FileAccess.Read))
             {
-                byte[] Data = Format.Read(new Sketching.Formats.Bmp.Format.Header(44, 40, 0, 5280, 0, 0, 0, 0, Sketching.Formats.Bmp.Format.Compression.RGB), TempFile);
+                var Data = Format.Read(new Sketching.Formats.Bmp.Format.Header(44, 40, 0, 5280, 0, 0, 0, 0, Sketching.Formats.Bmp.Format.Compression.RGB), TempFile);
                 Assert.Equal(5280, Data.Length);
             }
         }

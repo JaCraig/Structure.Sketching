@@ -268,7 +268,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
         {
             byte[] HeaderSize = new byte[4];
             stream.Read(HeaderSize, 0, 4);
-            int Size = BitConverter.ToInt32(HeaderSize, 0);
+            var Size = BitConverter.ToInt32(HeaderSize, 0);
             byte[] data = new byte[Size];
             stream.Read(data, 4, Size - 4);
             data[0] = HeaderSize[0];

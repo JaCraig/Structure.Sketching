@@ -33,7 +33,7 @@ namespace Structure.Sketching.Tests.Formats.BaseClasses
             {
                 while (true)
                 {
-                    int Count = stream.Read(Buffer, 0, Buffer.Length);
+                    var Count = stream.Read(Buffer, 0, Buffer.Length);
                     if (Count <= 0)
                         return Temp.ToArray();
                     Temp.Write(Buffer, 0, Count);

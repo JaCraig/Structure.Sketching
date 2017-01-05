@@ -29,7 +29,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses
         /// The bytes per pixel for this format.
         /// </summary>
         /// <value>The BPP.</value>
-        public abstract int BPP { get; }
+        public abstract double BPP { get; }
 
         /// <summary>
         /// Decodes the specified data.
@@ -37,9 +37,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses
         /// <param name="header">The header.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>
-        /// The decoded data
-        /// </returns>
+        /// <returns>The decoded data</returns>
         public abstract byte[] Decode(Header header, byte[] data, Palette palette);
 
         /// <summary>
@@ -48,9 +46,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses
         /// <param name="header">The header.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>
-        /// The encoded data
-        /// </returns>
+        /// <returns>The encoded data</returns>
         public abstract byte[] Encode(Header header, byte[] data, Palette palette);
 
         /// <summary>
@@ -58,9 +54,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses
         /// </summary>
         /// <param name="header">The header.</param>
         /// <param name="stream">The stream.</param>
-        /// <returns>
-        /// The byte array of the data
-        /// </returns>
+        /// <returns>The byte array of the data</returns>
         public byte[] Read(Header header, Stream stream)
         {
             if (header.Compression == Compression.RGB
@@ -69,8 +63,10 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses
                 int width = header.Width;
                 int height = header.Height;
                 int dataWidth = width;
-                int alignment = (4 - ((width * BPP) % 4)) % 4;
-                int size = ((dataWidth * BPP) + alignment) * height;
+                int alignment = (int)(4 - ((width * BPP) % 4)) % 4;
+                int size = (int)((dataWidth * BPP) + alignment) * height;
+                if (size < header.ImageSize)
+                    size = header.ImageSize;
                 byte[] data = new byte[size];
                 stream.Read(data, 0, size);
                 return data;
@@ -80,7 +76,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses
                 int width = header.Width;
                 int height = header.Height;
                 int dataWidth = width;
-                int alignment = (4 - ((width * BPP) % 4)) % 4;
+                int alignment = (int)(4 - ((width * BPP) % 4)) % 4;
                 byte[] TempData = new byte[2048];
                 using (MemoryStream MemStream = new MemoryStream())
                 {
@@ -98,31 +94,32 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses
                         if (TempData[x] == 0)
                         {
                             ++x;
-                            if (TempData[x] == 0)
+                            switch (TempData[x])
                             {
-                                for (int y = 0; y < alignment; ++y)
-                                {
-                                    MemStream.WriteByte(0);
-                                }
-                                ++x;
-                            }
-                            else if (TempData[x] == 1)
-                            {
-                                return MemStream.ToArray();
-                            }
-                            else if (TempData[x] == 2)
-                            {
-                            }
-                            else
-                            {
-                                int RunLength = TempData[x];
-                                ++x;
-                                int AbsoluteAlignment = (2 - ((RunLength) % 2)) % 2;
-                                for (int y = 0; y < RunLength; ++y, ++x)
-                                {
-                                    MemStream.WriteByte(TempData[x]);
-                                }
-                                x += AbsoluteAlignment;
+                                case 0:
+                                    for (int y = 0; y < alignment; ++y)
+                                    {
+                                        MemStream.WriteByte(0);
+                                    }
+                                    ++x;
+                                    break;
+
+                                case 1:
+                                    return MemStream.ToArray();
+
+                                case 2:
+                                    break;
+
+                                default:
+                                    int RunLength = TempData[x];
+                                    ++x;
+                                    int AbsoluteAlignment = (2 - ((RunLength) % 2)) % 2;
+                                    for (int y = 0; y < RunLength; ++y, ++x)
+                                    {
+                                        MemStream.WriteByte(TempData[x]);
+                                    }
+                                    x += AbsoluteAlignment;
+                                    break;
                             }
                         }
                         else

@@ -29,7 +29,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         /// The bytes per pixel for this format.
         /// </summary>
         /// <value>The BPP.</value>
-        public override int BPP => 1;
+        public override double BPP => 1;
 
         /// <summary>
         /// Decodes the specified data.
@@ -37,9 +37,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         /// <param name="header">The header.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>
-        /// The decoded data
-        /// </returns>
+        /// <returns>The decoded data</returns>
         public override byte[] Decode(Header header, byte[] data, Palette palette)
         {
             int width = header.Width;
@@ -79,9 +77,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         /// <param name="header">The header.</param>
         /// <param name="data">The data.</param>
         /// <param name="palette">The palette.</param>
-        /// <returns>
-        /// The encoded data
-        /// </returns>
+        /// <returns>The encoded data</returns>
         public override byte[] Encode(Header header, byte[] data, Palette palette)
         {
             return data;
