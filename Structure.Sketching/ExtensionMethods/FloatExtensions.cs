@@ -44,6 +44,20 @@ namespace Structure.Sketching.ExtensionMethods
         /// <param name="Value">The value.</param>
         /// <param name="Min">The minimum.</param>
         /// <param name="Max">The maximum.</param>
+        /// <returns>
+        /// The clamped value.
+        /// </returns>
+        public static double Clamp(this double Value, double Min, double Max)
+        {
+            return Value < Min ? Min : Value > Max ? Max : Value;
+        }
+
+        /// <summary>
+        /// Clamps the value based on the minimum and maximum specified.
+        /// </summary>
+        /// <param name="Value">The value.</param>
+        /// <param name="Min">The minimum.</param>
+        /// <param name="Max">The maximum.</param>
         /// <returns>The clamped value.</returns>
         public static int Clamp(this int Value, int Min, int Max)
         {

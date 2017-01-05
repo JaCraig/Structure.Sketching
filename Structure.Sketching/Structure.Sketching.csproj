@@ -51,7 +51,9 @@
     <Compile Include="Colors\ColorSpaces\CIELab.cs" />
     <Compile Include="Colors\ColorSpaces\HSV.cs" />
     <Compile Include="Colors\ColorSpaces\Interfaces\IColorSpace.cs" />
+    <Compile Include="Colors\ColorSpaces\XYZ.cs" />
     <Compile Include="Colors\ColorSpaces\YCbCr.cs" />
+    <Compile Include="Colors\ColorSpaces\YXY.cs" />
     <Compile Include="Filters\Drawing\BaseClasses\ShapeBaseClass.cs" />
     <Compile Include="Filters\Drawing\Ellipse.cs" />
     <Compile Include="Filters\Drawing\Interfaces\IShape.cs" />
