@@ -12,3 +12,4 @@ NetCoreTest/result.jpg
 NetCoreTest/result.gif
 NetCoreTest/result.png
 NetCoreTest/result.bmp
+build/node_modules/*
