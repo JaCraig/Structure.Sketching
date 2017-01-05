@@ -11,7 +11,7 @@ Structure.Sketching is an image processing library for use with .Net Core and .N
 Currently the library supports the following file types:
 
 * JPG
-* BMP - Reading: 32bit, 24bit, 16bit, 8bit and 4bit. Writing: 24bit
+* BMP - Reading: 32bit, 24bit, 16bit, 8bit, 8bit RLE, 4bit, and 1bit. Writing: 24bit
 * PNG - Reading: RGB, RGBA, Greyscale, Greysale+alpha, Palette. Writing: RGBA
 * GIF - Includes animation support
 
