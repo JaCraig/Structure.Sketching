@@ -28,9 +28,9 @@ namespace Structure.Sketching.Colors.ColorSpaces
     /// <summary>
     /// YXY color space
     /// </summary>
-    /// <seealso cref="System.IEquatable{ColorSpaces.YXY}" />
-    /// <seealso cref="IColorSpace" />
-    public class YXY : IEquatable<YXY>, IColorSpace
+    /// <seealso cref="System.IEquatable{ColorSpaces.YXY}"/>
+    /// <seealso cref="IColorSpace"/>
+    public struct YXY : IEquatable<YXY>, IColorSpace
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="YXY"/> class.
@@ -48,25 +48,19 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <summary>
         /// Gets or sets the x.
         /// </summary>
-        /// <value>
-        /// The x.
-        /// </value>
+        /// <value>The x.</value>
         public double X { get; set; }
 
         /// <summary>
         /// Gets or sets the y1.
         /// </summary>
-        /// <value>
-        /// The y1.
-        /// </value>
+        /// <value>The y1.</value>
         public double Y1 { get; set; }
 
         /// <summary>
         /// Gets or sets the y2.
         /// </summary>
-        /// <value>
-        /// The y2.
-        /// </value>
+        /// <value>The y2.</value>
         public double Y2 { get; set; }
 
         /// <summary>
@@ -78,9 +72,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Performs an implicit conversion from <see cref="YXY"/> to <see cref="Color"/>.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Color(YXY color)
         {
             return (XYZ)color;
@@ -90,9 +82,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Performs an implicit conversion from <see cref="YXY"/> to <see cref="XYZ"/>.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator XYZ(YXY color)
         {
             return new XYZ(color.X * (color.Y1 / color.Y2),
@@ -104,9 +94,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Performs an implicit conversion from <see cref="XYZ"/> to <see cref="YXY"/>.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator YXY(XYZ color)
         {
             var xyz = color;
@@ -121,9 +109,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Performs an implicit conversion from <see cref="Color"/> to <see cref="YXY"/>.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator YXY(Color color)
         {
             return (XYZ)color;

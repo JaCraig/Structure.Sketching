@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -30,9 +31,7 @@ namespace Structure.Sketching.ExtensionMethods
         /// <param name="Value">The value.</param>
         /// <param name="Min">The minimum.</param>
         /// <param name="Max">The maximum.</param>
-        /// <returns>
-        /// The clamped value.
-        /// </returns>
+        /// <returns>The clamped value.</returns>
         public static float Clamp(this float Value, float Min, float Max)
         {
             return Value < Min ? Min : Value > Max ? Max : Value;
@@ -44,9 +43,7 @@ namespace Structure.Sketching.ExtensionMethods
         /// <param name="Value">The value.</param>
         /// <param name="Min">The minimum.</param>
         /// <param name="Max">The maximum.</param>
-        /// <returns>
-        /// The clamped value.
-        /// </returns>
+        /// <returns>The clamped value.</returns>
         public static double Clamp(this double Value, double Min, double Max)
         {
             return Value < Min ? Min : Value > Max ? Max : Value;
@@ -62,6 +59,16 @@ namespace Structure.Sketching.ExtensionMethods
         public static int Clamp(this int Value, int Min, int Max)
         {
             return Value < Min ? Min : Value > Max ? Max : Value;
+        }
+
+        /// <summary>
+        /// Gets the cubic root of a value
+        /// </summary>
+        /// <param name="n">The value</param>
+        /// <returns>The result</returns>
+        public static double CubicRoot(this double n)
+        {
+            return Math.Pow(n, 1.0 / 3.0);
         }
 
         /// <summary>

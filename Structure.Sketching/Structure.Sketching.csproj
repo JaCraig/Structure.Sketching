@@ -49,8 +49,11 @@
     <Compile Include="Colors\ColorDefinitions.cs" />
     <Compile Include="Colors\ColorSpaces\Bgra.cs" />
     <Compile Include="Colors\ColorSpaces\CIELab.cs" />
+    <Compile Include="Colors\ColorSpaces\CIELCH.cs" />
     <Compile Include="Colors\ColorSpaces\HSV.cs" />
+    <Compile Include="Colors\ColorSpaces\HunterLab.cs" />
     <Compile Include="Colors\ColorSpaces\Interfaces\IColorSpace.cs" />
+    <Compile Include="Colors\ColorSpaces\CIELUV.cs" />
     <Compile Include="Colors\ColorSpaces\XYZ.cs" />
     <Compile Include="Colors\ColorSpaces\YCbCr.cs" />
     <Compile Include="Colors\ColorSpaces\YXY.cs" />

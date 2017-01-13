@@ -28,9 +28,9 @@ namespace Structure.Sketching.Colors.ColorSpaces
     /// <summary>
     /// XYZ color space
     /// </summary>
-    /// <seealso cref="System.IEquatable{ColorSpaces.XYZ}" />
-    /// <seealso cref="IColorSpace" />
-    public class XYZ : IEquatable<XYZ>, IColorSpace
+    /// <seealso cref="System.IEquatable{ColorSpaces.XYZ}"/>
+    /// <seealso cref="IColorSpace"/>
+    public struct XYZ : IEquatable<XYZ>, IColorSpace
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="XYZ"/> class.
@@ -46,27 +46,27 @@ namespace Structure.Sketching.Colors.ColorSpaces
         }
 
         /// <summary>
+        /// Gets the white reference.
+        /// </summary>
+        /// <value>The white reference.</value>
+        public static XYZ WhiteReference => new XYZ(95.047, 100, 108.883);
+
+        /// <summary>
         /// Gets or sets the x.
         /// </summary>
-        /// <value>
-        /// The x.
-        /// </value>
+        /// <value>The x.</value>
         public double X { get; set; }
 
         /// <summary>
         /// Gets or sets the y.
         /// </summary>
-        /// <value>
-        /// The y.
-        /// </value>
+        /// <value>The y.</value>
         public double Y { get; set; }
 
         /// <summary>
         /// Gets or sets the z.
         /// </summary>
-        /// <value>
-        /// The z.
-        /// </value>
+        /// <value>The z.</value>
         public double Z { get; set; }
 
         /// <summary>
@@ -78,9 +78,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Performs an implicit conversion from <see cref="XYZ"/> to <see cref="Color"/>.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Color(XYZ color)
         {
             var x = color.X / 100.0;
@@ -100,9 +98,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Performs an implicit conversion from <see cref="Color"/> to <see cref="XYZ"/>.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator XYZ(Color color)
         {
             var r = PivotRgb(color.Red / 255.0);

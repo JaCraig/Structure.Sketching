@@ -17,47 +17,51 @@ limitations under the License.
 using Structure.Sketching.Colors.ColorSpaces.Interfaces;
 using Structure.Sketching.ExtensionMethods;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Structure.Sketching.Colors.ColorSpaces
 {
     /// <summary>
-    /// YCbCr color space
+    /// LAB color space
     /// </summary>
+    /// <seealso cref="System.IEquatable{ColorSpaces.HunterLAB}"/>
     /// <seealso cref="IColorSpace"/>
-    /// <seealso cref="IEquatable{YCbCr}"/>
-    public struct YCbCr : IEquatable<YCbCr>, IColorSpace
+    public struct HunterLAB : IEquatable<HunterLAB>, IColorSpace
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="YCbCr"/> struct.
+        /// Initializes a new instance of the <see cref="HunterLAB"/> struct.
         /// </summary>
-        /// <param name="yLuminance">The y luminance.</param>
-        /// <param name="cbChroma">The cb chroma.</param>
-        /// <param name="crChroma">The cr chroma.</param>
-        public YCbCr(double yLuminance, double cbChroma, double crChroma)
+        /// <param name="l">The l.</param>
+        /// <param name="a">a.</param>
+        /// <param name="b">The b.</param>
+        public HunterLAB(double l, double a, double b)
         {
-            YLuminance = yLuminance;
-            CbChroma = cbChroma;
-            CrChroma = crChroma;
+            L = l;
+            A = a;
+            B = b;
         }
 
         /// <summary>
-        /// Gets or sets the cb chroma.
+        /// Gets or sets a.
         /// </summary>
-        /// <value>The cb chroma.</value>
-        public double CbChroma;
+        /// <value>a.</value>
+        public double A { get; set; }
 
         /// <summary>
-        /// Gets or sets the cr chroma.
+        /// Gets or sets the b.
         /// </summary>
-        /// <value>The cr chroma.</value>
-        public double CrChroma;
+        /// <value>The b.</value>
+        public double B { get; set; }
 
         /// <summary>
-        /// Gets or sets the y luminance.
+        /// Gets or sets the l.
         /// </summary>
-        /// <value>The y luminance.</value>
-        public double YLuminance;
+        /// <value>The l.</value>
+        public double L { get; set; }
 
         /// <summary>
         /// The epsilon
@@ -65,36 +69,54 @@ namespace Structure.Sketching.Colors.ColorSpaces
         private const float EPSILON = 0.001f;
 
         /// <summary>
-        /// Performs an implicit conversion from <see cref="YCbCr"/> to <see cref="Color"/>.
+        /// Performs an implicit conversion from <see cref="HunterLAB"/> to <see cref="Color"/>.
         /// </summary>
         /// <param name="color">The color.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator Color(YCbCr color)
+        public static implicit operator Color(HunterLAB color)
         {
-            var y = color.YLuminance;
-            var cb = color.CbChroma - 128;
-            var cr = color.CrChroma - 128;
-
-            return new Color((byte)((y + (1.402 * cr))).Clamp(0, 255),
-                                (byte)((y - (0.344136 * cb) - (0.714136 * cr))).Clamp(0, 255),
-                                (byte)((y + (1.772 * cb))).Clamp(0, 255));
+            return (XYZ)color;
         }
 
         /// <summary>
-        /// Performs an implicit conversion from <see cref="Color"/> to <see cref="YCbCr"/>.
+        /// Performs an implicit conversion from <see cref="Color"/> to <see cref="HunterLAB"/>.
         /// </summary>
         /// <param name="color">The color.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator YCbCr(Color color)
+        public static implicit operator HunterLAB(Color color)
         {
-            color = color.Clamp();
-            var r = color.Red;
-            var g = color.Green;
-            var b = color.Blue;
+            return (XYZ)color;
+        }
 
-            return new YCbCr((0.299 * r) + (0.587 * g) + (0.114 * b),
-                                128 - (0.168736 * r) - (0.331264 * g) + (0.5 * b),
-                                128 + (0.5 * r) - (0.418688 * g) - (0.081312 * b));
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="XYZ"/> to <see cref="HunterLAB"/>.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator HunterLAB(XYZ color)
+        {
+            var L = 10.0 * Math.Sqrt(color.Y);
+            var A = color.Y != 0 ? 17.5 * (((1.02 * color.X) - color.Y) / Math.Sqrt(color.Y)) : 0;
+            var B = color.Y != 0 ? 7.0 * ((color.Y - (.847 * color.Z)) / Math.Sqrt(color.Y)) : 0;
+            return new HunterLAB(L, A, B);
+        }
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="HunterLAB"/> to <see cref="XYZ"/>.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator XYZ(HunterLAB color)
+        {
+            var x = (color.A / 17.5) * (color.L / 10.0);
+            var itemL_10 = color.L / 10.0;
+            var y = itemL_10 * itemL_10;
+            var z = color.B / 7.0 * color.L / 10.0;
+
+            return new XYZ((x + y) / 1.02,
+                    y,
+                    -(z - y) / .847
+                );
         }
 
         /// <summary>
@@ -104,7 +126,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <param name="color2">The color2.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool operator !=(YCbCr color1, YCbCr color2)
+        public static bool operator !=(HunterLAB color1, HunterLAB color2)
         {
             return !(color1 == color2);
         }
@@ -116,7 +138,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <param name="color2">The color2.</param>
         /// <returns>The result of the operator.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool operator ==(YCbCr color1, YCbCr color2)
+        public static bool operator ==(HunterLAB color1, HunterLAB color2)
         {
             return color1.Equals(color2);
         }
@@ -131,7 +153,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
-            return obj is YCbCr && Equals((YCbCr)obj);
+            return obj is HunterLAB && Equals((HunterLAB)obj);
         }
 
         /// <summary>
@@ -142,11 +164,11 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(YCbCr other)
+        public bool Equals(HunterLAB other)
         {
-            return Math.Abs(other.YLuminance - YLuminance) < EPSILON
-                && Math.Abs(other.CbChroma - CbChroma) < EPSILON
-                && Math.Abs(other.CrChroma - CrChroma) < EPSILON;
+            return Math.Abs(other.L - L) < EPSILON
+                && Math.Abs(other.A - A) < EPSILON
+                && Math.Abs(other.B - B) < EPSILON;
         }
 
         /// <summary>
@@ -158,16 +180,16 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// </returns>
         public override int GetHashCode()
         {
-            var hash = YLuminance.GetHashCode();
-            hash = ComputeHash(hash, CbChroma);
-            return ComputeHash(hash, CrChroma);
+            var hash = L.GetHashCode();
+            hash = ComputeHash(hash, A);
+            return ComputeHash(hash, B);
         }
 
         /// <summary>
         /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string"/> that represents this instance.</returns>
-        public override string ToString() => $"({YLuminance:#0.##},{CbChroma:#0.##},{CrChroma:#0.##})";
+        public override string ToString() => $"({L:#0.##},{A:#0.##},{B:#0.##})";
 
         /// <summary>
         /// Computes the hash.

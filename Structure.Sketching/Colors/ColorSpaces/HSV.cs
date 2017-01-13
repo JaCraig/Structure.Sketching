@@ -8,8 +8,8 @@ namespace Structure.Sketching.Colors.ColorSpaces
     /// <summary>
     /// HSV color space
     /// </summary>
-    /// <seealso cref="System.IEquatable{HSV}" />
-    /// <seealso cref="IColorSpace" />
+    /// <seealso cref="System.IEquatable{HSV}"/>
+    /// <seealso cref="IColorSpace"/>
     public struct HSV : IEquatable<HSV>, IColorSpace
     {
         /// <summary>
@@ -28,26 +28,20 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <summary>
         /// Gets or sets the hue.
         /// </summary>
-        /// <value>
-        /// The hue.
-        /// </value>
-        public double Hue { get; set; }
+        /// <value>The hue.</value>
+        public double Hue;
 
         /// <summary>
         /// Gets or sets the saturation.
         /// </summary>
-        /// <value>
-        /// The saturation.
-        /// </value>
-        public double Saturation { get; set; }
+        /// <value>The saturation.</value>
+        public double Saturation;
 
         /// <summary>
         /// Gets or sets the value.
         /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
-        public double Value { get; set; }
+        /// <value>The value.</value>
+        public double Value;
 
         /// <summary>
         /// The epsilon value for double comparison
@@ -58,9 +52,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Performs an implicit conversion from <see cref="HSV"/> to <see cref="Color"/>.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Color(HSV color)
         {
             double Red = 0;
@@ -101,9 +93,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Performs an implicit conversion from <see cref="Color"/> to <see cref="HSV"/>.
         /// </summary>
         /// <param name="color">The color.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator HSV(Color color)
         {
             double Hue = 0;
