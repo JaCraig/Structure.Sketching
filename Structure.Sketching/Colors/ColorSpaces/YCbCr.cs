@@ -75,9 +75,9 @@ namespace Structure.Sketching.Colors.ColorSpaces
             var cb = color.CbChroma - 128;
             var cr = color.CrChroma - 128;
 
-            return new Color((byte)((y + (1.402 * cr))).Clamp(0, 255),
-                                (byte)((y - (0.344136 * cb) - (0.714136 * cr))).Clamp(0, 255),
-                                (byte)((y + (1.772 * cb))).Clamp(0, 255));
+            return new Color((byte)(Math.Round(y + (1.402 * cr), MidpointRounding.AwayFromZero).Clamp(0, 255)),
+                                (byte)(Math.Round(y - (0.344136 * cb) - (0.714136 * cr), MidpointRounding.AwayFromZero).Clamp(0, 255)),
+                                (byte)(Math.Round(y + (1.772 * cb), MidpointRounding.AwayFromZero)).Clamp(0, 255));
         }
 
         /// <summary>

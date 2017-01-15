@@ -24,7 +24,7 @@ namespace Structure.Sketching.Tests.Colors.ColorSpaces
         {
             {x=>(Bgra)x,new Bgra(25, 140, 132, 255) },
             {x=>(CIELab)x,new CIELab(55.818348999038136d,-16.853418868401192d,54.700336854544005d) },
-            {x=>(YCbCr)x,new YCbCr(124.881149d, 71.91583d, 133.505554d) },
+            {x=>(YCbCr)x,new YCbCr(124.49799999999999d,71.849888d,133.35088d) },
             {x=>(HSV)x,new HSV(64.17f,0.82f,0.55f) },
             {x=>(XYZ)x,new XYZ(19.069271087036391d,23.731887647203653d,4.4953578376945806d) },
             {x=>(YXY)x,new YXY(23.731887647203653d,0.40318552970034038d,0.50176819282471141d) },
