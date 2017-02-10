@@ -25,7 +25,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
     /// <summary>
     /// Define huffman table segment
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.Jpeg.Format.Segments.SegmentBase" />
+    /// <seealso cref="Structure.Sketching.Formats.Jpeg.Format.Segments.SegmentBase"/>
     public class DefineHuffmanTable : SegmentBase
     {
         /// <summary>
@@ -48,9 +48,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
         /// <summary>
         /// Gets the huffman codes.
         /// </summary>
-        /// <value>
-        /// The huffman codes.
-        /// </value>
+        /// <value>The huffman codes.</value>
         public Huffman[,] HuffmanCodes { get; private set; }
 
         /// <summary>
@@ -137,17 +135,8 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
         /// </summary>
         /// <param name="segments">The segments.</param>
         /// <exception cref="System.Exception">
-        /// DHT has wrong length
-        /// or
-        /// bad Tc value
-        /// or
-        /// bad Th value
-        /// or
-        /// Huffman table has zero length
-        /// or
-        /// Huffman table has excessive length
-        /// or
-        /// DHT has wrong length
+        /// DHT has wrong length or bad Tc value or bad Th value or Huffman table has zero length or
+        /// Huffman table has excessive length or DHT has wrong length
         /// </exception>
         public override void Setup(IEnumerable<SegmentBase> segments)
         {
@@ -165,7 +154,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
                     throw new Exception("bad Tc value");
 
                 int th = TempData[0] & 0x0f;
-                if (th > MAXIMUM_TH || !Frame.Progressive && th > 1)
+                if (th > MAXIMUM_TH || (Frame != null && !Frame.Progressive && th > 1))
                     throw new Exception("bad Th value");
 
                 Huffman h = HuffmanCodes[tc, th];

@@ -16,7 +16,8 @@ namespace Structure.Sketching.Tests.Formats.Jpeg
             {"Calliphora.jpg"},
             {"Floorplan.jpeg"},
             {"gamma_dalai_lama_gray.jpg"},
-            {"rgb.jpg"}
+            {"rgb.jpg"},
+            {"maltese_puppy-wide.jpg"}
         };
 
         [Theory]
