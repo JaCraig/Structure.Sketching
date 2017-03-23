@@ -28,8 +28,6 @@ namespace Structure.Sketching.Colors.ColorSpaces
     /// <summary>
     /// LCH color space
     /// </summary>
-    /// <seealso cref="System.IEquatable{ColorSpaces.CIELCH}"/>
-    /// <seealso cref="IColorSpace"/>
     public struct CIELCH : IEquatable<CIELCH>, IColorSpace
     {
         /// <summary>

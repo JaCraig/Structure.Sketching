@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "jsonfile": "^2.2.3"
-  },
-  "scripts": {
-	"patch-version-info":"node projectjsonpatch.js"
-  }
-}

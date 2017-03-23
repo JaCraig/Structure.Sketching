@@ -28,8 +28,6 @@ namespace Structure.Sketching.Colors.ColorSpaces
     /// <summary>
     /// LUV color space
     /// </summary>
-    /// <seealso cref="System.IEquatable{ColorSpaces.CIELUV}"/>
-    /// <seealso cref="IColorSpace"/>
     public struct CIELUV : IEquatable<CIELUV>, IColorSpace
     {
         /// <summary>

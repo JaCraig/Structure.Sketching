@@ -1,343 +1,42 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{340EBDF3-EEC5-4079-A10F-DAD8E61AF5C4}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Structure.Sketching</RootNamespace>
-    <AssemblyName>Structure.Sketching</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <BuildNumber Condition=" '$(APPVEYOR_BUILD_NUMBER)' != '' ">$(APPVEYOR_BUILD_NUMBER)</BuildNumber>
+    <!-- for AppVeyor -->
+    <BuildNumber Condition=" '$(BUILD_NUMBER)' != '' ">$(BUILD_NUMBER)</BuildNumber>
+    <!-- for Team City -->
+    <BuildNumber Condition=" '$(BuildNumber)' == '' ">0</BuildNumber>
+    <!-- if not set -->
+    <TargetFramework>netstandard1.3</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>James Craig</Authors>
+    <Company />
+    <PackageLicenseUrl>https://github.com/JaCraig/Structure.Sketching/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/JaCraig/Structure.Sketching</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/JaCraig/Structure.Sketching/master/build/icons/icon.png</PackageIconUrl>
+    <Description>Structure.Sketching is an image manipulation and drawing library intended for use with .Net Core and .Net 4.6.</Description>
+    <PackageReleaseNotes>This is the beta release of the project. While the general functionality is set the classes themselves may change namespaces and some minor functionality may be added prior to 1.0 release.</PackageReleaseNotes>
+    <Copyright>Copyright 2016</Copyright>
+    <PackageTags>Image Picture Gif Jpg Jpeg Bitmap Png Processing System.Drawing</PackageTags>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>0.1.$(BuildNumber)</Version>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\netstandard1.3\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DocumentationFile>bin\Debug\netstandard1.3\Structure.Sketching.XML</DocumentationFile>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <TreatSpecificWarningsAsErrors />
+    <DocumentationFile>bin\Debug\netstandard1.3\Structure.Sketching.xml</DocumentationFile>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\netstandard1.3\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DocumentationFile>bin\Release\netstandard1.3\Structure.Sketching.XML</DocumentationFile>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard1.3\Structure.Sketching.xml</DocumentationFile>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
+
   <ItemGroup>
-    <None Include="project.json" />
-    <!-- A reference to the entire .NET Framework is automatically included -->
+    <PackageReference Include="System.Numerics.Vectors" Version="4.3.0" />
+    <PackageReference Include="System.Threading.Tasks.Parallel" Version="4.3.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Animation.cs" />
-    <Compile Include="Colors\Color.cs" />
-    <Compile Include="Colors\ColorDefinitions.cs" />
-    <Compile Include="Colors\ColorSpaces\Bgra.cs" />
-    <Compile Include="Colors\ColorSpaces\CIELab.cs" />
-    <Compile Include="Colors\ColorSpaces\CIELCH.cs" />
-    <Compile Include="Colors\ColorSpaces\HSV.cs" />
-    <Compile Include="Colors\ColorSpaces\HunterLab.cs" />
-    <Compile Include="Colors\ColorSpaces\Interfaces\IColorSpace.cs" />
-    <Compile Include="Colors\ColorSpaces\CIELUV.cs" />
-    <Compile Include="Colors\ColorSpaces\XYZ.cs" />
-    <Compile Include="Colors\ColorSpaces\YCbCr.cs" />
-    <Compile Include="Colors\ColorSpaces\YXY.cs" />
-    <Compile Include="Filters\Drawing\BaseClasses\ShapeBaseClass.cs" />
-    <Compile Include="Filters\Drawing\Ellipse.cs" />
-    <Compile Include="Filters\Drawing\Interfaces\IShape.cs" />
-    <Compile Include="Filters\Drawing\Line.cs" />
-    <Compile Include="Filters\Drawing\Rectangle.cs" />
-    <Compile Include="Exceptions\ImageException.cs" />
-    <Compile Include="ExtensionMethods\ByteExtensions.cs" />
-    <Compile Include="ExtensionMethods\FloatExtensions.cs" />
-    <Compile Include="ExtensionMethods\StreamExtensions.cs" />
-    <Compile Include="Filters\Normalization\AdaptiveEqualize.cs" />
-    <Compile Include="Filters\Arithmetic\Add.cs" />
-    <Compile Include="Filters\Arithmetic\And.cs" />
-    <Compile Include="Filters\Arithmetic\Division.cs" />
-    <Compile Include="Filters\Arithmetic\Modulo.cs" />
-    <Compile Include="Filters\Arithmetic\Multiplication.cs" />
-    <Compile Include="Filters\Arithmetic\Or.cs" />
-    <Compile Include="Filters\Arithmetic\Subtract.cs" />
-    <Compile Include="Filters\Arithmetic\XOr.cs" />
-    <Compile Include="Filters\Binary\AdaptiveThreshold.cs" />
-    <Compile Include="Filters\Binary\NonMaximalSuppression.cs" />
-    <Compile Include="Filters\Binary\Threshold.cs" />
-    <Compile Include="Filters\ColorMatrix\Alpha.cs" />
-    <Compile Include="Filters\ColorMatrix\BaseClasses\MatrixBaseClass.cs" />
-    <Compile Include="Filters\ColorMatrix\BlackWhite.cs" />
-    <Compile Include="Filters\ColorMatrix\BlueFilter.cs" />
-    <Compile Include="Filters\ColorMatrix\Brightness.cs" />
-    <Compile Include="Filters\ColorMatrix\ColorBlindness\Achromatomaly.cs" />
-    <Compile Include="Filters\ColorMatrix\ColorBlindness\Achromatopsia.cs" />
-    <Compile Include="Filters\ColorMatrix\ColorBlindness\Deuteranomaly.cs" />
-    <Compile Include="Filters\ColorMatrix\ColorBlindness\Deuteranopia.cs" />
-    <Compile Include="Filters\ColorMatrix\ColorBlindness\Protanomaly.cs" />
-    <Compile Include="Filters\ColorMatrix\ColorBlindness\Protanopia.cs" />
-    <Compile Include="Filters\ColorMatrix\ColorBlindness\Tritanomaly.cs" />
-    <Compile Include="Filters\ColorMatrix\ColorBlindness\Tritanopia.cs" />
-    <Compile Include="Filters\ColorMatrix\ColorMatrix.cs" />
-    <Compile Include="Filters\ColorMatrix\Contrast.cs" />
-    <Compile Include="Filters\ColorMatrix\GreenFilter.cs" />
-    <Compile Include="Filters\ColorMatrix\Greyscale601.cs" />
-    <Compile Include="Filters\ColorMatrix\Greyscale709.cs" />
-    <Compile Include="Filters\ColorMatrix\Hue.cs" />
-    <Compile Include="Filters\ColorMatrix\Kodachrome.cs" />
-    <Compile Include="Filters\ColorMatrix\Lomograph.cs" />
-    <Compile Include="Filters\ColorMatrix\Polaroid.cs" />
-    <Compile Include="Filters\ColorMatrix\RedFilter.cs" />
-    <Compile Include="Filters\ColorMatrix\Saturation.cs" />
-    <Compile Include="Filters\ColorMatrix\SepiaTone.cs" />
-    <Compile Include="Filters\Convolution\BaseClasses\Convolution2DBaseClass.cs" />
-    <Compile Include="Filters\Convolution\BaseClasses\ConvolutionBaseClass.cs" />
-    <Compile Include="Filters\Convolution\BoxBlur.cs" />
-    <Compile Include="Filters\Convolution\ConvolutionFilter.cs" />
-    <Compile Include="Filters\Convolution\Emboss.cs" />
-    <Compile Include="Filters\Convolution\Enums\Direction.cs" />
-    <Compile Include="Filters\Convolution\Kayyali.cs" />
-    <Compile Include="Filters\Convolution\Kirsch.cs" />
-    <Compile Include="Filters\Convolution\LaplaceEdgeDetection.cs" />
-    <Compile Include="Filters\Convolution\LaplacianOfGaussianEdgeDetector.cs" />
-    <Compile Include="Filters\Convolution\Prewitt.cs" />
-    <Compile Include="Filters\Convolution\RobertsCross.cs" />
-    <Compile Include="Filters\Convolution\Robinson.cs" />
-    <Compile Include="Filters\Convolution\Scharr.cs" />
-    <Compile Include="Filters\Convolution\Sharpen.cs" />
-    <Compile Include="Filters\Convolution\SharpenLess.cs" />
-    <Compile Include="Filters\Convolution\SobelEmboss.cs" />
-    <Compile Include="Filters\Normalization\Equalize.cs" />
-    <Compile Include="Filters\Normalization\Gamma.cs" />
-    <Compile Include="Filters\Interfaces\IFilter.cs" />
-    <Compile Include="Filters\Effects\Invert.cs" />
-    <Compile Include="Filters\Effects\Jitter.cs" />
-    <Compile Include="Filters\Normalization\Logarithm.cs" />
-    <Compile Include="Filters\Morphology\Constrict.cs" />
-    <Compile Include="Filters\Morphology\Dilate.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\BaseClasses\ResamplingFilterBase.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\HelperClasses\Weights.cs" />
-    <Compile Include="Filters\Sharpening\Unsharp.cs" />
-    <Compile Include="Filters\Effects\Noise.cs" />
-    <Compile Include="Filters\Overlays\Blend.cs" />
-    <Compile Include="Filters\Overlays\Glow.cs" />
-    <Compile Include="Filters\Overlays\Vignette.cs" />
-    <Compile Include="Filters\Pipelines\BaseClasses\ProcessingPipelineBaseClass.cs" />
-    <Compile Include="Filters\Pipelines\BumpMap.cs" />
-    <Compile Include="Filters\Pipelines\CannyEdgeDetection.cs" />
-    <Compile Include="Filters\Pipelines\GaussianBlur.cs" />
-    <Compile Include="Filters\Pipelines\Lomograph.cs" />
-    <Compile Include="Filters\Pipelines\NormalMap.cs" />
-    <Compile Include="Filters\Pipelines\Polaroid.cs" />
-    <Compile Include="Filters\Effects\Pixellate.cs" />
-    <Compile Include="Filters\Effects\Pointillism.cs" />
-    <Compile Include="Filters\Effects\Posterize.cs" />
-    <Compile Include="Filters\Effects\Replace.cs" />
-    <Compile Include="Filters\Resampling\AffineTransformation.cs" />
-    <Compile Include="Filters\Resampling\BaseClasses\AffineBaseClass.cs" />
-    <Compile Include="Filters\Resampling\Crop.cs" />
-    <Compile Include="Filters\Resampling\Enums\FlipDirection.cs" />
-    <Compile Include="Filters\Resampling\Enums\ResamplingFilters.cs" />
-    <Compile Include="Filters\Resampling\Enums\ResizeOptions.cs" />
-    <Compile Include="Filters\Resampling\Flip.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\BellFilter.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\BicubicFilter.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\BilinearFilter.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\CatmullRomFilter.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\CosineFilter.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\CubicBSplineFilter.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\CubicConvolutionFilter.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\HermiteFilter.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\Interfaces\IResamplingFilter.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\Lanczos3Filter.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\Lanczos8Filter.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\MitchellFilter.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\NearestNeighborFilter.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\QuadraticBSplineFilter.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\QuadraticFilter.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\RobidouxFilter.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\RobidouxSharpFilter.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\RobidouxSoftFilter.cs" />
-    <Compile Include="Filters\Resampling\ResamplingFilters\TriangleFilter.cs" />
-    <Compile Include="Filters\Resampling\Resize.cs" />
-    <Compile Include="Filters\Resampling\ResizeCanvas.cs" />
-    <Compile Include="Filters\Resampling\Rotate.cs" />
-    <Compile Include="Filters\Resampling\Scale.cs" />
-    <Compile Include="Filters\Resampling\Skew.cs" />
-    <Compile Include="Filters\Resampling\Translate.cs" />
-    <Compile Include="Filters\Effects\SinWave.cs" />
-    <Compile Include="Filters\Smoothing\Kuwahara.cs" />
-    <Compile Include="Filters\Smoothing\Median.cs" />
-    <Compile Include="Filters\Smoothing\SNNBlur.cs" />
-    <Compile Include="Filters\Effects\Solarize.cs" />
-    <Compile Include="Filters\Normalization\StretchContrast.cs" />
-    <Compile Include="Filters\Effects\Turbulence.cs" />
-    <Compile Include="Formats\BaseClasses\AnimationFormatBase.cs" />
-    <Compile Include="Formats\BaseClasses\DecoderBase.cs" />
-    <Compile Include="Formats\BaseClasses\EncoderBase.cs" />
-    <Compile Include="Formats\BaseClasses\FileBase.cs" />
-    <Compile Include="Formats\BaseClasses\FormatBase.cs" />
-    <Compile Include="Formats\Bmp\BmpFormat.cs" />
-    <Compile Include="Formats\Bmp\Decoder.cs" />
-    <Compile Include="Formats\Bmp\Encoder.cs" />
-    <Compile Include="Formats\Bmp\Format\Body.cs" />
-    <Compile Include="Formats\Bmp\Format\Compression.cs" />
-    <Compile Include="Formats\Bmp\Format\File.cs" />
-    <Compile Include="Formats\Bmp\Format\FileHeader.cs" />
-    <Compile Include="Formats\Bmp\Format\Header.cs" />
-    <Compile Include="Formats\Bmp\Format\Palette.cs" />
-    <Compile Include="Formats\Bmp\Format\PixelFormats\BaseClasses\PixelFormatBase.cs" />
-    <Compile Include="Formats\Bmp\Format\PixelFormats\Interfaces\IPixelFormat.cs" />
-    <Compile Include="Formats\Bmp\Format\PixelFormats\RGB16bit.cs" />
-    <Compile Include="Formats\Bmp\Format\PixelFormats\RGB1bit.cs" />
-    <Compile Include="Formats\Bmp\Format\PixelFormats\RGB24bit.cs" />
-    <Compile Include="Formats\Bmp\Format\PixelFormats\RGB32bit.cs" />
-    <Compile Include="Formats\Bmp\Format\PixelFormats\RGB4bit.cs" />
-    <Compile Include="Formats\Bmp\Format\PixelFormats\RGB8bit.cs" />
-    <Compile Include="Formats\Enums\FileFormat.cs" />
-    <Compile Include="Formats\Gif\Decoder.cs" />
-    <Compile Include="Formats\Gif\Encoder.cs" />
-    <Compile Include="Formats\Gif\Format\ApplicationExtension.cs" />
-    <Compile Include="Formats\Gif\Format\BaseClasses\SectionBase.cs" />
-    <Compile Include="Formats\Gif\Format\ColorTable.cs" />
-    <Compile Include="Formats\Gif\Format\Comment.cs" />
-    <Compile Include="Formats\Gif\Format\Enums\DisposalMethod.cs" />
-    <Compile Include="Formats\Gif\Format\File.cs" />
-    <Compile Include="Formats\Gif\Format\FileHeader.cs" />
-    <Compile Include="Formats\Gif\Format\Frame.cs" />
-    <Compile Include="Formats\Gif\Format\FrameIndices.cs" />
-    <Compile Include="Formats\Gif\Format\GraphicsControl.cs" />
-    <Compile Include="Formats\Gif\Format\Helpers\LzwDecoder.cs" />
-    <Compile Include="Formats\Gif\Format\Helpers\LZWEncoder.cs" />
-    <Compile Include="Formats\Gif\Format\Helpers\PackedField.cs" />
-    <Compile Include="Formats\Gif\Format\ImageDescriptor.cs" />
-    <Compile Include="Formats\Gif\Format\Interfaces\ISection.cs" />
-    <Compile Include="Formats\Gif\Format\LogicalScreenDescriptor.cs" />
-    <Compile Include="Formats\Gif\Format\PlainText.cs" />
-    <Compile Include="Formats\Gif\Format\SectionTypes.cs" />
-    <Compile Include="Formats\Gif\GifFormat.cs" />
-    <Compile Include="Formats\Interfaces\IAnimationFormat.cs" />
-    <Compile Include="Formats\Interfaces\IDecoder.cs" />
-    <Compile Include="Formats\Interfaces\IEncoder.cs" />
-    <Compile Include="Formats\Interfaces\IFile.cs" />
-    <Compile Include="Formats\Interfaces\IFormat.cs" />
-    <Compile Include="Formats\Jpeg\Decoder.cs" />
-    <Compile Include="Formats\Jpeg\Encoder.cs" />
-    <Compile Include="Formats\Jpeg\Format\Enums\ImageType.cs" />
-    <Compile Include="Formats\Jpeg\Format\File.cs" />
-    <Compile Include="Formats\Jpeg\Format\FileHeader.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\BitsBuffer.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\Block.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\ByteBuffer.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\Component.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\Enums\HuffmanIndex.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\Enums\JpegSubSample.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\Enums\QuantIndex.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\Enums\YCbCrSubsampleRatio.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\Exceptions\EOF.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\Exceptions\MissingFF00.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\Exceptions\ShortHuffmanData.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\FDCT.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\GreyImage.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\Huffman.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\HuffmanLookUpTable.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\HuffmanSpec.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\IDCT.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\Scan.cs" />
-    <Compile Include="Formats\Jpeg\Format\HelperClasses\YcbcrImg.cs" />
-    <Compile Include="Formats\Jpeg\Format\Segments\Application0.cs" />
-    <Compile Include="Formats\Jpeg\Format\Segments\Application14.cs" />
-    <Compile Include="Formats\Jpeg\Format\Segments\BaseClasses\SegmentBase.cs" />
-    <Compile Include="Formats\Jpeg\Format\Segments\DefineHuffmanTable.cs" />
-    <Compile Include="Formats\Jpeg\Format\Segments\DefineQuantizationTable.cs" />
-    <Compile Include="Formats\Jpeg\Format\Segments\DefineRestartInterval.cs" />
-    <Compile Include="Formats\Jpeg\Format\Segments\EndOfImage.cs" />
-    <Compile Include="Formats\Jpeg\Format\Segments\SegmentTypes.cs" />
-    <Compile Include="Formats\Jpeg\Format\Segments\StartOfFrame.cs" />
-    <Compile Include="Formats\Jpeg\Format\Segments\StartOfImage.cs" />
-    <Compile Include="Formats\Jpeg\Format\Segments\StartOfScan.cs" />
-    <Compile Include="Formats\Jpeg\JpegFormat.cs" />
-    <Compile Include="Formats\Manager.cs" />
-    <Compile Include="Formats\Png\Decoder.cs" />
-    <Compile Include="Formats\Png\Encoder.cs" />
-    <Compile Include="Formats\Png\Format\ColorFormats\ColorTypeInformation.cs" />
-    <Compile Include="Formats\Png\Format\ColorFormats\GreyscaleAlphaReader.cs" />
-    <Compile Include="Formats\Png\Format\ColorFormats\GreyscaleNoAlphaReader.cs" />
-    <Compile Include="Formats\Png\Format\ColorFormats\Interfaces\IColorReader.cs" />
-    <Compile Include="Formats\Png\Format\ColorFormats\PaletteReader.cs" />
-    <Compile Include="Formats\Png\Format\ColorFormats\TrueColorAlphaReader.cs" />
-    <Compile Include="Formats\Png\Format\ColorFormats\TrueColorNoAlphaReader.cs" />
-    <Compile Include="Formats\Png\Format\Data.cs" />
-    <Compile Include="Formats\Png\Format\Enums\ColorType.cs" />
-    <Compile Include="Formats\Png\Format\Enums\FilterType.cs" />
-    <Compile Include="Formats\Png\Format\Enums\PaletteType.cs" />
-    <Compile Include="Formats\Png\Format\File.cs" />
-    <Compile Include="Formats\Png\Format\FileEnd.cs" />
-    <Compile Include="Formats\Png\Format\FileHeader.cs" />
-    <Compile Include="Formats\Png\Format\Filters\AverageFilter.cs" />
-    <Compile Include="Formats\Png\Format\Filters\BaseClasses\FilterBaseClass.cs" />
-    <Compile Include="Formats\Png\Format\Filters\Interfaces\IScanFilter.cs" />
-    <Compile Include="Formats\Png\Format\Filters\NoFilter.cs" />
-    <Compile Include="Formats\Png\Format\Filters\PaethFilter.cs" />
-    <Compile Include="Formats\Png\Format\Filters\SubFilter.cs" />
-    <Compile Include="Formats\Png\Format\Filters\UpFilter.cs" />
-    <Compile Include="Formats\Png\Format\Header.cs" />
-    <Compile Include="Formats\Png\Format\Helpers\Chunk.cs" />
-    <Compile Include="Formats\Png\Format\Helpers\ChunkTypes.cs" />
-    <Compile Include="Formats\Png\Format\Helpers\ZLib\Adler32.cs" />
-    <Compile Include="Formats\Png\Format\Helpers\ZLib\CRC32.cs" />
-    <Compile Include="Formats\Png\Format\Helpers\ZLib\InflateStream.cs" />
-    <Compile Include="Formats\Png\Format\Helpers\ZLib\ZLibDeflateStream.cs" />
-    <Compile Include="Formats\Png\Format\Palette.cs" />
-    <Compile Include="Formats\Png\Format\Property.cs" />
-    <Compile Include="Formats\Png\PngFormat.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Image.cs" />
-    <Compile Include="Image.Filters.cs" />
-    <Compile Include="Image.Operators.cs" />
-    <Compile Include="IO\BitReader.cs" />
-    <Compile Include="IO\Converters\BaseClasses\EndianBitConverterBase.cs" />
-    <Compile Include="IO\Converters\BigEndianBitConverter.cs" />
-    <Compile Include="IO\Converters\LittleEndianBitConverter.cs" />
-    <Compile Include="IO\Converters\Structs\IntFloatUnion.cs" />
-    <Compile Include="IO\EndianBinaryReader.cs" />
-    <Compile Include="IO\EndianBinaryWriter.cs" />
-    <Compile Include="Numerics\Distance.cs" />
-    <Compile Include="Numerics\HSVHistogram.cs" />
-    <Compile Include="Numerics\Interfaces\IHistogram.cs" />
-    <Compile Include="Numerics\Matrix5x5.cs" />
-    <Compile Include="Numerics\Random.cs" />
-    <Compile Include="Numerics\Rectangle.cs" />
-    <Compile Include="Numerics\RGBHistogram.cs" />
-    <Compile Include="Procedural\PerlinNoise.cs" />
-    <Compile Include="ProcessingPipeline.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Quantizers\BaseClasses\QuantizerBase.cs" />
-    <Compile Include="Quantizers\Interfaces\IQuantizer.cs" />
-    <Compile Include="Quantizers\Octree\Node.cs" />
-    <Compile Include="Quantizers\Octree\Octree.cs" />
-    <Compile Include="Quantizers\Octree\OctreeQuantizer.cs" />
-    <Compile Include="Quantizers\QuantizedImage.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

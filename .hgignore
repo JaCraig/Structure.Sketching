@@ -1,15 +1,5 @@
 syntax: glob
-Structure.Sketching.Tests/TestOutput/*
+*/BenchmarkDotNet.Artifacts/*
+.vs/*
 */bin/*
 */obj/*
-.vs/*
-Structure.Sketching.Benchmarks/BenchmarkDotNet.Artifacts/*
-*.nupkg
-*/project.lock.json
-*/project.fragment.lock.json
-packages/*
-NetCoreTest/result.jpg
-NetCoreTest/result.gif
-NetCoreTest/result.png
-NetCoreTest/result.bmp
-build/node_modules/*

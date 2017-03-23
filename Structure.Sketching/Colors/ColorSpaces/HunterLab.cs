@@ -28,8 +28,6 @@ namespace Structure.Sketching.Colors.ColorSpaces
     /// <summary>
     /// LAB color space
     /// </summary>
-    /// <seealso cref="System.IEquatable{ColorSpaces.HunterLAB}"/>
-    /// <seealso cref="IColorSpace"/>
     public struct HunterLAB : IEquatable<HunterLAB>, IColorSpace
     {
         /// <summary>

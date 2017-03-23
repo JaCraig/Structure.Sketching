@@ -1,0 +1,1319 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Tests for Structure.Sketching</Description>
+    <AssemblyTitle>Structure.Sketching.Tests</AssemblyTitle>
+    <Authors>James Craig</Authors>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <DebugType>portable</DebugType>
+    <AssemblyName>Structure.Sketching.Tests</AssemblyName>
+    <PackageId>Structure.Sketching.Tests</PackageId>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <PackageTags>Image Picture Gif Jpg Jpeg Bitmap Png Processing</PackageTags>
+    <PackageProjectUrl>https://github.com/JaCraig/Structure.Sketching</PackageProjectUrl>
+    <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
+    <RuntimeIdentifiers>win7-x64;osx.10.10-x64;ubuntu.14.04-x64</RuntimeIdentifiers>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50;portable-net45+win8</PackageTargetFallback>
+    <RuntimeFrameworkVersion>1.0.4</RuntimeFrameworkVersion>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="ExpectedResults\EncodingTest.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Achromatomaly-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Achromatomaly.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Achromatopsia-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Achromatopsia.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-AdaptiveEqualize-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-AdaptiveEqualize.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-AdaptiveHSVEqualize-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-AdaptiveHSVEqualize.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-AdaptiveThreshold-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-AdaptiveThreshold.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Add.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Alpha-50-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Alpha-50.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-And.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-BlackWhite-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-BlackWhite.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Blend-50.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-BlueFilter-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-BlueFilter.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-BoxBlur-3-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-BoxBlur-3.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-BoxBlur-5-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-BoxBlur-5.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Brightness--50-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Brightness--50.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Brightness-50-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Brightness-50.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-BumpMap-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-BumpMap.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-CannyEdgeDetection-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-CannyEdgeDetection.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-ColorMatrix-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-ColorMatrix.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Constrict-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Constrict.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Contrast--50-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Contrast--50.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Contrast-50-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Contrast-50.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Crop.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Deuteranomaly-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Deuteranomaly.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Deuteranopia-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Deuteranopia.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Dilate-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Dilate.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Division.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-DrawingEllipse.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-DrawingFilledEllipse.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-DrawingLine.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-DrawingRectangle.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Emboss-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Emboss.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Equalize-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Equalize.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Fill-Purple.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Flip-Both-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Flip-Both.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Flip-Horizontal-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Flip-Horizontal.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Flip-Vertical-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Flip-Vertical.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Gamma-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Gamma.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-GaussianBlur-7-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-GaussianBlur-7.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Glow.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-GreenFilter-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-GreenFilter.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Greyscale601-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Greyscale601.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Greyscale709-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Greyscale709.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-HSVEqualize-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-HSVEqualize.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Hue-180-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Hue-180.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Hue-270-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Hue-270.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Hue-90-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Hue-90.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Invert-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Invert.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Jitter-10.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Jitter-5.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Kayyali-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Kayyali.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Kirsch-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Kirsch.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Kodachrome-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Kodachrome.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Kuwahara-7-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Kuwahara-7.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-LaplaceEdgeDetection-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-LaplaceEdgeDetection.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-LaplacianOfGaussianEdgeDetector-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-LaplacianOfGaussianEdgeDetector.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Logarithm-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Logarithm.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Lomograph-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Lomograph.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-LomographColorMatrix-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-LomographColorMatrix.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-MatrixMultiplication-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-MatrixMultiplication.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Median-5-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Median-5.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Modulo.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Multiplication.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Noise-20.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-NonMaximalSuppression-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-NonMaximalSuppression.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-NormalMap-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-NormalMap.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Or.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Pipeline-Polaroid-Brightness-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Pipeline-Polaroid-Brightness.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Pipeline-RC-Greyscale-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Pipeline-RC-Greyscale.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Pixellate-10-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Pixellate-10.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Pointillism.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-PolaroidColorMatrix-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-PolaroidColorMatrix.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Poloroid-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Poloroid.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Posterize-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Posterize.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Prewitt-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Prewitt.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Protanomaly-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Protanomaly.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Protanopia-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Protanopia.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-RedFilter-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-RedFilter.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Replace-Black-For-White-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Replace-Black-For-White.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Bell-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Bell-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Bicubic-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Bicubic-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Bilinear-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Bilinear-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-CatmullRom-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-CatmullRom-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Cosine-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Cosine-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-CubicBSpline-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-CubicBSpline-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-CubicConvolution-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-CubicConvolution-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Hermite-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Hermite-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Lanczos3-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Lanczos3-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Lanczos8-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Lanczos8-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Mitchell-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Mitchell-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-NearestNeighbor-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-NearestNeighbor-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Quadratic-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Quadratic-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-QuadraticBSpline-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-QuadraticBSpline-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Robidoux-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Robidoux-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-RobidouxSharp-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-RobidouxSharp-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-RobidouxSoft-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-RobidouxSoft-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Triangle-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Resize-Triangle-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-ResizeCanvas-Center-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-ResizeCanvas-Center-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-ResizeCanvas-UpperLeft-100x100.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-ResizeCanvas-UpperLeft-2000x2000.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-RobertsCross-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-RobertsCross.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Robinson-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Robinson.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Rotate-45-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Rotate-45.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Saturation--50-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Saturation--50.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Saturation-50-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Saturation-50.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Scale-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Scale.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Scharr-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Scharr.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Sepiatone-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Sepiatone.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Sharpen-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Sharpen.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-SharpenLess-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-SharpenLess.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-SinWave-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-SinWave.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Skew-45-80-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Skew-45-80.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-SNNBlur-5-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-SNNBlur-5.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-SobelEmboss-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-SobelEmboss.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Solarize-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Solarize.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-StretchContrast-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-StretchContrast.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Subtract.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Threshold-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Threshold.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Translate-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Translate.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Tritanomaly-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Tritanomaly.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Tritanopia-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Tritanopia.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Turbulence-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Turbulence.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Unsharp-Partial.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Unsharp.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-Vignette.bmp" />
+    <None Remove="ExpectedResults\Filters\BitmapFilter-XOr.bmp" />
+    <None Remove="ExpectedResults\Formats\Bmp\Car.bmp" />
+    <None Remove="ExpectedResults\Formats\Bmp\EncodingTest.bmp" />
+    <None Remove="ExpectedResults\Formats\Bmp\Test1.bmp" />
+    <None Remove="ExpectedResults\Formats\Bmp\Test16.bmp" />
+    <None Remove="ExpectedResults\Formats\Bmp\Test24.bmp" />
+    <None Remove="ExpectedResults\Formats\Bmp\Test32.bmp" />
+    <None Remove="ExpectedResults\Formats\Bmp\Test4.bmp" />
+    <None Remove="ExpectedResults\Formats\Bmp\Test8.bmp" />
+    <None Remove="ExpectedResults\Formats\Bmp\TestRLE8.bmp" />
+    <None Remove="ExpectedResults\Formats\Gif\BMPFormatTest.jpg" />
+    <None Remove="ExpectedResults\Formats\Gif\BMPFormatTest2.jpg" />
+    <None Remove="ExpectedResults\Formats\Gif\giphy.gif" />
+    <None Remove="ExpectedResults\Formats\Gif\rings.gif" />
+    <None Remove="ExpectedResults\Formats\Jpg\Calliphora.jpg" />
+    <None Remove="ExpectedResults\Formats\Jpg\Floorplan.jpeg" />
+    <None Remove="ExpectedResults\Formats\Jpg\gamma_dalai_lama_gray.jpg" />
+    <None Remove="ExpectedResults\Formats\Jpg\maltese_puppy-wide.jpg" />
+    <None Remove="ExpectedResults\Formats\Jpg\rgb.jpg" />
+    <None Remove="ExpectedResults\Formats\Png\48bit.png" />
+    <None Remove="ExpectedResults\Formats\Png\blur.png" />
+    <None Remove="ExpectedResults\Formats\Png\indexed.png" />
+    <None Remove="ExpectedResults\Formats\Png\splash.png" />
+    <None Remove="ExpectedResults\Formats\Png\splashbw.png" />
+    <None Remove="ExpectedResults\Image\BitmapFilter-Not.bmp" />
+    <None Remove="ExpectedResults\Image\BitmapFilter-ShiftLeft.bmp" />
+    <None Remove="ExpectedResults\Image\BitmapFilter-ShiftRight.bmp" />
+    <None Remove="ExpectedResults\Image\blur-Add.png" />
+    <None Remove="ExpectedResults\Image\blur-And.png" />
+    <None Remove="ExpectedResults\Image\blur-Division.png" />
+    <None Remove="ExpectedResults\Image\blur-Modulo.png" />
+    <None Remove="ExpectedResults\Image\blur-Multiplication.png" />
+    <None Remove="ExpectedResults\Image\blur-OR.png" />
+    <None Remove="ExpectedResults\Image\blur-ShiftLeft.png" />
+    <None Remove="ExpectedResults\Image\blur-ShiftRight.png" />
+    <None Remove="ExpectedResults\Image\blur-Subtract.png" />
+    <None Remove="ExpectedResults\Image\blur-XOR.png" />
+    <None Remove="ExpectedResults\Image\Car-Add.bmp" />
+    <None Remove="ExpectedResults\Image\Car-And.bmp" />
+    <None Remove="ExpectedResults\Image\Car-Division.bmp" />
+    <None Remove="ExpectedResults\Image\Car-Modulo.bmp" />
+    <None Remove="ExpectedResults\Image\Car-Multiplication.bmp" />
+    <None Remove="ExpectedResults\Image\Car-Not.bmp" />
+    <None Remove="ExpectedResults\Image\Car-OR.bmp" />
+    <None Remove="ExpectedResults\Image\Car-ShiftLeft.bmp" />
+    <None Remove="ExpectedResults\Image\Car-ShiftRight.bmp" />
+    <None Remove="ExpectedResults\Image\Car-Subtract.bmp" />
+    <None Remove="ExpectedResults\Image\Car-XOR.bmp" />
+    <None Remove="ExpectedResults\Image\indexed-Add.png" />
+    <None Remove="ExpectedResults\Image\indexed-And.png" />
+    <None Remove="ExpectedResults\Image\indexed-Division.png" />
+    <None Remove="ExpectedResults\Image\indexed-Modulo.png" />
+    <None Remove="ExpectedResults\Image\indexed-Multiplication.png" />
+    <None Remove="ExpectedResults\Image\indexed-OR.png" />
+    <None Remove="ExpectedResults\Image\indexed-ShiftLeft.png" />
+    <None Remove="ExpectedResults\Image\indexed-ShiftRight.png" />
+    <None Remove="ExpectedResults\Image\indexed-Subtract.png" />
+    <None Remove="ExpectedResults\Image\indexed-XOR.png" />
+    <None Remove="ExpectedResults\Image\splash-Add.png" />
+    <None Remove="ExpectedResults\Image\splash-And.png" />
+    <None Remove="ExpectedResults\Image\splash-Division.png" />
+    <None Remove="ExpectedResults\Image\splash-Modulo.png" />
+    <None Remove="ExpectedResults\Image\splash-Multiplication.png" />
+    <None Remove="ExpectedResults\Image\splash-OR.png" />
+    <None Remove="ExpectedResults\Image\splash-ShiftLeft.png" />
+    <None Remove="ExpectedResults\Image\splash-ShiftRight.png" />
+    <None Remove="ExpectedResults\Image\splash-Subtract.png" />
+    <None Remove="ExpectedResults\Image\splash-XOR.png" />
+    <None Remove="TestImages\BitmapFilter.bmp" />
+    <None Remove="TestImages\BitmapFilter1.bmp" />
+    <None Remove="TestImages\BitmapFilter2.bmp" />
+    <None Remove="TestImages\BitmapFilter3.bmp" />
+    <None Remove="TestImages\Formats\Bmp\Car.bmp" />
+    <None Remove="TestImages\Formats\Bmp\EncodingTest.bmp" />
+    <None Remove="TestImages\Formats\Bmp\Test1.bmp" />
+    <None Remove="TestImages\Formats\Bmp\Test16.bmp" />
+    <None Remove="TestImages\Formats\Bmp\Test24.bmp" />
+    <None Remove="TestImages\Formats\Bmp\Test32.bmp" />
+    <None Remove="TestImages\Formats\Bmp\Test4.bmp" />
+    <None Remove="TestImages\Formats\Bmp\Test8.bmp" />
+    <None Remove="TestImages\Formats\Bmp\TestRLE8.bmp" />
+    <None Remove="TestImages\Formats\Gif\giphy.gif" />
+    <None Remove="TestImages\Formats\Gif\rings.gif" />
+    <None Remove="TestImages\Formats\Jpg\Calliphora.jpg" />
+    <None Remove="TestImages\Formats\Jpg\Calliphora_final.jpg" />
+    <None Remove="TestImages\Formats\Jpg\Floorplan.jpeg" />
+    <None Remove="TestImages\Formats\Jpg\gamma_dalai_lama_gray.jpg" />
+    <None Remove="TestImages\Formats\Jpg\maltese_puppy-wide.jpg" />
+    <None Remove="TestImages\Formats\Jpg\rgb.jpg" />
+    <None Remove="TestImages\Formats\Png\48bit.png" />
+    <None Remove="TestImages\Formats\Png\blur.png" />
+    <None Remove="TestImages\Formats\Png\indexed.png" />
+    <None Remove="TestImages\Formats\Png\splash.png" />
+    <None Remove="TestImages\Formats\Png\splashbw.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ExpectedResults\EncodingTest.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Achromatomaly-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Achromatomaly.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Achromatopsia-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Achromatopsia.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-AdaptiveEqualize-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-AdaptiveEqualize.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-AdaptiveHSVEqualize-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-AdaptiveHSVEqualize.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-AdaptiveThreshold-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-AdaptiveThreshold.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Add.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Alpha-50-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Alpha-50.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-And.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-BlackWhite-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-BlackWhite.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Blend-50.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-BlueFilter-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-BlueFilter.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-BoxBlur-3-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-BoxBlur-3.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-BoxBlur-5-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-BoxBlur-5.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Brightness--50-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Brightness--50.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Brightness-50-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Brightness-50.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-BumpMap-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-BumpMap.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-CannyEdgeDetection-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-CannyEdgeDetection.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-ColorMatrix-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-ColorMatrix.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Constrict-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Constrict.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Contrast--50-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Contrast--50.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Contrast-50-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Contrast-50.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Crop.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Deuteranomaly-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Deuteranomaly.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Deuteranopia-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Deuteranopia.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Dilate-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Dilate.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Division.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-DrawingEllipse.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-DrawingFilledEllipse.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-DrawingLine.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-DrawingRectangle.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Emboss-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Emboss.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Equalize-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Equalize.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Fill-Purple.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Flip-Both-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Flip-Both.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Flip-Horizontal-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Flip-Horizontal.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Flip-Vertical-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Flip-Vertical.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Gamma-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Gamma.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-GaussianBlur-7-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-GaussianBlur-7.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Glow.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-GreenFilter-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-GreenFilter.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Greyscale601-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Greyscale601.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Greyscale709-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Greyscale709.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-HSVEqualize-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-HSVEqualize.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Hue-180-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Hue-180.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Hue-270-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Hue-270.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Hue-90-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Hue-90.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Invert-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Invert.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Jitter-10.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Jitter-5.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Kayyali-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Kayyali.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Kirsch-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Kirsch.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Kodachrome-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Kodachrome.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Kuwahara-7-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Kuwahara-7.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-LaplaceEdgeDetection-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-LaplaceEdgeDetection.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-LaplacianOfGaussianEdgeDetector-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-LaplacianOfGaussianEdgeDetector.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Logarithm-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Logarithm.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Lomograph-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Lomograph.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-LomographColorMatrix-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-LomographColorMatrix.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-MatrixMultiplication-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-MatrixMultiplication.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Median-5-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Median-5.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Modulo.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Multiplication.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Noise-20.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-NonMaximalSuppression-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-NonMaximalSuppression.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-NormalMap-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-NormalMap.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Or.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Pipeline-Polaroid-Brightness-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Pipeline-Polaroid-Brightness.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Pipeline-RC-Greyscale-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Pipeline-RC-Greyscale.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Pixellate-10-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Pixellate-10.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Pointillism.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-PolaroidColorMatrix-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-PolaroidColorMatrix.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Poloroid-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Poloroid.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Posterize-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Posterize.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Prewitt-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Prewitt.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Protanomaly-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Protanomaly.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Protanopia-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Protanopia.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-RedFilter-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-RedFilter.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Replace-Black-For-White-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Replace-Black-For-White.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Bell-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Bell-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Bicubic-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Bicubic-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Bilinear-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Bilinear-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-CatmullRom-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-CatmullRom-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Cosine-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Cosine-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-CubicBSpline-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-CubicBSpline-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-CubicConvolution-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-CubicConvolution-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Hermite-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Hermite-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Lanczos3-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Lanczos3-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Lanczos8-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Lanczos8-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Mitchell-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Mitchell-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-NearestNeighbor-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-NearestNeighbor-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Quadratic-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Quadratic-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-QuadraticBSpline-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-QuadraticBSpline-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Robidoux-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Robidoux-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-RobidouxSharp-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-RobidouxSharp-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-RobidouxSoft-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-RobidouxSoft-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Triangle-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Resize-Triangle-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-ResizeCanvas-Center-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-ResizeCanvas-Center-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-ResizeCanvas-UpperLeft-100x100.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-ResizeCanvas-UpperLeft-2000x2000.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-RobertsCross-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-RobertsCross.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Robinson-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Robinson.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Rotate-45-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Rotate-45.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Saturation--50-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Saturation--50.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Saturation-50-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Saturation-50.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Scale-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Scale.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Scharr-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Scharr.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Sepiatone-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Sepiatone.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Sharpen-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Sharpen.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-SharpenLess-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-SharpenLess.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-SinWave-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-SinWave.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Skew-45-80-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Skew-45-80.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-SNNBlur-5-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-SNNBlur-5.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-SobelEmboss-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-SobelEmboss.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Solarize-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Solarize.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-StretchContrast-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-StretchContrast.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Subtract.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Threshold-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Threshold.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Translate-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Translate.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Tritanomaly-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Tritanomaly.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Tritanopia-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Tritanopia.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Turbulence-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Turbulence.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Unsharp-Partial.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Unsharp.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-Vignette.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Filters\BitmapFilter-XOr.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Bmp\Car.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Bmp\EncodingTest.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Bmp\Test1.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Bmp\Test16.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Bmp\Test24.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Bmp\Test32.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Bmp\Test4.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Bmp\Test8.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Bmp\TestRLE8.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Gif\BMPFormatTest.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Gif\BMPFormatTest2.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Gif\giphy.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Gif\rings.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Jpg\Calliphora.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Jpg\Floorplan.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Jpg\gamma_dalai_lama_gray.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Jpg\maltese_puppy-wide.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Jpg\rgb.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Png\48bit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Png\blur.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Png\indexed.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Png\splash.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Formats\Png\splashbw.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\BitmapFilter-Not.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\BitmapFilter-ShiftLeft.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\BitmapFilter-ShiftRight.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\blur-Add.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\blur-And.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\blur-Division.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\blur-Modulo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\blur-Multiplication.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\blur-OR.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\blur-ShiftLeft.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\blur-ShiftRight.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\blur-Subtract.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\blur-XOR.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\Car-Add.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\Car-And.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\Car-Division.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\Car-Modulo.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\Car-Multiplication.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\Car-Not.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\Car-OR.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\Car-ShiftLeft.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\Car-ShiftRight.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\Car-Subtract.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\Car-XOR.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\indexed-Add.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\indexed-And.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\indexed-Division.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\indexed-Modulo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\indexed-Multiplication.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\indexed-OR.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\indexed-ShiftLeft.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\indexed-ShiftRight.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\indexed-Subtract.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\indexed-XOR.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\splash-Add.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\splash-And.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\splash-Division.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\splash-Modulo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\splash-Multiplication.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\splash-OR.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\splash-ShiftLeft.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\splash-ShiftRight.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\splash-Subtract.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResults\Image\splash-XOR.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\BitmapFilter.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\BitmapFilter1.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\BitmapFilter2.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\BitmapFilter3.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Bmp\Car.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Bmp\EncodingTest.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Bmp\Test1.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Bmp\Test16.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Bmp\Test24.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Bmp\Test32.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Bmp\Test4.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Bmp\Test8.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Bmp\TestRLE8.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Gif\giphy.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Gif\rings.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Jpg\Calliphora.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Jpg\Calliphora_final.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Jpg\Floorplan.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Jpg\gamma_dalai_lama_gray.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Jpg\maltese_puppy-wide.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Jpg\rgb.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Png\48bit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Png\blur.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Png\indexed.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Png\splash.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestImages\Formats\Png\splashbw.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Structure.Sketching\Structure.Sketching.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
+    <PackageReference Include="xunit" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
+
+</Project>

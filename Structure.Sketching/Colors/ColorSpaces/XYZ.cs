@@ -28,8 +28,6 @@ namespace Structure.Sketching.Colors.ColorSpaces
     /// <summary>
     /// XYZ color space
     /// </summary>
-    /// <seealso cref="System.IEquatable{ColorSpaces.XYZ}"/>
-    /// <seealso cref="IColorSpace"/>
     public struct XYZ : IEquatable<XYZ>, IColorSpace
     {
         /// <summary>
